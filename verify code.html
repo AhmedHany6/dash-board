@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Title Of The Page -->
+    <title>Login || Metrix</title>
+
+    <!-- Meta Information -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Metrix is a sleek and modern app landing page template built with HTML, CSS, and JavaScript. It's designed to showcase your app's features and attract potential users.">
+    <meta name="keywords" content="Metrix - App Landing Page Template, application landing page, application website landing page, responsive website, application responsive website, mobile app landing website, latest bootstrap mobile application website design, product lounch website, app product lounch website, bootstrap template, creative mobile website, multi pages template, landing page website, minimal portfolio, mobile app intro website">
+    <meta name="author" content="white orange software">
+    <!-- meta og property tags start -->
+    <meta property="og:title" content="404 || Metrix" />
+    <meta property="og:description" content="Metrix is a sleek and modern app landing page template built with HTML, CSS, and JavaScript. It's designed to showcase your app's features and attract potential users." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="./assets/images/banner/etfit-index-one-hero-04.png" />
+    <meta property="og:URL" content="https://staging.whiteorangesoftware.com/metrix" />
+    <!-- meta og property tags end * -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="robots" content="noindex">
+
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/images/favicons/apple-touch-icon.png">
+    <link rel="icon" type="images/png" sizes="32x32" href="assets/images/favicons/favicon-32x32.png">
+    <link rel="icon" type="images/png" sizes="16x16" href="assets/images/favicons/favicon-16x16.png">
+  
+    <link rel="mask-icon" href="/assets/images/favicons/safari-pinned-tab.svg" color="#ffffff">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- All Css -->
+    <link type="text/css" rel="stylesheet" href="assets/css/styles.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+      <style>
+        .digit-cell {
+            width: 40px;
+            height: 60px;
+            text-align: center;
+            font-size: 28px;
+            margin: 0 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .digit-input-group {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .btn-activity-confirm {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        .error-box {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+
+        .success-box {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Spinner Loader Start -->
+    <div class="loader">
+        <div id="loading-bar-spinner" class="spinner">
+            <div class="spinner-icon"></div>
+        </div>
+    </div>
+
+   <section class="activity-bg bg-norepeat-cover">
+    <div class="container d-flex">
+        <div class="activity-card">
+            <div class="activity-card-heading">
+                <h1 class="activity-card-header">Verify Code</h1>
+                <label class="activity-card-subtitle">Enter the 6-digit code sent to your email.</label>
+            </div>
+            <div class="activity-actions">
+                <form class="d-flex flex-column gap-4" id="verifyForm">
+                    <div class="digit-input-group">
+                        <input type="text" class="digit-cell" maxlength="1" inputmode="numeric" />
+                        <input type="text" class="digit-cell" maxlength="1" inputmode="numeric" />
+                        <input type="text" class="digit-cell" maxlength="1" inputmode="numeric" />
+                        <input type="text" class="digit-cell" maxlength="1" inputmode="numeric" />
+                        <input type="text" class="digit-cell" maxlength="1" inputmode="numeric" />
+                        <input type="text" class="digit-cell" maxlength="1" inputmode="numeric" />
+                    </div>
+
+                    <div id="verify-message" class="error-box"></div>
+
+                    <button type="submit" class="btn-common btn-activity-confirm">Verify</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Activity Page Section Ends Here-->
+    <!-- Jquery Javascript File -->
+    <script src="assets/js/jquery.min.js"></script>
+    <!-- Bootstrap Bundle Javascript File -->
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <!-- Owl Carousel Javascript File -->
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <!-- Smooth Scroll Javascript File -->
+    <script src="assets/js/smoothscroll.min.js"></script>
+    <!-- Default Javascript File -->
+    <!-- Customized Javascript File -->
+    <script src="assets/js/svg.js"></script>
+    <script src="assets/js/custom.js"></script>
+    
+   <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const verifyForm = document.getElementById('verifyForm');
+    const verifyButton = document.querySelector('.btn-activity-confirm');
+    const digitInputs = document.querySelectorAll('.digit-cell');
+    const messageBox = document.getElementById('verify-message');
+
+    if (digitInputs.length > 0) digitInputs[0].focus();
+
+    digitInputs.forEach((input, index) => {
+        input.addEventListener('input', function () {
+            if (this.value.length === 1 && index < digitInputs.length - 1) {
+                digitInputs[index + 1].focus();
+            }
+        });
+
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Backspace' && this.value === '' && index > 0) {
+                digitInputs[index - 1].focus();
+            }
+        });
+    });
+
+    verifyForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        messageBox.style.display = 'none';
+        messageBox.className = 'error-box';
+        messageBox.textContent = '';
+
+        let code = '';
+        digitInputs.forEach(input => {
+            code += input.value.trim();
+        });
+
+        if (!/^\d{6}$/.test(code)) {
+            showMessage('يرجى إدخال رمز مكون من 6 أرقام فقط', false);
+            return;
+        }
+
+        const email = localStorage.getItem('emailToVerify');
+        if (!email) {
+            showMessage('انتهت الجلسة. يرجى التسجيل مرة أخرى.', false);
+            setTimeout(() => window.location.href = 'register.html', 2000);
+            return;
+        }
+
+        verifyButton.disabled = true;
+        verifyButton.textContent = 'Verifying...';
+
+        fetch("https://jobizaa.com/api/admin/verify-email", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: email,
+                code: code
+            })
+        })
+        .then(async res => {
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || 'Verification failed');
+            return data;
+        })
+        .then(() => {
+            showMessage('تم التحقق بنجاح! سيتم توجيهك الآن...', true);
+            localStorage.removeItem('emailToVerify');
+            setTimeout(() => window.location.href = 'login.html', 2000);
+        })
+        .catch(error => {
+            showMessage(error.message || 'فشل التحقق. يرجى المحاولة مجددًا.', false);
+            digitInputs.forEach(input => input.value = '');
+            digitInputs[0].focus();
+        })
+        .finally(() => {
+            verifyButton.disabled = false;
+            verifyButton.textContent = 'Verify';
+        });
+    });
+
+    function showMessage(message, success = false) {
+        messageBox.textContent = message;
+        messageBox.className = success ? 'error-box success-box' : 'error-box';
+        messageBox.style.display = 'block';
+    }
+});
+</script>
+
+    
+      
+</body>
+
+</html>

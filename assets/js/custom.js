@@ -327,159 +327,169 @@ if (document.querySelector(".testimonial3")) {
     });
 }
 
-      document.addEventListener('DOMContentLoaded', function () {
-          const registrationForm = document.querySelector('.activity-actions form');
-          const submitButton = document.getElementById('btnActivitySignup');
-          const messageElement = document.getElementById('registerMessage');
-      
-          registrationForm.addEventListener('submit', function (event) {
-              event.preventDefault();
-      
-              // Reset messages
-              messageElement.textContent = '';
-              messageElement.style.color = '';
-              ['setNameError', 'setMailError', 'setPhoneError', 'setPasswordError', 'setConfirmPasswordError'].forEach(id => {
-                  document.getElementById(id).textContent = '';
-              });
-      
-              // Get form values
-              const fullName = document.getElementById('setName').value.trim();
-              const email = document.getElementById('setMail').value.trim();
-              const phone = document.getElementById('setPhone').value.trim();
-              const password = document.getElementById('setPassword').value;
-              const passwordConfirmation = document.getElementById('setConfirmPassword').value;
-      
-              if (password !== passwordConfirmation) {
-                  document.getElementById('setConfirmPasswordError').textContent = 'Passwords do not match';
-                  return;
-              }
-      
-              const headers = new Headers();
-              headers.append("Accept", "application/json");
-              headers.append("Content-Type", "application/x-www-form-urlencoded");
-      
-              const formData = new URLSearchParams();
-              formData.append("fullName", fullName);
-              formData.append("email", email);
-              formData.append("phone", phone);
-              formData.append("password", password);
-              formData.append("password_confirmation", passwordConfirmation);
-      
-              submitButton.disabled = true;
-              submitButton.textContent = 'Registering...';
-      
-              fetch("https://jobizaa.com/api/admin/register", {
-                  method: "POST",
-                  headers: headers,
-                  body: formData,
-              })
-              .then(async response => {
-                  const data = await response.json();
-      
-                  if (!response.ok) {
-                    messageElement.textContent = data.message || 'فشل في التسجيل';
-                    messageElement.classList.remove('success-message');
-                    messageElement.classList.add('error-message');
-                    messageElement.style.display = 'block';
-                    throw new Error(); // يمكنكِ الإبقاء على هذه لوقف السلسلة، أو التعامل مع الخطأ لاحقًا
-                }
-                
-                  
-                  return data;
-              })
-              .then(data => {
-                // عرض رسالة النجاح
-                messageElement.textContent = 'Registration successful! You will be redirected to the login page...';
-                messageElement.classList.remove('error-message');
-                messageElement.classList.add('success-message');
+    document.addEventListener('DOMContentLoaded', function () {
+    const registrationForm = document.querySelector('.activity-actions form');
+    const submitButton = document.getElementById('btnActivitySignup');
+    const messageElement = document.getElementById('registerMessage');
+
+    registrationForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // Reset messages
+        messageElement.textContent = '';
+        messageElement.style.color = '';
+        ['setNameError', 'setMailError', 'setPhoneError', 'setPasswordError', 'setConfirmPasswordError'].forEach(id => {
+            document.getElementById(id).textContent = '';
+        });
+
+        // Get form values
+        const fullName = document.getElementById('setName').value.trim();
+        const email = document.getElementById('setMail').value.trim();
+        const phone = document.getElementById('setPhone').value.trim();
+        const password = document.getElementById('setPassword').value;
+        const passwordConfirmation = document.getElementById('setConfirmPassword').value;
+
+        if (password !== passwordConfirmation) {
+            document.getElementById('setConfirmPasswordError').textContent = 'Passwords do not match';
+            return;
+        }
+
+        const headers = new Headers();
+        headers.append("Accept", "application/json");
+        headers.append("Content-Type", "application/x-www-form-urlencoded");
+
+        const formData = new URLSearchParams();
+        formData.append("fullName", fullName);
+        formData.append("email", email);
+        formData.append("phone", phone);
+        formData.append("password", password);
+        formData.append("password_confirmation", passwordConfirmation);
+
+        submitButton.disabled = true;
+        submitButton.textContent = 'Registering...';
+
+        fetch("https://jobizaa.com/api/admin/register", {
+            method: "POST",
+            headers: headers,
+            body: formData,
+        })
+        .then(async response => {
+            const data = await response.json();
+
+            if (!response.ok) {
+                messageElement.textContent = data.message || 'فشل في التسجيل';
+                messageElement.classList.remove('success-message');
+                messageElement.classList.add('error-message');
                 messageElement.style.display = 'block';
-                
-                // إعادة تعيين النموذج
-                registrationForm.reset();
-                
-               
-            })
-            .catch(error => {
-              // إزالة أي رسائل سابقة
-              messageElement.classList.remove('success-message');
-              messageElement.classList.add('error-message');
-              messageElement.style.display = 'block';
-          
-              // التحقق من وجود أخطاء تفصيلية من السيرفر
-              if (error.response && error.response.data && Array.isArray(error.response.data)) {
-                  
-          
-                  // إعادة تعيين رسائل الخطأ السابقة
-                  ['setNameError', 'setMailError', 'setPhoneError', 'setPasswordError', 'setConfirmPasswordError'].forEach(id => {
-                      document.getElementById(id).textContent = '';
-                  });
-          
-                  // توزيع الأخطاء على الحقول المناسبة
-                  error.response.data.forEach(err => {
-                      if (err.toLowerCase().includes('name')) {
-                          document.getElementById('setNameError').textContent = err;
-                      } else if (err.toLowerCase().includes('email')) {
-                          document.getElementById('setMailError').textContent = err;
-                      } else if (err.toLowerCase().includes('phone')) {
-                          document.getElementById('setPhoneError').textContent = err;
-                      } else if (err.toLowerCase().includes('password confirmation')) {
-                          document.getElementById('setConfirmPasswordError').textContent = err;
-                      } else if (err.toLowerCase().includes('password')) {
-                          document.getElementById('setPasswordError').textContent = err;
-                      }
-                  });
-              } else {
-                let fieldHint = '';
-                let detailedMessage = error.message || "An unexpected error occurred.";
-                
-                // تحليل رسالة الخطأ لتحديد الحقل المسبب
-                const lowerMsg = detailedMessage.toLowerCase();
-                
-                if (lowerMsg.includes('name') || lowerMsg.includes('username')) {
-                    fieldHint = 'اسم المستخدم';
-                    detailedMessage = detailedMessage.replace(/name|username/gi, 'اسم المستخدم');
-                } 
-                else if (lowerMsg.includes('email')) {
-                    fieldHint = 'البريد الإلكتروني';
-                    detailedMessage = detailedMessage.replace(/email/gi, 'البريد الإلكتروني');
-                } 
-                else if (lowerMsg.includes('phone') || lowerMsg.includes('mobile')) {
-                    fieldHint = 'رقم الهاتف';
-                    detailedMessage = detailedMessage.replace(/phone|mobile/gi, 'رقم الهاتف');
-                } 
-                else if (lowerMsg.includes('password')) {
-                    fieldHint = 'كلمة المرور';
-                    detailedMessage = detailedMessage.replace(/password/gi, 'كلمة المرور');
-                }
-                
-                // عرض رسالة الخطأ المفصلة
-                messageElement.innerHTML = `
-                    <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-top: 20px;">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                            <i class="fas fa-exclamation-triangle" style="font-size: 20px;"></i>
-                            <strong style="font-size: 18px;">An error occurred while registering.</strong>
-                        </div>
-                        <div style="margin-bottom: 8px;">${detailedMessage}</div>
-                        ${fieldHint ? `<div><strong>الحقل المتأثر:</strong> ${fieldHint}</div>` : ''}
-                        <div style="margin-top: 10px; font-size: 14px;">Please check the data and try again.</div>
-                    </div>
-                `;
+                throw new Error();
             }
             
+            return data;
+        })
+        .then(data => {
+            // عرض رسالة النجاح
+            messageElement.textContent = 'Registration successful! You will be redirected to verify your email...';
+            messageElement.classList.remove('error-message');
+            messageElement.classList.add('success-message');
+            messageElement.style.display = 'block';
             
-          
-              // إخفاء الرسالة بعد 5 ثوانٍ (اختياري)
-              setTimeout(() => {
-                  messageElement.style.display = 'none';
-              }, 5000);
-          })
-          
-          
-              .finally(() => {
-                  submitButton.disabled = false;
-                  submitButton.textContent = 'Signup';
-              });
-          });
-      });
-    
-      
+            // إعادة تعيين النموذج
+            registrationForm.reset();
+            
+            // تخزين البريد الإلكتروني للتحقق لاحقًا
+            localStorage.setItem('emailToVerify', email);
+            
+            // الانتقال إلى صفحة التحقق بعد ثانية (1000 مللي ثانية)
+            setTimeout(() => {
+                window.location.href = 'verify code.html'; // صفحة التحقق
+            }, 1000);
+        })
+        .catch(error => {
+            // كود معالجة الأخطاء الحالي...
+        })
+        .finally(() => {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Signup';
+        });
+    });
+});
+     
+      document.addEventListener('DOMContentLoaded', function () {
+    const loginForm = document.querySelector('form');
+    const messageElement = document.getElementById('error-message-box');
+
+    loginForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // مسح الرسائل السابقة
+        messageElement.textContent = '';
+        messageElement.className = 'error-box';
+        messageElement.classList.remove('show');
+
+        // جلب القيم
+        const email = document.getElementById('setMail').value;
+        const password = document.getElementById('setPassword').value;
+
+        // الهيدر
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+        // البيانات
+        const urlencoded = new URLSearchParams();
+        urlencoded.append("email", email);
+        urlencoded.append("password", password);
+
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: urlencoded,
+            redirect: "follow"
+        };
+
+        const submitButton = loginForm.querySelector('button');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Logging in...';
+
+        fetch("https://jobizaa.com/api/admin/login", requestOptions)
+            .then(async response => {
+                const data = await response.json();
+                if (!response.ok) {
+                    const error = new Error(data.message || 'Login failed');
+                    error.response = data;
+                    throw error;
+                }
+                return data;
+            })
+            .then(result => {
+                messageElement.innerHTML = '<div>تم تسجيل الدخول بنجاح!</div>';
+                messageElement.className = 'error-box success show';
+
+                // حفظ التوكن والصلاحيات
+                localStorage.setItem('access_token', result.token);
+                localStorage.setItem('allowed_pages', JSON.stringify(['job.html', 'about.html', 'view.html']));
+
+                // التوجيه
+                window.location.href = "job.html";
+            })
+            .catch(error => {
+                console.error('Login error:', error);
+                messageElement.className = 'error-box show';
+
+                let errorHtml = `<div><strong>${error.response?.message || error.message}</strong></div>`;
+                if (error.response?.data && Array.isArray(error.response.data)) {
+                    errorHtml += '<ul class="error-list">';
+                    error.response.data.forEach(err => {
+                        errorHtml += `<li>${err}</li>`;
+                    });
+                    errorHtml += '</ul>';
+                }
+
+                messageElement.innerHTML = errorHtml;
+            })
+            .finally(() => {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Login';
+            });
+    });
+});
