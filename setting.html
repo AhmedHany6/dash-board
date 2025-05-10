@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <!-- fontAwesome -->
+    <!-- <link rel="stylesheet" href="css/vendor/all.min.css">
+    <link rel="stylesheet" href="./css/pages/setting.css"> -->
+    <meta name="api-url" content="https://placeholder.mockapi.io/api/v1">
+    <meta name="api-url" content="https://your-real-api-url.com/api/v1">
+
+    <link rel="stylesheet" href="./css/style.css">
+
+    <style>
+        .confirmation-dialog {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            width: 350px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .confirmation-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .confirmation-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+        </style>
+
+</head>
+
+<body>
+
+    <div class="header">
+        <!-- ✅ Navbar -->
+        <nav class="top-bar">
+            <div class="search-container">
+                <input type="text" placeholder="Search..." class="search-input">
+                <button class="search-button">
+                    <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+            <div class="icon-section">
+                <i class="fas fa-envelope"></i>
+              <!-- أيقونة الإشعارات مع البادج -->
+<div class="notification-container">
+    <i class="fas fa-bell" id="notificationBell"><span class="notification-badge">4</span></i>
+    
+    <!-- Dropdown الإشعارات -->
+    <div class="notification-dropdown" id="notificationDropdown">
+        <div class="dropdown-header">
+            <h3>Notifications</h3>
+            <a href="#" class="mark-read">Mark all as read</a>
+        </div>
+        
+        <div class="notification-list">
+            <!-- الإشعارات الجديدة -->
+            <div class="notification-section">
+                <h4>NEW</h4>
+                <div class="notification-item unread">
+                    <div class="notification-content">
+                     
+                        Emma Watson replied to your comment: "Hello world 😊"
+                        <span class="notification-time">Just now</span>
+                    </div>
+                </div>
+                <!-- باقي الإشعارات هنا -->
+            </div>
+            
+            <!-- الإشعارات القديمة -->
+            <div class="notification-section">
+                <h4>EARLIER</h4>
+                <div class="notification-item">
+                    <div class="notification-content">
+                        The forecast today shows a low of 20°C in California.
+                        <span class="notification-time">8h ago</span>
+                    </div>
+                </div>
+                <!-- باقي الإشعارات هنا -->
+            </div>
+        </div>
+        
+        <a href="nofigation.html" class="view-all">View all</a>
+    </div>
+</div>
+                <i class="fas fa-layer-group"></i>
+                <div class="user-profile" onclick="toggleDropdown()">
+                    <img src="assets/images/avata.jpeg" alt="image profile">
+                    <span>Hi, Hizrian</span>
+
+                    <div class="dropdown-box">
+                        <div class="user-info">
+                            <h3>Kevin Anderson</h3>
+                            <p>مصمم مواقع</p>
+                        </div>
+                        <ul>
+                            <li><i class="fas fa-user"></i> الحساب الشخصي</li>
+                            <li><i class="fas fa-cog"></i> الإعدادات</li>
+                            <li><i class="fas fa-question-circle"></i> المساعدة</li>
+                            <li><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+
+
+    </div>
+
+
+
+
+    <!-- =============== sidebar ================ -->
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="assets/images/logo.png" alt="logo">
+            <div class="toggle-btn">☰</div>
+        </div>
+
+        <ul>
+
+            <li data-id="dashboard">
+                <a href="index.html">
+                    <span class="icon">
+                        <i class="fa-sharp fa-solid fa-house"></i>
+                    </span>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+
+            <li data-id="users">
+                <a href="user.html">
+                    <span class="icon">
+                        <i class="fa-solid fa-users"></i>
+                    </span>
+                    <span class="text">Users</span>
+                </a>
+            </li>
+
+            <li data-id="jobs">
+                <a href="job.html">
+                    <span class="icon">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </span>
+                    <span class="text">Jobs</span>
+                </a>
+            </li>
+
+            <li data-id="view">
+                <a href="view.html">
+                    <span class="icon">
+                        <i class="fa-sharp fa-solid fa-eye"></i>
+                    </span>
+                    <span class="text">View jobs</span>
+                </a>
+            </li>
+
+            <li data-id="companies">
+                <a href="company.html">
+                    <span class="icon">
+                        <i class="fa-solid fa-buildings"></i>
+                    </span>
+                    <span class="text">Companies</span>
+                </a>
+            </li>
+            <li>
+                <a href="./app/chat.html">
+                    <span class="icon">
+                        <i class="fas fa-comments"></i>
+                    </span>
+                    <span class="text">Chat</span>
+                </a>
+            </li>
+
+            <li data-id="profile">
+                <a href="about.html">
+                    <span class="icon">
+                        <i class="fa-solid fa-user"></i>
+                    </span>
+                    <span class="text">Profile</span>
+                </a>
+            </li>
+
+            <li data-id="register">
+                <a href="signup.html">
+                    <span class="icon">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </span>
+                    <span class="text">Register</span>
+                </a>
+            </li>
+
+            <li data-id="setting">
+                <a href="setting.html">
+                    <span class="icon">
+                        <i class="fa-solid fa-gear"></i>
+                    </span>
+                    <span class="text">Settings</span>
+                </a>
+            </li>
+
+            <li data-id="logout">
+                <a href="register.html">
+                    <span class="icon">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </span>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+
+
+    <section class="main-panel">
+
+        <div class="container-fluid">
+
+
+
+            <h1 class="my-5">Settings</h1>
+
+            <!-- Navigation Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('general')">General</button>
+                <button class="tab btn-center" onclick="showTab('security')">Security</button>
+                <button class="tab" onclick="showTab('admin')">Admin Management</button>
+            </div>
+
+            <!-- General Settings -->
+            <div class="tab-content" id="general">
+                <h2>General Settings</h2>
+                <label>Application Name:</label>
+                <input type="text" placeholder="Enter application name" class="my-2">
+
+
+                <label for="logo">Logo:</label>
+                <div class="file-upload">
+                    <label for="logo" class="custom-file-upload">Choose the file</label>
+                    <span id="file-name">No file selected</span>
+                    <input type="file" id="logo" name="logo" accept="image/*" class="my-2">
+                </div>
+
+            </div>
+
+            <!-- Security Settings -->
+            <div class="tab-content hidden" id="security">
+                <h2>Security Settings</h2>
+                <label>Admin Permissions:</label>
+                <select>
+                    <option value="full">Full Access</option>
+                    <option value="limited">Limited Access</option>
+                </select>
+            </div>
+
+<!-- Admin Management -->
+<div class="tab-content hidden" id="admin">
+    <h2>Add super admin</h2>
+    <form id="superAdminForm">
+        <label for="adminName">Name:</label>
+        <input type="text" id="adminName" class="my-2" placeholder="full name" required>
+  
+        <label for="adminEmail">Email:</label>
+        <input type="email" id="adminEmail" class="my-2" placeholder="example@email.com" required>
+  
+        <label for="adminPhone">Phone Number:</label>
+        <input type="text" id="adminPhone" class="my-2" placeholder="Phone Number" required>
+  
+        <label for="adminPassword">Password:</label>
+        <input type="password" id="adminPassword" class="my-2" placeholder="Password" required>
+  
+        <button type="submit">Add super admin</button>
+    </form>
+  
+    <hr>
+  
+    <label for="adminList">Choose Admin:</label>
+    <select id="adminList">
+        <option>Choose Admin</option>
+    </select>
+   
+
+</div>
+
+        </div>
+    </section>
+   
+
+    <script src="./js/main.js"></script>
+    <script src="./js/setting.js"></script>
+    <script>
+        const API_URL = 'https://jsonplaceholder.typicode.com';
+    
+        async function fetchAdmins() {
+            try {
+                const response = await fetch(`${API_URL}/users`);
+                if (!response.ok) throw new Error('فشل في جلب قائمة المشرفين');
+                const data = await response.json();
+                return data || [];
+            } catch (error) {
+                console.error('Error:', error);
+                alert('حدث خطأ أثناء جلب قائمة المشرفين');
+                return [];
+            }
+        }
+    
+        async function updateAdminList() {
+            const adminList = document.getElementById('adminList');
+            adminList.innerHTML = '<option>اختر أدمن</option>';
+            try {
+                const admins = await fetchAdmins();
+                admins.forEach(admin => {
+                    const option = document.createElement('option');
+                    option.value = admin.id;
+                    option.textContent = admin.name || admin.email;
+                    adminList.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    
+        async function addSuperAdmin(adminData) {
+            try {
+                const response = await fetch(`${API_URL}/users`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(adminData)
+                });
+    
+                const result = await response.json();
+                if (!response.ok) throw new Error('فشل في إضافة المشرف');
+                return result;
+            } catch (error) {
+                console.error('Error:', error);
+                throw error;
+            }
+        }
+    
+        async function deleteSuperAdmin(adminId) {
+            try {
+                const response = await fetch(`${API_URL}/users/${adminId}`, {
+                    method: 'DELETE'
+                });
+    
+                if (!response.ok) throw new Error('فشل في حذف المشرف');
+                return true;
+            } catch (error) {
+                console.error('Error:', error);
+                throw error;
+            }
+        }
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAdminList();
+    
+            const submitBtn = document.querySelector('#superAdminForm button[type="submit"]');
+    
+            document.getElementById('superAdminForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const adminData = {
+                    name: document.getElementById('adminName').value.trim(),
+                    email: document.getElementById('adminEmail').value.trim(),
+                    phone: document.getElementById('adminPhone').value.trim(),
+                    password: document.getElementById('adminPassword').value
+                };
+    
+                try {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'جاري الإضافة...';
+    
+                    await addSuperAdmin(adminData);
+                    alert('تمت الإضافة بنجاح (تجريبيًا)');
+                    await updateAdminList();
+                    e.target.reset();
+                } catch (error) {
+                    alert(`خطأ: ${error.message}`);
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'إضافة سوبر أدمن';
+                }
+            });
+    
+            document.getElementById('deleteAdminBtn').addEventListener('click', async () => {
+                const adminId = document.getElementById('adminList').value;
+    
+                if (!adminId || adminId === "اختر أدمن") {
+                    alert('الرجاء اختيار مشرف للحذف');
+                    return;
+                }
+    
+                if (confirm('هل أنت متأكد من حذف هذا المشرف؟')) {
+                    try {
+                        await deleteSuperAdmin(adminId);
+                        alert('تم الحذف بنجاح (تجريبيًا)');
+                        await updateAdminList();
+                    } catch (error) {
+                        alert(`خطأ: ${error.message}`);
+                    }
+                }
+            });
+        });
+      </script>
+   
+  
+</body>
+
+</html>

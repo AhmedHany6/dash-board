@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Title Of The Page -->
+    <title>Login || Metrix</title>
+
+    <!-- Meta Information -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Metrix is a sleek and modern app landing page template built with HTML, CSS, and JavaScript. It's designed to showcase your app's features and attract potential users.">
+    <meta name="keywords" content="Metrix - App Landing Page Template, application landing page, application website landing page, responsive website, application responsive website, mobile app landing website, latest bootstrap mobile application website design, product lounch website, app product lounch website, bootstrap template, creative mobile website, multi pages template, landing page website, minimal portfolio, mobile app intro website">
+    <meta name="author" content="white orange software">
+    <!-- meta og property tags start -->
+    <meta property="og:title" content="404 || Metrix" />
+    <meta property="og:description" content="Metrix is a sleek and modern app landing page template built with HTML, CSS, and JavaScript. It's designed to showcase your app's features and attract potential users." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="./assets/images/banner/etfit-index-one-hero-04.png" />
+    <meta property="og:URL" content="https://staging.whiteorangesoftware.com/metrix" />
+    <!-- meta og property tags end * -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="robots" content="noindex">
+
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/images/favicons/apple-touch-icon.png">
+    <link rel="icon" type="images/png" sizes="32x32" href="assets/images/favicons/favicon-32x32.png">
+    <link rel="icon" type="images/png" sizes="16x16" href="assets/images/favicons/favicon-16x16.png">
+  
+    <link rel="mask-icon" href="/assets/images/favicons/safari-pinned-tab.svg" color="#ffffff">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- All Css -->
+    <link type="text/css" rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   
+        
+</head>
+
+<body>
+    <!-- Spinner Loader Start -->
+    <div class="loader">
+        <div id="loading-bar-spinner" class="spinner">
+            <div class="spinner-icon"></div>
+        </div>
+    </div>
+
+    <!-- Activity Page Section Starts Here-->
+    <section class="activity-bg bg-norepeat-cover">
+        <div class="container d-flex">
+            <div class="activity-card">
+                <div class="activity-logo-wrap">
+                    <a href="home.html" class="logo-img pb-0">
+                        <img src="assets/images/logo/logo.svg" alt="logo-images" />
+                    </a>
+                </div>
+                <div class="activity-card-heading">
+                    <h1 class="activity-card-header">Welcome Back</h1>
+                    <label class="activity-card-subtitle">Lorem Ipsum is simply dummy text of the printing
+                        and type setting industry.</p>
+                </div>
+                <div class="activity-actions">
+                    <form class="d-flex flex-column gap-4" onsubmit="loginRedirect(event)">
+                        <div class="form-group">
+                            <label for="setMail"><i class="fas fa-envelope"></i></label>
+                            <input type="email" id="setMail" class="input-one" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="setPassword"><i class="fas fa-lock"></i></label>
+                            <input type="password" id="setPassword" class="input-one" placeholder="Password">
+                        </div>
+                        <div class="text-end">
+                            <a href="forget-password.html" class="activity-forget mb-0">Forget Password?</a>
+                        </div>
+                        <button type="submit" class="btn-common btn-activity-confirm">Login</button>
+                    </form>
+                </div>
+                <div class="activity-switch">
+                    <label class="activity-switch-title">Don't have an account?</label>
+                    <a href="signup.html" class="activity-go-link">Signup</a>
+                </div>
+            </div>
+        </div>
+       
+
+    </section>
+    <!-- Activity Page Section Ends Here-->
+    <!-- Jquery Javascript File -->
+    <script src="assets/js/jquery.min.js"></script>
+    <!-- Bootstrap Bundle Javascript File -->
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <!-- Owl Carousel Javascript File -->
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <!-- Smooth Scroll Javascript File -->
+    <script src="assets/js/smoothscroll.min.js"></script>
+    <!-- Default Javascript File -->
+    <!-- Customized Javascript File -->
+    <script src="assets/js/svg.js"></script>
+    <script src="assets/js/custom.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginForm = document.querySelector('form');
+            const messageElement = document.createElement('div');
+            loginForm.appendChild(messageElement);
+    
+            loginForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+    
+                // مسح الرسائل السابقة
+                messageElement.textContent = '';
+                messageElement.className = '';
+                messageElement.innerHTML = '';
+    
+                // جلب القيم
+                const email = document.getElementById('setMail').value;
+                const password = document.getElementById('setPassword').value;
+    
+                // الهيدر
+                const myHeaders = new Headers();
+                myHeaders.append("Accept", "application/json");
+                myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+    
+                // البيانات
+                const urlencoded = new URLSearchParams();
+                urlencoded.append("email", email);
+                urlencoded.append("password", password);
+    
+                const requestOptions = {
+                    method: "POST",
+                    headers: myHeaders,
+                    body: urlencoded,
+                    redirect: "follow"
+                };
+    
+                const submitButton = loginForm.querySelector('button');
+                submitButton.disabled = true;
+                submitButton.textContent = 'Logging in...';
+    
+                fetch("https://jobizaa.com/api/admin/login", requestOptions)
+                    .then(async response => {
+                        const data = await response.json();
+                        if (!response.ok) {
+                            const error = new Error(data.message || 'Login failed');
+                            error.response = data;
+                            throw error;
+                        }
+                        return data;
+                    })
+                    .then(result => {
+                        messageElement.innerHTML = '<div>Login successful!</div>';
+                        messageElement.className = 'success';
+    
+                        // حفظ التوكن والصلاحيات
+                        localStorage.setItem('access_token', result.token);
+                        localStorage.setItem('allowed_pages', JSON.stringify(['job.html', 'about.html', 'view.html']));
+    
+                        // التوجيه
+                        window.location.href = "job.html";
+                    })
+                    .catch(error => {
+                        console.error('Login error:', error);
+                        messageElement.className = 'error';
+    
+                        let errorHtml = `<div><strong>${error.response?.message || error.message}</strong></div>`;
+                        if (error.response?.data && Array.isArray(error.response.data)) {
+                            errorHtml += '<ul class="error-list">';
+                            error.response.data.forEach(err => {
+                                errorHtml += `<li>${err}</li>`;
+                            });
+                            errorHtml += '</ul>';
+                        }
+    
+                        messageElement.innerHTML = errorHtml;
+                    })
+                    .finally(() => {
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Login';
+                    });
+            });
+        });
+    </script>
+    
+    
+    
+      
+</body>
+
+</html>
