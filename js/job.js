@@ -1,6 +1,11 @@
 // General Settings
 const API_URL = "https://jobizaa.com/api/admin/jobs";
-const AUTH_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0Njg4NDg4NSwibmJmIjoxNzQ2ODg0ODg1LCJqdGkiOiJKNFRQNDc0VDBYZmVkbHZSIiwic3ViIjoiMSIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJzdXBlci1hZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2UtYWxsLWNvbXBhbmllcyIsIm1hbmFnZS1hbGwtam9icyIsIm1hbmFnZS1yb2xlcyIsIm1hbmFnZS1jb21wYW55LWFkbWlucyIsIm1hbmFnZS1hcHBsaWNhdGlvbnMiLCJ2aWV3LWFwcGxpY2FudC1wcm9maWxlcyIsInNlbmQtbWVzc2FnZXMiXSwiY29tcGFueV9pZCI6bnVsbH0.1okzsacodT2LkZoDo6e7N8nkNekwXxvFAuT1mjH0OE0";
+const AUTH_TOKEN =
+  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0Njg4NDg4NSwibmJmIjoxNzQ2ODg0ODg1LCJqdGkiOiJKNFRQNDc0VDBYZmVkbHZSIiwic3ViIjoiMSIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJzdXBlci1hZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2UtYWxsLWNvbXBhbmllcyIsIm1hbmFnZS1hbGwtam9icyIsIm1hbmFnZS1yb2xlcyIsIm1hbmFnZS1jb21wYW55LWFkbWlucyIsIm1hbmFnZS1hcHBsaWNhdGlvbnMiLCJ2aWV3LWFwcGxpY2FudC1wcm9maWxlcyIsInNlbmQtbWVzc2FnZXMiXSwiY29tcGFueV9pZCI6bnVsbH0.1okzsacodT2LkZoDo6e7N8nkNekwXxvFAuT1mjH0OE0";
+
+const CEATOR_TOKEN =
+  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0Njk5NTMwNiwibmJmIjoxNzQ2OTk1MzA2LCJqdGkiOiJmR0pFa2FWMHpBTTFmU0kwIiwic3ViIjoiMyIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJhZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2Utb3duLWNvbXBhbnkiLCJtYW5hZ2UtY29tcGFueS1qb2JzIiwibWFuYWdlLWNvbXBhbnktYWRtaW5zIiwibWFuYWdlLWFwcGxpY2F0aW9ucyIsInZpZXctYXBwbGljYW50LXByb2ZpbGVzIiwic2VuZC1tZXNzYWdlcyJdLCJjb21wYW55X2lkIjozfQ.X3uQzsixFHZizAf9v8Y_ESNnQ-sIMNQFOWoGHYKpOsM";
+
 let jobs = [];
 let currentPage = 1;
 const itemsPerPage = 5;
@@ -9,34 +14,43 @@ const itemsPerPage = 5;
 document.addEventListener("DOMContentLoaded", fetchJobs);
 
 // ✅ الإشعارات
-document.getElementById('notificationBell').addEventListener('click', function(e) {
+document
+  .getElementById("notificationBell")
+  .addEventListener("click", function (e) {
     e.stopPropagation();
-    const dropdown = document.getElementById('notificationDropdown');
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    const dropdown = document.getElementById("notificationDropdown");
+    dropdown.style.display =
+      dropdown.style.display === "block" ? "none" : "block";
+  });
+document.addEventListener("click", function (e) {
+  if (!e.target.closest(".notification-container")) {
+    document.getElementById("notificationDropdown").style.display = "none";
+  }
 });
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.notification-container')) {
-        document.getElementById('notificationDropdown').style.display = 'none';
-    }
+document.querySelector(".mark-read").addEventListener("click", function () {
+  document.querySelectorAll(".unread").forEach((item) => {
+    item.classList.remove("unread");
+  });
+  document.querySelector(".notification-badge").textContent = "0";
 });
-document.querySelector('.mark-read').addEventListener('click', function() {
-    document.querySelectorAll('.unread').forEach(item => {
-        item.classList.remove('unread');
-    });
-    document.querySelector('.notification-badge').textContent = '0';
-});
-// Fetch jobs from API
+
+// @author  A.A
+// @desc    Fetch jobs from API
+// @route   GET /api/admin/jobs
 async function fetchJobs() {
-    document.getElementById("loading").style.display = "block";
-    try {
-      const response = await fetch(`${API_URL}?page=${currentPage}&limit=${itemsPerPage}`, {
+  document.getElementById("loading").style.display = "block";
+  try {
+    const response = await fetch(
+      `${API_URL}?page=${currentPage}&limit=${itemsPerPage}`,
+      {
         method: "GET",
         headers: {
-          "Authorization": AUTH_TOKEN,
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        }
-      });
+          Authorization: AUTH_TOKEN,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     // if (!response.ok) {
     //     Swal.fire({
@@ -54,40 +68,37 @@ async function fetchJobs() {
     //     });
     //     return;
     //   }
-    
-  const respons = await response.json();
-console.log("Response:", respons);
 
-// جرب احتمالات متعددة حسب شكل الريسبونس
-const jobList =
-  respons?.data?.jobs?.data ||
-  respons?.data?.jobs ||
-  respons?.jobs?.data ||
-  respons?.jobs ||
-  respons?.data ||
-  [];
+    const respons = await response.json();
+    console.log("Response:", respons);
 
-let alljobs = [];
+    // جرب احتمالات متعددة حسب شكل الريسبونس
+    const jobList =
+      respons?.data?.jobs?.data ||
+      respons?.data?.jobs ||
+      respons?.jobs?.data ||
+      respons?.jobs ||
+      respons?.data ||
+      [];
 
-if (Array.isArray(jobList) && jobList.length > 0) {
-  alljobs = jobList.map(job => ({
-    id: job.id,
-    title: job.title,
-    company: job.company?.name || "No company",
-    applicants: Math.floor(Math.random() * 50),
-    status: job.job_status || "Pending"
-  }));
-} else {
-  console.warn("No jobs available");
-}
+    let alljobs = [];
 
-displayJobs(alljobs);
+    if (Array.isArray(jobList) && jobList.length > 0) {
+      alljobs = jobList.map((job) => ({
+        id: job.id,
+        title: job.title,
+        company: job.company?.name || "No company",
+        applicants: Math.floor(Math.random() * 50),
+        status: job.job_status || "Pending",
+      }));
+    } else {
+      console.warn("No jobs available");
+    }
 
-    
-  
+    displayJobs(alljobs);
+
     // يمكنك استخدام alljobs هنا مثلاً:
     displayJobs(alljobs); // أو أي دالة تعرض البيانات
-
   } catch (error) {
     console.error("Error fetching jobs:", error);
   } finally {
@@ -99,13 +110,13 @@ function viewJob(jobId) {
   fetch(`${API_URL}/${jobId}`, {
     method: "GET",
     headers: {
-      "Authorization": AUTH_TOKEN,
-      "Accept": "application/json",
-      "Content-Type": "application/json"
-    }
+      Authorization: AUTH_TOKEN,
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
   })
-    .then(res => res.json())
-    .then(job => {
+    .then((res) => res.json())
+    .then((job) => {
       Swal.fire({
         title: job.title,
         html: `
@@ -114,28 +125,34 @@ function viewJob(jobId) {
           <p><strong>Salary:</strong> ${job.salary}</p>
           <p><strong>Status:</strong> ${job.job_status}</p>
         `,
-        icon: "info"
+        icon: "info",
       });
     })
-    .catch(err => console.error("Error fetching job details:", err));
-    window.location.href = "view.html";
+    .catch((err) => console.error("Error fetching job details:", err));
+  window.location.href = "view.html";
 }
 
-// Display jobs in the table
-function displayJobs(filteredJobs) {
-  const jobTable = document.getElementById("jobTable");
-  jobTable.innerHTML = "";
-  let start = (currentPage - 1) * itemsPerPage;
-  let paginatedJobs = filteredJobs.slice(start, start + itemsPerPage);
-  paginatedJobs.forEach(job => {
+// @author  A.A
+// @desc    Display Jobs in Table
+// @route   GET /api/admin/jobs
+function displayJobs(jobsArray) {
+  const tableBody = document.getElementById("jobTable");
+  tableBody.innerHTML = "";
+
+  if (jobsArray.length === 0) {
+    tableBody.innerHTML = `<tr><td colspan="6">No jobs found.</td></tr>`;
+    return;
+  }
+
+  jobsArray.forEach((job) => {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${job.id}</td>
       <td>${job.title}</td>
       <td>${job.company}</td>
       <td>${job.applicants}</td>
-      <td><span class="status ${job.status.toLowerCase()}">${job.status}</span></td>
-      <td>
+      <td>${job.status}</td>
+<td>
         <button class="view-btn" onclick="viewJob(${job.id})">
           <i class="fa-solid fa-eye"></i> View
         </button>
@@ -147,7 +164,15 @@ function displayJobs(filteredJobs) {
         </button>
       </td>
     `;
-    jobTable.appendChild(row);
+    tableBody.appendChild(row);
+  });
+
+  // Attach the event listener to all delete buttons after the table is populated
+  document.querySelectorAll(".delete-button").forEach((button) => {
+    button.addEventListener("click", function () {
+      const jobId = this.getAttribute("data-id"); // Get the job ID from the data-id attribute
+      deleteJob(jobId); // Call the deleteJob function with the job ID
+    });
   });
 }
 
@@ -171,9 +196,12 @@ function generatePagination(totalItems) {
 function applyFilters() {
   let searchValue = document.getElementById("searchInput").value.toLowerCase();
   let statusFilter = document.getElementById("statusFilter").value;
-  let filteredJobs = jobs.filter(job =>
-    (job.title.toLowerCase().includes(searchValue) || job.company.toLowerCase().includes(searchValue)) &&
-    (statusFilter === "" || job.status.toLowerCase() === statusFilter.toLowerCase())
+  let filteredJobs = jobs.filter(
+    (job) =>
+      (job.title.toLowerCase().includes(searchValue) ||
+        job.company.toLowerCase().includes(searchValue)) &&
+      (statusFilter === "" ||
+        job.status.toLowerCase() === statusFilter.toLowerCase())
   );
   displayJobs(filteredJobs);
 }
@@ -187,17 +215,17 @@ async function deleteJob(id) {
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!"
+    confirmButtonText: "Yes, delete it!",
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
         const response = await fetch(`${API_URL}/${id}`, {
           method: "DELETE",
           headers: {
-            "Authorization": AUTH_TOKEN,
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          }
+            Authorization: AUTH_TOKEN,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
         });
         const resultData = await response.json();
         console.log("Job deleted:", resultData);
@@ -205,7 +233,7 @@ async function deleteJob(id) {
         Swal.fire({
           title: "Deleted!",
           text: "Job has been deleted successfully.",
-          icon: "success"
+          icon: "success",
         });
       } catch (err) {
         console.error("Error deleting job:", err);
@@ -214,20 +242,28 @@ async function deleteJob(id) {
   });
 }
 
-// Open add job modal
+// @author  A.A
+// @desc    Open add job modal
 function openAddJobModal() {
   document.getElementById("modalJobId").value = "";
+  document.getElementById("modalCategory").value = "";
   document.getElementById("modalTitle").value = "";
-  document.getElementById("modalCompany").value = "";
-  document.getElementById("modalApplicants").value = "";
-  document.getElementById("modalStatus").value = "Pending";
+  document.getElementById("modalSalary").value = "";
+  document.getElementById("modalLocation").value = "";
+  document.getElementById("modalDescription").value = "";
+  document.getElementById("modalRequirement").value = "";
+  document.getElementById("modalBenefits").value = "";
+  document.getElementById("modalJob_type").value = "";
+  document.getElementById("modalJob_status").value = "";
+  document.getElementById("modalPosition").value = "";
+  document.getElementById("modalStatus").value = "Pending"; // default value
   document.getElementById("modalTitleText").innerText = "Add Job";
   document.getElementById("jobModal").style.display = "flex";
 }
 
 // Open edit job modal
 function openEditJobModal(id) {
-  let job = jobs.find(j => j.id === id);
+  let job = jobs.find((j) => j.id === id);
   if (!job) return;
   document.getElementById("modalJobId").value = job.id;
   document.getElementById("modalTitle").value = job.title;
@@ -259,13 +295,13 @@ async function saveChanges() {
   formData.append("position", "Software Engineer");
 
   const options = {
-    method:  "POST",
+    method: "POST",
     headers: {
-      "Authorization": AUTH_TOKEN,
-      "Accept": "application/json",
-      "Content-Type": "application/x-www-form-urlencoded"
+      Authorization: AUTH_TOKEN,
+      Accept: "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: formData
+    body: formData,
   };
 
   const url = id ? `${API_URL}/${id}` : `${API_URL}/add-job`;
@@ -281,7 +317,98 @@ async function saveChanges() {
   }
 }
 
+// @author  A.A
+// @desc    Create a new job
+// @route   POST /api/admin/jobs/add-job
+async function saveJob() {
+  let id = document.getElementById("modalJobId").value;
+  let category = document.getElementById("modalCategory").value;
+  let title = document.getElementById("modalTitle").value;
+  let salary = document.getElementById("modalSalary").value;
+  let location = document.getElementById("modalLocation").value;
+  let description = document.getElementById("modalDescription").value;
+  let requirement = document.getElementById("modalRequirement").value;
+  let benefits = document.getElementById("modalBenefits").value;
+  let job_type = document.getElementById("modalJob_type").value;
+  let job_status = document.getElementById("modalJob_status").value;
+  let position = document.getElementById("modalPosition").value;
+  let status = document.getElementById("modalStatus").value;
+
+  const formData = new URLSearchParams();
+  formData.append("title", title);
+  formData.append("description", description);
+  formData.append("job_status", job_status || "Open");
+  formData.append("category_name", category || "General");
+  formData.append("location", location);
+  formData.append("salary", salary);
+  formData.append("requirement", requirement);
+  formData.append("benefits", benefits);
+  formData.append("job_type", job_type);
+  formData.append("position", position);
+  formData.append("status", status);
+
+  const options = {
+    method: "POST",
+    headers: {
+      Authorization: CEATOR_TOKEN,
+      Accept: "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: formData,
+  };
+
+  const url = id ? `${API_URL}/${id}` : `${API_URL}/add-job`;
+
+  try {
+    const response = await fetch(url, options);
+    const result = await response.json();
+    console.log("Saved job:", result);
+    if (result.status === "403") {
+      Swal.fire({
+        title: "Error!",
+        text: "You don't have permission to perform this action.",
+        icon: "error",
+      });
+      return;
+    }
+    if (result.status === "422") {
+      Swal.fire({
+        title: "Error!",
+        text: `${result.data[0] || "Validation error."}`,
+        icon: "error",
+      });
+      return;
+    }
+    if (result.status === "409") {
+      Swal.fire({
+        title: "Error!",
+        text: `${result.data[0] || "Conflict error."}`,
+        icon: "error",
+      });
+      return;
+    }
+    if (result.status === "200") {
+      Swal.fire({
+        title: "Success!",
+        text: "Job created successfully.",
+        icon: "success",
+      });
+      return;
+    }
+
+    closeModal();
+    fetchJobs();
+  } catch (error) {
+    console.error("Error saving job:", error);
+    Swal.fire({
+      title: "Error!",
+      text: "An error occurred while saving the job.",
+      icon: "error",
+    });
+  }
+}
+
 // Close the modal
 function closeModal() {
-  document.getElementById("jobModal").style.display = "none";
+  document.getElementById("jobModal").style.display = "none";
 }
