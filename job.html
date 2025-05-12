@@ -1,311 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Job Listings Dashboard</title>
 
     <!-- fontAwesome -->
 
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
 
-
-</head>
-
-<body>
-
+  <body>
     <div class="header">
-        <!-- ✅ Navbar -->
-        <nav class="top-bar">
-            <div class="search-container">
-                <input type="text" placeholder="Search..." class="search-input">
-                <button class="search-button">
-                    <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
-                </button>
-            </div>
-            <div class="icon-section">
-                <i class="fas fa-envelope"></i>
-              <!-- أيقونة الإشعارات مع البادج -->
-<div class="notification-container">
-    <i class="fas fa-bell" id="notificationBell"><span class="notification-badge">4</span></i>
-    
-    <!-- Dropdown الإشعارات -->
-    <div class="notification-dropdown" id="notificationDropdown">
-        <div class="dropdown-header">
-            <h3>Notifications</h3>
-            <a href="#" class="mark-read">Mark all as read</a>
+      <!-- ✅ Navbar -->
+      <nav class="top-bar">
+        <div class="search-container">
+          <input type="text" placeholder="Search..." class="search-input" />
+          <button class="search-button">
+            <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
+          </button>
         </div>
-        
-        <div class="notification-list">
-            <!-- الإشعارات الجديدة -->
-            <div class="notification-section">
-                <h4>NEW</h4>
-                <div class="notification-item unread">
+        <div class="icon-section">
+          <i class="fas fa-envelope"></i>
+          <!-- أيقونة الإشعارات مع البادج -->
+          <div class="notification-container">
+            <i class="fas fa-bell" id="notificationBell"
+              ><span class="notification-badge">4</span></i
+            >
+
+            <!-- Dropdown الإشعارات -->
+            <div class="notification-dropdown" id="notificationDropdown">
+              <div class="dropdown-header">
+                <h3>Notifications</h3>
+                <a href="#" class="mark-read">Mark all as read</a>
+              </div>
+
+              <div class="notification-list">
+                <!-- الإشعارات الجديدة -->
+                <div class="notification-section">
+                  <h4>NEW</h4>
+                  <div class="notification-item unread">
                     <div class="notification-content">
-                     
-                        Emma Watson replied to your comment: "Hello world 😊"
-                        <span class="notification-time">Just now</span>
+                      Emma Watson replied to your comment: "Hello world 😊"
+                      <span class="notification-time">Just now</span>
                     </div>
+                  </div>
+                  <!-- باقي الإشعارات هنا -->
                 </div>
-                <!-- باقي الإشعارات هنا -->
-            </div>
-            
-            <!-- الإشعارات القديمة -->
-            <div class="notification-section">
-                <h4>EARLIER</h4>
-                <div class="notification-item">
+
+                <!-- الإشعارات القديمة -->
+                <div class="notification-section">
+                  <h4>EARLIER</h4>
+                  <div class="notification-item">
                     <div class="notification-content">
-                        The forecast today shows a low of 20°C in California.
-                        <span class="notification-time">8h ago</span>
+                      The forecast today shows a low of 20°C in California.
+                      <span class="notification-time">8h ago</span>
                     </div>
+                  </div>
+                  <!-- باقي الإشعارات هنا -->
                 </div>
-                <!-- باقي الإشعارات هنا -->
+              </div>
+
+              <a href="nofigation.html" class="view-all">View all</a>
             </div>
+          </div>
+          <i class="fas fa-layer-group"></i>
+          <div class="user-profile" onclick="toggleDropdown()">
+            <img src="assets/images/avata.jpeg" alt="image profile" />
+            <span>Hi, Hizrian</span>
+
+            <div class="dropdown-box">
+              <div class="user-info">
+                <h3>Kevin Anderson</h3>
+                <p>مصمم مواقع</p>
+              </div>
+              <ul>
+                <li><i class="fas fa-user"></i> الحساب الشخصي</li>
+                <li><i class="fas fa-cog"></i> الإعدادات</li>
+                <li><i class="fas fa-question-circle"></i> المساعدة</li>
+                <li><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        
-        <a href="nofigation.html" class="view-all">View all</a>
+      </nav>
     </div>
-</div>
-                <i class="fas fa-layer-group"></i>
-                <div class="user-profile" onclick="toggleDropdown()">
-                    <img src="assets/images/avata.jpeg" alt="image profile">
-                    <span>Hi, Hizrian</span>
-
-                    <div class="dropdown-box">
-                        <div class="user-info">
-                            <h3>Kevin Anderson</h3>
-                            <p>مصمم مواقع</p>
-                        </div>
-                        <ul>
-                            <li><i class="fas fa-user"></i> الحساب الشخصي</li>
-                            <li><i class="fas fa-cog"></i> الإعدادات</li>
-                            <li><i class="fas fa-question-circle"></i> المساعدة</li>
-                            <li><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</li>
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-        </nav>
-
-
-    </div>
-
-
-    <!-- =============== sidebar ================ -->
-
 
     <!-- =============== sidebar ================ -->
 
     <div class="sidebar">
-        <div class="sidebar-header">
-            <img src="assets/images/logo.png" alt="logo">
-            <div class="toggle-btn">☰</div>
-        </div>
+      <div class="sidebar-header">
+        <img src="assets/images/logo.png" alt="logo" />
+        <div class="toggle-btn">☰</div>
+      </div>
 
-        <ul>
+      <ul>
+        <li data-id="dashboard">
+          <a href="index.html">
+            <span class="icon">
+              <i class="fa-sharp fa-solid fa-house"></i>
+            </span>
+            <span class="text">Dashboard</span>
+          </a>
+        </li>
 
-            <li data-id="dashboard">
-                <a href="index.html">
-                    <span class="icon">
-                        <i class="fa-sharp fa-solid fa-house"></i>
-                    </span>
-                    <span class="text">Dashboard</span>
-                </a>
-            </li>
+        <li data-id="users">
+          <a href="user.html">
+            <span class="icon">
+              <i class="fa-solid fa-users"></i>
+            </span>
+            <span class="text">Users</span>
+          </a>
+        </li>
 
-            <li data-id="users">
-                <a href="user.html">
-                    <span class="icon">
-                        <i class="fa-solid fa-users"></i>
-                    </span>
-                    <span class="text">Users</span>
-                </a>
-            </li>
+        <li data-id="jobs">
+          <a href="job.html">
+            <span class="icon">
+              <i class="fa-solid fa-briefcase"></i>
+            </span>
+            <span class="text">Jobs</span>
+          </a>
+        </li>
 
-            <li data-id="jobs">
-                <a href="job.html">
-                    <span class="icon">
-                        <i class="fa-solid fa-briefcase"></i>
-                    </span>
-                    <span class="text">Jobs</span>
-                </a>
-            </li>
+        <li data-id="view">
+          <a href="view.html">
+            <span class="icon">
+              <i class="fa-sharp fa-solid fa-eye"></i>
+            </span>
+            <span class="text">View jobs</span>
+          </a>
+        </li>
 
-            <li data-id="view">
-                <a href="view.html">
-                    <span class="icon">
-                        <i class="fa-sharp fa-solid fa-eye"></i>
-                    </span>
-                    <span class="text">View jobs</span>
-                </a>
-            </li>
+        <li data-id="companies">
+          <a href="company.html">
+            <span class="icon">
+              <i class="fa-solid fa-buildings"></i>
+            </span>
+            <span class="text">Companies</span>
+          </a>
+        </li>
+        <li>
+          <a href="./app/chat.html">
+            <span class="icon">
+              <i class="fas fa-comments"></i>
+            </span>
+            <span class="text">Chat</span>
+          </a>
+        </li>
+        <li data-id="profile">
+          <a href="about.html">
+            <span class="icon">
+              <i class="fa-solid fa-user"></i>
+            </span>
+            <span class="text">Profile</span>
+          </a>
+        </li>
 
-            <li data-id="companies">
-                <a href="company.html">
-                    <span class="icon">
-                        <i class="fa-solid fa-buildings"></i>
-                    </span>
-                    <span class="text">Companies</span>
-                </a>
-            </li>
-            <li>
-                <a href="./app/chat.html">
-                    <span class="icon">
-                        <i class="fas fa-comments"></i>
-                    </span>
-                    <span class="text">Chat</span>
-                </a>
-            </li>
-            <li data-id="profile">
-                <a href="about.html">
-                    <span class="icon">
-                        <i class="fa-solid fa-user"></i>
-                    </span>
-                    <span class="text">Profile</span>
-                </a>
-            </li>
+        <li data-id="register">
+          <a href="./signup.html">
+            <span class="icon">
+              <i class="fa-solid fa-user-plus"></i>
+            </span>
+            <span class="text">Register</span>
+          </a>
+        </li>
 
-            <li data-id="register">
-                <a href="./signup.html">
-                    <span class="icon">
-                        <i class="fa-solid fa-user-plus"></i>
-                    </span>
-                    <span class="text">Register</span>
-                </a>
-            </li>
+        <li data-id="setting">
+          <a href="setting.html">
+            <span class="icon">
+              <i class="fa-solid fa-gear"></i>
+            </span>
+            <span class="text">Settings</span>
+          </a>
+        </li>
 
-            <li data-id="setting">
-                <a href="setting.html">
-                    <span class="icon">
-                        <i class="fa-solid fa-gear"></i>
-                    </span>
-                    <span class="text">Settings</span>
-                </a>
-            </li>
-
-            <li data-id="logout">
-                <a href="register.html">
-                    <span class="icon">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                    </span>
-                    <span class="text">Logout</span>
-                </a>
-            </li>
-        </ul>
+        <li data-id="logout">
+          <a href="register.html">
+            <span class="icon">
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </span>
+            <span class="text">Logout</span>
+          </a>
+        </li>
+      </ul>
     </div>
 
-
-
-
     <section class="main-panel">
+      <div class="container-fluid text-center">
+        <h2 class="mt-4">Job Listings Dashboard</h2>
+        <button class="add-btn" onclick="openAddJobModal()">
+          <i class="fa-solid fa-plus"></i> Add Job
+        </button>
 
-        <div class="container-fluid text-center">
+        <!-- <div class="filter-container">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search job title or company..." />
+          <select id="statusFilter">
+            <option value="">All</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Pending">Pending</option>
+          </select>
+          <button class="filter-btn" onclick="applyFilters()">
+            <i class="fa-solid fa-filter"></i> Filter Jobs
+          </button>
+        </div> -->
 
-            <h2 class="mt-4">Job Listings Dashboard</h2>
-            <button class="add-btn" onclick="openAddJobModal()"><i class="fa-solid fa-plus"></i> Add Job</button>
+        <div id="loading">Loading...</div>
 
-            <div class="filter-container">
-                <input type="text" id="searchInput" placeholder="Search job title or company...">
-                <select id="statusFilter">
-                    <option value="">All</option>
-                    <option value="Accepted">Accepted</option>
-                    <option value="Rejected">Rejected</option>
-                    <option value="Pending">Pending</option>
-                </select>
-                <button class="filter-btn" onclick="applyFilters()"><i class="fa-solid fa-filter"></i> Filter
-                    Jobs</button>
-            </div>
-
-            <div id="loading">Loading...</div>
-
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Job Title</th>
-                            <th>Company Name</th>
-                            <th>Applicants</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="jobTable"></tbody>
-                </table>
-            </div>
-            
-            <div class="card-container"></div>
-
-            <div class="pagination justify-content-center mb-3" id="pagination"></div>
-
-            <!-- Modal for Adding/Editing Job -->
-            <div id="jobModal" class="modal">
-                <div class="modal-content">
-                    <div class="close-btn">
-                        <span class="close" onclick="closeModal()">&times;</span>
-                    </div>
-
-
-                    <h3 id="modalTitleText">Add Job</h3>
-                    <!-- <div class="inp"> -->
-                    <input type="hidden" id="modalJobId">
-                    <input type="text" id="modalTitle" placeholder="Job Title" class="inp">
-                    <input type="text" id="modalCompany" placeholder="Company Name" class="inp">
-                    <input type="number" id="modalApplicants" placeholder="Applicants" class="inp">
-                    <select id="modalStatus" class="inp">
-                        <option value="Accepted">Accepted</option>
-                        <option value="Rejected">Rejected</option>
-                        <option value="Pending">Pending</option>
-                    </select>
-                    <button onclick="saveChanges()" class="btn"><i class="fa-solid fa-save"></i> Save</button>
-                    <!-- </div> -->
-                </div>
-            </div>
-
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Job Title</th>
+                <th>Company Name</th>
+                <th>Applicants</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="jobTable"></tbody>
+          </table>
         </div>
 
+        <div class="card-container"></div>
+
+        <div
+          class="pagination justify-content-center mb-3"
+          id="pagination"></div>
+
+        <!-- Modal for Adding/Editing Job -->
+        <div id="jobModal" class="modal">
+          <div class="modal-content">
+            <div class="close-btn">
+              <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+
+            <h3 id="modalTitleText">Add Job</h3>
+            <!-- <div class="inp"> -->
+            <input type="hidden" id="modalJobId" />
+            <input
+              type="text"
+              id="modalCategory"
+              placeholder="Category Name"
+              class="inp" />
+            <input
+              type="text"
+              id="modalTitle"
+              placeholder="Job Title"
+              class="inp" />
+            <input
+              type="number"
+              id="modalSalary"
+              placeholder="Salary"
+              class="inp" />
+            <input
+              type="text"
+              id="modalLocation"
+              placeholder="Location"
+              class="inp" />
+            <input
+              type="text"
+              id="modalDescription"
+              placeholder="Description"
+              class="inp" />
+            <input
+              type="text"
+              id="modalRequirement"
+              placeholder="Requirement"
+              class="inp" />
+            <input
+              type="text"
+              id="modalBenefits"
+              placeholder="Benefits"
+              class="inp" />
+            <input
+              type="text"
+              id="modalJob_type"
+              placeholder="Job Type"
+              class="inp" />
+            <input
+              type="text"
+              id="modalJob_status"
+              placeholder="Job Status"
+              class="inp" />
+            <input
+              type="text"
+              id="modalPosition"
+              placeholder="Position"
+              class="inp" />
+            <select id="modalStatus" class="inp" placeholder="Status">
+              <option value="Accepted">Accepted</option>
+              <option value="Rejected">Rejected</option>
+              <option value="Pending">Pending</option>
+            </select>
+            <button onclick="saveJob()" class="btn">
+              <i class="fa-solid fa-save"></i> Save
+            </button>
+            <!-- </div> -->
+          </div>
+        </div>
+      </div>
     </section>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const bellIcon = document.getElementById('notificationBell');
-            const dropdown = document.getElementById('notificationDropdown');
-            const viewAllLink = document.querySelector('.view-all');
-        
-            // إظهار / إخفاء قائمة الإشعارات عند الضغط على الجرس
-            bellIcon.addEventListener('click', function (e) {
-                e.stopPropagation();
-                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-            });
-        
-            // إغلاق القائمة إذا تم النقر خارجها
-            document.addEventListener('click', function (e) {
-                if (!e.target.closest('.notification-container')) {
-                    dropdown.style.display = 'none';
-                }
-            });
-        
-            // عند الضغط على "View all" يتم التوجيه للصفحة
-            viewAllLink.addEventListener('click', function (e) {
-                e.preventDefault();
-                window.location.href = this.getAttribute('href');
-            });
+      document.addEventListener("DOMContentLoaded", function () {
+        const bellIcon = document.getElementById("notificationBell");
+        const dropdown = document.getElementById("notificationDropdown");
+        const viewAllLink = document.querySelector(".view-all");
+
+        // إظهار / إخفاء قائمة الإشعارات عند الضغط على الجرس
+        bellIcon.addEventListener("click", function (e) {
+          e.stopPropagation();
+          dropdown.style.display =
+            dropdown.style.display === "block" ? "none" : "block";
         });
-        </script>
-        
+
+        // إغلاق القائمة إذا تم النقر خارجها
+        document.addEventListener("click", function (e) {
+          if (!e.target.closest(".notification-container")) {
+            dropdown.style.display = "none";
+          }
+        });
+
+        // عند الضغط على "View all" يتم التوجيه للصفحة
+        viewAllLink.addEventListener("click", function (e) {
+          e.preventDefault();
+          window.location.href = this.getAttribute("href");
+        });
+      });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-
     <script src="./js/main.js"></script>
     <script src="./js/job.js"></script>
-   
-    
-   
-
-</body>
-
+  </body>
 </html>
