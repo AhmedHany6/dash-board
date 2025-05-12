@@ -94,6 +94,7 @@ async function fetchJobs() {
     } else {
       console.warn("No jobs available");
     }
+    jobs = alljobs
 
     displayJobs(alljobs);
 
@@ -159,9 +160,9 @@ function displayJobs(jobsArray) {
         <button class="edit-btn" onclick="openEditJobModal(${job.id})">
           <i class="fa-solid fa-pen-to-square"></i> Edit
         </button>
-        <button class="delete-btn" onclick="deleteJob(${job.id})">
-          <i class="fa-solid fa-trash"></i> Delete
-        </button>
+       <button class="delete-button" data-id="${job.id}">
+        <i class="fa-solid fa-trash"></i> Delete
+      </button>
       </td>
     `;
     tableBody.appendChild(row);
@@ -170,8 +171,9 @@ function displayJobs(jobsArray) {
   // Attach the event listener to all delete buttons after the table is populated
   document.querySelectorAll(".delete-button").forEach((button) => {
     button.addEventListener("click", function () {
-      const jobId = this.getAttribute("data-id"); // Get the job ID from the data-id attribute
-      deleteJob(jobId); // Call the deleteJob function with the job ID
+     const jobId = parseInt(this.getAttribute("data-id"));
+     deleteJob(jobId); // Get the job ID from the data-id attribute
+       // Call the deleteJob function with the job ID
     });
   });
 }
@@ -208,39 +210,54 @@ function applyFilters() {
 
 // Delete a job
 async function deleteJob(id) {
-  Swal.fire({
+  if (!id || isNaN(id)) {
+    Swal.fire("Error!", "Invalid job ID.", "error");
+    return;
+  }
+
+  console.log("Deleting job with ID:", id);
+
+  const confirm = await Swal.fire({
     title: "Are you sure?",
-    text: "You won't be able to revert this!",
+    text: "This action cannot be undone!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const response = await fetch(`${API_URL}/${id}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: AUTH_TOKEN,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        });
-        const resultData = await response.json();
-        console.log("Job deleted:", resultData);
-        fetchJobs();
-        Swal.fire({
-          title: "Deleted!",
-          text: "Job has been deleted successfully.",
-          icon: "success",
-        });
-      } catch (err) {
-        console.error("Error deleting job:", err);
-      }
-    }
+    confirmButtonText: "Yes, delete it!"
   });
+
+  if (confirm.isConfirmed) {
+    try {
+      const response = await fetch("https://jobizaa.com/api/admin/jobs/${id}", {
+        method: "DELETE",
+        headers: {
+          Authorization: AUTH_TOKEN,
+          Accept: "application/json"
+        }
+      });
+
+      const result = await response.json();
+      console.log("Delete response:", result);
+
+      if (response.status === 404) {
+        Swal.fire("Error!", "Job not found or already deleted.", "error");
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(result.message || "Unknown error");
+      }
+
+      Swal.fire("Deleted!", "Job has been deleted.", "success");
+      fetchJobs(); // إعادة تحميل الوظائف
+    } catch (err) {
+      console.error("Error deleting job:", err);
+      Swal.fire("Error!", "Something went wrong.", "error");
+    }
+  }
 }
+
 
 // @author  A.A
 // @desc    Open add job modal
@@ -260,19 +277,32 @@ function openAddJobModal() {
   document.getElementById("modalTitleText").innerText = "Add Job";
   document.getElementById("jobModal").style.display = "flex";
 }
-
 // Open edit job modal
 function openEditJobModal(id) {
-  let job = jobs.find((j) => j.id === id);
-  if (!job) return;
+  console.log("Edit button clicked for job ID:", id); // للتأكد من وصول الضغط
+  let job = jobs.find((j) => j.id == id);
+  if (!job) {
+    console.warn("Job not found for ID:", id);
+    return;
+  }
+
   document.getElementById("modalJobId").value = job.id;
-  document.getElementById("modalTitle").value = job.title;
-  document.getElementById("modalCompany").value = job.company;
-  document.getElementById("modalApplicants").value = job.applicants;
-  document.getElementById("modalStatus").value = job.status;
+  document.getElementById("modalCategory").value = job.category || "";
+  document.getElementById("modalTitle").value = job.title || "";
+  document.getElementById("modalSalary").value = job.salary || "";
+  document.getElementById("modalLocation").value = job.location || "";
+  document.getElementById("modalDescription").value = job.description || "";
+  document.getElementById("modalRequirement").value = job.requirement || "";
+  document.getElementById("modalBenefits").value = job.benefits || "";
+  document.getElementById("modalJob_type").value = job.job_type || "";
+  document.getElementById("modalJob_status").value = job.job_status || "";
+  document.getElementById("modalPosition").value = job.position || "";
+  document.getElementById("modalStatus").value = job.status || "Pending";
+
   document.getElementById("modalTitleText").innerText = "Edit Job";
-  document.getElementById("jobModal").style.display = "flex";
+  document.getElementById("jobModal").style.display = "flex";
 }
+
 
 // Save or update job
 async function saveChanges() {
@@ -285,8 +315,8 @@ async function saveChanges() {
   const formData = new URLSearchParams();
   formData.append("title", title);
   formData.append("description", company);
-  formData.append("job_status", "Open"); // لازم تكون قيمة مقبولة
-  formData.append("category_name", "Engineering"); // لازم اسم كاتيجوري فعلي
+  formData.append("job_status", "Open");
+  formData.append("category_name", "Engineering");
   formData.append("location", "Cairo");
   formData.append("salary", "4000");
   formData.append("requirement", "2 years experience");
@@ -294,8 +324,15 @@ async function saveChanges() {
   formData.append("job_type", "Full-time");
   formData.append("position", "Software Engineer");
 
+  // دي الإضافة المهمة علشان Laravel
+  if (id) {
+    formData.append("_method", "PUT");
+  }
+
+  const url = id ? `${API_URL}/${id}` :` ${API_URL}/add-job`;
+
   const options = {
-    method: "POST",
+    method: "POST", 
     headers: {
       Authorization: AUTH_TOKEN,
       Accept: "application/json",
@@ -304,8 +341,6 @@ async function saveChanges() {
     body: formData,
   };
 
-  const url = id ? `${API_URL}/${id}` : `${API_URL}/add-job`;
-
   try {
     const response = await fetch(url, options);
     const result = await response.json();
@@ -313,9 +348,10 @@ async function saveChanges() {
     closeModal();
     fetchJobs();
   } catch (error) {
-    console.error("Error saving job:", error);
-  }
+    console.error("Error saving job:", error);
+  }
 }
+
 
 // @author  A.A
 // @desc    Create a new job
