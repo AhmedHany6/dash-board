@@ -6,35 +6,31 @@
     <title>Login || Metrix</title>
 
     <!-- Meta Information -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height">
     <meta name="description" content="Metrix is a sleek and modern app landing page template built with HTML, CSS, and JavaScript. It's designed to showcase your app's features and attract potential users.">
     <meta name="keywords" content="Metrix - App Landing Page Template, application landing page, application website landing page, responsive website, application responsive website, mobile app landing website, latest bootstrap mobile application website design, product lounch website, app product lounch website, bootstrap template, creative mobile website, multi pages template, landing page website, minimal portfolio, mobile app intro website">
     <meta name="author" content="white orange software">
-    <!-- meta og property tags start -->
-    <meta property="og:title" content="404 || Metrix" />
+    <meta property="og:title" content="Verify Code || Metrix" />
     <meta property="og:description" content="Metrix is a sleek and modern app landing page template built with HTML, CSS, and JavaScript. It's designed to showcase your app's features and attract potential users." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="./assets/images/banner/etfit-index-one-hero-04.png" />
-    <meta property="og:URL" content="https://staging.whiteorangesoftware.com/metrix" />
-    <!-- meta og property tags end * -->
+   
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="robots" content="noindex">
 
 
     <!-- Favicons -->
-    <link rel="apple-touch-icon" sizes="72x72" href="/assets/images/favicons/apple-touch-icon.png">
-    <link rel="icon" type="images/png" sizes="32x32" href="assets/images/favicons/favicon-32x32.png">
-    <link rel="icon" type="images/png" sizes="16x16" href="assets/images/favicons/favicon-16x16.png">
-  
-    <link rel="mask-icon" href="/assets/images/favicons/safari-pinned-tab.svg" color="#ffffff">
+   <link rel="apple-touch-icon" sizes="72x72" href="assets/images/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicons/favicon-16x16.png">
+    <link rel="mask-icon" href="assets/images/favicons/safari-pinned-tab.svg" color="#ffffff">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
 
     <!-- All Css -->
-    <link type="text/css" rel="stylesheet" href="assets/css/styles.css">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link type="text/css" rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
       <style>
         .digit-cell {
             width: 40px;
@@ -73,6 +69,14 @@
             color: #155724;
             border: 1px solid #c3e6cb;
         }
+        @font-face {
+  font-family: 'Gilroy';
+  src: url('assets/fonts/Gilroy-Regular.woff2') format('woff2'),
+       url('assets/fonts/Gilroy-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
     </style>
 </head>
 
@@ -125,17 +129,20 @@
     <script src="assets/js/svg.js"></script>
     <script src="assets/js/custom.js"></script>
     
-   <script>
+  <script>
 document.addEventListener('DOMContentLoaded', function () {
     const verifyForm = document.getElementById('verifyForm');
     const verifyButton = document.querySelector('.btn-activity-confirm');
     const digitInputs = document.querySelectorAll('.digit-cell');
     const messageBox = document.getElementById('verify-message');
 
+    // Focus first input
     if (digitInputs.length > 0) digitInputs[0].focus();
 
+    // Handle input navigation
     digitInputs.forEach((input, index) => {
         input.addEventListener('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
             if (this.value.length === 1 && index < digitInputs.length - 1) {
                 digitInputs[index + 1].focus();
             }
@@ -148,63 +155,128 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    verifyForm.addEventListener('submit', function (e) {
+    verifyForm.addEventListener('submit', async function (e) {
         e.preventDefault();
         messageBox.style.display = 'none';
         messageBox.className = 'error-box';
         messageBox.textContent = '';
 
+        // Collect code
         let code = '';
         digitInputs.forEach(input => {
             code += input.value.trim();
         });
 
+        // Validate code
         if (!/^\d{6}$/.test(code)) {
-            showMessage('يرجى إدخال رمز مكون من 6 أرقام فقط', false);
+            showMessage('Please enter a valid 6-digit code', false);
             return;
         }
 
         const email = localStorage.getItem('emailToVerify');
         if (!email) {
-            showMessage('انتهت الجلسة. يرجى التسجيل مرة أخرى.', false);
-            setTimeout(() => window.location.href = 'register.html', 2000);
+            showMessage('Session expired. Please register again.', false);
+            setTimeout(() => window.location.href = 'signup.html', 2000);
             return;
         }
 
         verifyButton.disabled = true;
         verifyButton.textContent = 'Verifying...';
 
-        fetch("https://jobizaa.com/api/admin/verify-email", {
-            method: "POST",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: email,
-                code: code
-            })
-        })
-        .then(async res => {
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message || 'Verification failed');
-            return data;
-        })
-        .then(() => {
-            showMessage('تم التحقق بنجاح! سيتم توجيهك الآن...', true);
+        try {
+            // Try multiple possible endpoints
+            const endpoints = [
+                'https://jobizaa.com/api/admin/password/verify-pin',
+                'https://jobizaa.com/api/admin/verify-code',
+                'https://jobizaa.com/api/admin/verify-otp'
+            ];
+
+            let response;
+            for (const endpoint of endpoints) {
+                try {
+                    response = await fetch(endpoint, {
+                        method: "POST",
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            code: code,
+                            // Try different field names
+                            pin: code,
+                            verification_code: code,
+                            otp: code
+                        })
+                    });
+
+                    if (response.ok) break;
+                } catch (e) {
+                    console.log(`Tried ${endpoint} - failed`);
+                }
+            }
+
+            if (!response || !response.ok) {
+                throw new Error('Verification failed on all endpoints');
+            }
+
+            const data = await response.json();
+
+            showMessage('Verification successful! Redirecting to login...', true);
+            
+            // Store email and password for auto-login
+            const password = localStorage.getItem('registeredPassword');
+            localStorage.setItem('loginEmail', email);
+            localStorage.setItem('loginPassword', password);
+            
+            // Remove temporary data
             localStorage.removeItem('emailToVerify');
-            setTimeout(() => window.location.href = 'login.html', 2000);
-        })
-        .catch(error => {
-            showMessage(error.message || 'فشل التحقق. يرجى المحاولة مجددًا.', false);
+            localStorage.removeItem('registeredPassword');
+            
+            // Auto-login after verification
+            await autoLogin(email, password);
+            
+        } catch (error) {
+            console.error('Verification error:', error);
+            showMessage(error.message || 'Invalid verification code', false);
             digitInputs.forEach(input => input.value = '');
             digitInputs[0].focus();
-        })
-        .finally(() => {
+        } finally {
             verifyButton.disabled = false;
             verifyButton.textContent = 'Verify';
-        });
+        }
     });
+
+    async function autoLogin(email, password) {
+        try {
+            const response = await fetch("https://jobizaa.com/api/admin/login", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Auto-login failed');
+            }
+
+            // Store token and redirect to jobs page
+            localStorage.setItem('authToken', data.token);
+            window.location.href = 'job.html';
+            
+        } catch (error) {
+            console.error('Auto-login error:', error);
+            // If auto-login fails, redirect to login page with pre-filled data
+            window.location.href = 'login.html';
+        }
+    }
 
     function showMessage(message, success = false) {
         messageBox.textContent = message;
@@ -214,7 +286,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-    
+
+
       
 </body>
 

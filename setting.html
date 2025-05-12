@@ -355,7 +355,7 @@
                 alert('تمت إضافة المشرف بنجاح');
                 form.reset();
             } catch (error) {
-                alert(`خطأ: ${error.message}`);
+                alert`(خطأ: ${error.message})`;
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Add Super Admin';
