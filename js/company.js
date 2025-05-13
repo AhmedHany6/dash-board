@@ -7,15 +7,9 @@ function activeLink() {
 list.forEach((item) => item.addEventListener("mouseover", activeLink));
 
 // API Constants
-<<<<<<< HEAD
 const API_BASE = "https://jobizaa.com/api/admin/companies";
 const TOKEN =
   "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0Njg4NDg4NSwibmJmIjoxNzQ2ODg0ODg1LCJqdGkiOiJKNFRQNDc0VDBYZmVkbHZSIiwic3ViIjoiMSIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJzdXBlci1hZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2UtYWxsLWNvbXBhbmllcyIsIm1hbmFnZS1hbGwtam9icyIsIm1hbmFnZS1yb2xlcyIsIm1hbmFnZS1jb21wYW55LWFkbWlucyIsIm1hbmFnZS1hcHBsaWNhdGlvbnMiLCJ2aWV3LWFwcGxpY2FudC1wcm9maWxlcyIsInNlbmQtbWVzc2FnZXMiXSwiY29tcGFueV9pZCI6bnVsbH0.1okzsacodT2LkZoDo6e7N8nkNekwXxvFAuT1mjH0OE0";
-=======
-const API_BASE = 'https://jobizaa.com/api/admin/companies';
-const TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0Njg4NDg4NSwibmJmIjoxNzQ2ODg0ODg1LCJqdGkiOiJKNFRQNDc0VDBYZmVkbHZSIiwic3ViIjoiMSIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJzdXBlci1hZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2UtYWxsLWNvbXBhbmllcyIsIm1hbmFnZS1hbGwtam9icyIsIm1hbmFnZS1yb2xlcyIsIm1hbmFnZS1jb21wYW55LWFkbWlucyIsIm1hbmFnZS1hcHBsaWNhdGlvbnMiLCJ2aWV3LWFwcGxpY2FudC1wcm9maWxlcyIsInNlbmQtbWVzc2FnZXMiXSwiY29tcGFueV9pZCI6bnVsbH0.1okzsacodT2LkZoDo6e7N8nkNekwXxvFAuT1mjH0OE0"; 
-// shortened for clarity
->>>>>>> 40a38fe26c5fb8920afba1ae45b56f6cd176e248
 
 document.addEventListener("DOMContentLoaded", fetchCompanies);
 
@@ -33,23 +27,14 @@ async function fetchCompanies() {
       },
     });
 
-<<<<<<< HEAD
     if (!response.ok) {
       Swal.fire("Error", "Failed to fetch companies", "error");
       return;
     }
-=======
-    if (!response.ok)
-      throw new Error(`HTTP error! Status: ${response.status}`);
-
-    const data = await response.json();
-    const companiesArray = data.data.items || [];
->>>>>>> 40a38fe26c5fb8920afba1ae45b56f6cd176e248
 
     const apiResult = await response.json();
     console.log(" Response:", apiResult);
 
-<<<<<<< HEAD
     console.log("companies:", Object.values(apiResult)[2]["items"]);
 
     if (!apiResult || !apiResult.data || !Array.isArray(apiResult.data.items)) {
@@ -69,8 +54,6 @@ async function fetchCompanies() {
       status: Math.random() > 0.5 ? "Active" : "Inactive", // يُفضل لاحقًا تأتي من الـ API
     }));
 
-=======
->>>>>>> 40a38fe26c5fb8920afba1ae45b56f6cd176e248
     displayCompanies(companies);
   } catch (error) {
     console.error("Error fetching companies:", error);
@@ -85,13 +68,8 @@ async function fetchCompanies() {
 // Add a company
 async function addCompany(formData) {
   try {
-<<<<<<< HEAD
     const response = await fetch(`${API_BASE}` / add - company, {
       method: "POST",
-=======
-    const response = await fetch(`${API_BASE}/add-company`, {
-      method: 'POST',
->>>>>>> 40a38fe26c5fb8920afba1ae45b56f6cd176e248
       headers: {
         Authorization: TOKEN,
         Accept: "application/json",
@@ -104,24 +82,6 @@ async function addCompany(formData) {
     await fetchCompanies();
   } catch (error) {
     console.error("Error adding company:", error);
-  }
-}
-
-// Get single company by ID
-async function getCompany(id) {
-  try {
-    const response = await fetch(`${API_BASE}/${id}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': TOKEN,
-        'Accept': 'application/json'
-      }
-    });
-
-    const data = await response.json();
-    console.log("Company details:", data);
-  } catch (error) {
-    console.error("Error fetching company by ID:", error);
   }
 }
 
@@ -257,19 +217,12 @@ function displayCompanies(companiesList = []) {
 // Filter companies
 function filterCompanies() {
   let status = document.getElementById("statusFilter").value;
-  let jobCountInput = document.getElementById("jobsFilter").value;
-  let jobCount = parseInt(jobCountInput) || 0;
+  let jobCount = document.getElementById("jobsFilter").value;
 
-<<<<<<< HEAD
   let filtered = companies.filter(
     (company) =>
       (status === "" || company.status === status) &&
       (jobCount === "" || company.jobs >= jobCount)
-=======
-  let filtered = companies.filter(company =>
-    (status === "" || company.status === status) &&
-    (jobCountInput === "" || company.jobs >= jobCount)
->>>>>>> 40a38fe26c5fb8920afba1ae45b56f6cd176e248
   );
 
   displayCompanies(filtered);
