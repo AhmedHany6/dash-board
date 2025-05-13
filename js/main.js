@@ -141,3 +141,37 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+
+
+    const map = L.map('world-map').setView([20, 0], 2);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    const fakeApiData = [
+        { name: "user1", lat: 30.0444, lon: 31.2357, country: "Egypt" },
+        { name: "user2", lat: 40.7128, lon: -74.0060, country: "America" },
+        { name: "user3", lat: 48.8566, lon: 2.3522, country:" France" },
+        { name: "user4", lat: 51.5074, lon: -0.1278, country: "Britain" },
+        { name: "user5", lat: 35.6895, lon: 139.6917, country: "Japan" }
+    ];
+
+    let markers = [];
+
+    function loadUserLocations() {
+        clearMapMarkers(); // تنظيف أي علامات قديمة
+        fakeApiData.forEach(user => {
+            const marker = L.marker([user.lat, user.lon]).addTo(map);
+            marker.bindPopup(`<b>${user.name}</b><br>country: ${user.country}`);
+            markers.push(marker);
+        });
+    }
+
+    function clearMapMarkers() {
+        markers.forEach(marker => map.removeLayer(marker));
+        markers = [];
+    }
+
+
