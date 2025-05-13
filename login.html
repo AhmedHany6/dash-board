@@ -36,7 +36,29 @@
     <link type="text/css" rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
    
-        
+        <style>
+            .error-box {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    border-radius: 5px;
+    display: none;
+    font-size: 14px;
+}
+
+.error-box.show {
+    display: block;
+}
+
+.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+        </style>
 </head>
 
 <body>
@@ -75,6 +97,7 @@
                             <a href="forget-password.html" class="activity-forget mb-0">Forget Password?</a>
                         </div>
                         <button type="submit" class="btn-common btn-activity-confirm">Login</button>
+                         <div id="error-message-box" class="error-box"></div> <!-- مربع عرض الأخطاء -->
                     </form>
                 </div>
                 <div class="activity-switch">
@@ -100,91 +123,120 @@
     <script src="assets/js/svg.js"></script>
     <script src="assets/js/custom.js"></script>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const loginForm = document.querySelector('form');
-            const messageElement = document.createElement('div');
-            loginForm.appendChild(messageElement);
-    
-            loginForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-    
-                // مسح الرسائل السابقة
-                messageElement.textContent = '';
-                messageElement.className = '';
-                messageElement.innerHTML = '';
-    
-                // جلب القيم
-                const email = document.getElementById('setMail').value;
-                const password = document.getElementById('setPassword').value;
-    
-                // الهيدر
-                const myHeaders = new Headers();
-                myHeaders.append("Accept", "application/json");
-                myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-    
-                // البيانات
-                const urlencoded = new URLSearchParams();
-                urlencoded.append("email", email);
-                urlencoded.append("password", password);
-    
-                const requestOptions = {
+      <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById("loginForm");
+        const emailInput = document.getElementById("loginEmail");
+        const passwordInput = document.getElementById("loginPassword");
+        const errorBox = document.getElementById("error-message-box");
+
+        form.addEventListener("submit", async function(e) {
+            e.preventDefault();
+
+            const data = {
+                email: emailInput.value,
+                password: passwordInput.value
+            };
+
+            const submitButton = form.querySelector("button[type='submit']");
+            submitButton.disabled = true;
+            submitButton.textContent = "جاري تسجيل الدخول...";
+
+            try {
+                const response = await fetch("https://jobizaa.com/api/admin/login", {
                     method: "POST",
-                    headers: myHeaders,
-                    body: urlencoded,
-                    redirect: "follow"
-                };
-    
-                const submitButton = loginForm.querySelector('button');
-                submitButton.disabled = true;
-                submitButton.textContent = 'Logging in...';
-    
-                fetch("https://jobizaa.com/api/admin/login", requestOptions)
-                    .then(async response => {
-                        const data = await response.json();
-                        if (!response.ok) {
-                            const error = new Error(data.message || 'Login failed');
-                            error.response = data;
-                            throw error;
-                        }
-                        return data;
-                    })
-                    .then(result => {
-                        messageElement.innerHTML = '<div>Login successful!</div>';
-                        messageElement.className = 'success';
-    
-                        // حفظ التوكن والصلاحيات
-                        localStorage.setItem('access_token', result.token);
-                        localStorage.setItem('allowed_pages', JSON.stringify(['job.html', 'about.html', 'view.html']));
-    
-                        // التوجيه
-                        window.location.href = "job.html";
-                    })
-                    .catch(error => {
-                        console.error('Login error:', error);
-                        messageElement.className = 'error';
-    
-                        let errorHtml = `<div><strong>${error.response?.message || error.message}</strong></div>`;
-                        if (error.response?.data && Array.isArray(error.response.data)) {
-                            errorHtml += '<ul class="error-list">';
-                            error.response.data.forEach(err => {
-                                errorHtml += `<li>${err}</li>`;
-                            });
-                            errorHtml += '</ul>';
-                        }
-    
-                        messageElement.innerHTML = errorHtml;
-                    })
-                    .finally(() => {
-                        submitButton.disabled = false;
-                        submitButton.textContent = 'Login';
-                    });
-            });
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.message || "فشل في تسجيل الدخول");
+                }
+
+                // تخزين التوكن للجلسة
+                localStorage.setItem("authToken", result.token);
+                
+                // توجيه إلى صفحة الوظائف
+                window.location.href = "jobs.html";
+                
+            } catch (error) {
+                console.error("Error:", error);
+                errorBox.textContent = error.message;
+                errorBox.classList.add("show");
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = "Login";
+            }
         });
+    });
     </script>
     
-    
-    
+      <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('loginForm');
+        const emailInput = document.getElementById('loginEmail');
+        const passwordInput = document.getElementById('loginPassword');
+        const errorBox = document.getElementById('error-message-box');
+
+        // Auto-fill credentials if available
+        const savedEmail = localStorage.getItem('loginEmail');
+        const savedPassword = localStorage.getItem('loginPassword');
+        
+        if (savedEmail) emailInput.value = savedEmail;
+        if (savedPassword) passwordInput.value = savedPassword;
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const data = {
+                email: emailInput.value,
+                password: passwordInput.value
+            };
+
+            const submitButton = form.querySelector('button');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Logging in...';
+
+            try {
+                const response = await fetch("https://jobizaa.com/api/admin/login", {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.message || "Login failed");
+                }
+
+                // Store token and redirect
+                localStorage.setItem('authToken', result.token);
+                localStorage.removeItem('loginEmail');
+                localStorage.removeItem('loginPassword');
+                
+                // Redirect to jobs page
+                window.location.href = "job.html";
+                
+            } catch (error) {
+                console.error("Error:", error);
+                errorBox.textContent = error.message;
+                errorBox.classList.add("show");
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = "Login";
+            }
+        });
+    });
+    </script>
       
 </body>
 

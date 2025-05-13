@@ -287,20 +287,25 @@
                                       
                                     </div>
 
-                                    <ul class="social-list list-inline mt-3 mb-0">
-                                        <li class="list-inline-item">
-                                            <a href="javascript: void(0);" class="social-list-item border-primary text-primary"><i class="mdi mdi-facebook"></i></a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="javascript: void(0);" class="social-list-item border-info text-info"><i class="mdi mdi-twitter"></i></a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github"></i></a>
-                                        </li>
-                                    </ul>
+                                   <!-- زر إضافة شركة -->
+<!-- زر إضافة شركة - سيفتح في نفس الصفحة ضمن تبويب الـ Settings -->
+<button type="button" class="btn btn-success btn-sm mb-2" onclick="switchToSettingsTab()">
+    <i class="mdi mdi-plus"></i> Add Company
+</button>
+
+<script>
+function switchToSettingsTab() {
+    // إيجاد عنصر تبويب الـ Settings وتفعيله
+    const settingsTab = document.querySelector('a[href="#settings"][data-bs-toggle="tab"]');
+    if (settingsTab) {
+        const tabInstance = new bootstrap.Tab(settingsTab);
+        tabInstance.show();
+        
+        // بعد تفعيل التبويب، يمكنك تنفيذ أي أكواد إضافية هنا
+        // أو تحميل محتوى الشركة في هذا التبويب
+    }
+}
+</script>
                                 </div>
                                 <!-- end card-body -->
                             </div>
@@ -416,198 +421,69 @@
                                            
 
                                         </div>
+                           
                                         <!-- end timeline content-->
-
-                                        <div class="tab-pane" id="settings">
-                                            <form>
-                                                <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Personal Info</h5>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label for="firstname" class="form-label">First Name</label>
-                                                            <input type="text" class="form-control" id="firstname" placeholder="Enter first name">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label for="lastname" class="form-label">Last Name</label>
-                                                            <input type="text" class="form-control" id="lastname" placeholder="Enter last name">
-                                                        </div>
-                                                    </div>
-                                                    <!-- end col -->
-                                                </div>
-                                                <!-- end row -->
-
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <div class="mb-3">
-                                                            <label for="userbio" class="form-label">Bio</label>
-                                                            <textarea class="form-control" id="userbio" rows="4" placeholder="Write something..."></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <!-- end col -->
-                                                </div>
-                                                <!-- end row -->
-
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label for="useremail" class="form-label">Email Address</label>
-                                                            <input type="email" class="form-control" id="useremail" placeholder="Enter email">
-                                                            <span class="form-text text-muted"><small>If you want to change email please <a href="javascript: void(0);">click</a> here.</small></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label for="userpassword" class="form-label">Password</label>
-                                                            <input type="password" class="form-control" id="userpassword" placeholder="Enter password">
-                                                            <span class="form-text text-muted"><small>If you want to change password please <a href="javascript: void(0);">click</a> here.</small></span>
-                                                        </div>
-                                                    </div>
-                                                    <!-- end col -->
-                                                </div>
-                                                <!-- end row -->
-
-                                                <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-office-building me-1"></i> Company Info</h5>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label for="companyname" class="form-label">Company Name</label>
-                                                            <input type="text" class="form-control" id="companyname" placeholder="Enter company name">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label for="cwebsite" class="form-label">Website</label>
-                                                            <input type="text" class="form-control" id="cwebsite" placeholder="Enter website url">
-                                                        </div>
-                                                    </div>
-                                                    <!-- end col -->
-                                                </div>
-                                                <!-- end row -->
-
-                                                <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Social</h5>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label for="social-fb" class="form-label">Facebook</label>
-                                                            <div class="input-group">
-                                                                <span class="input-group-text"><i class="mdi mdi-facebook"></i></span>
-                                                                <input type="text" class="form-control" id="social-fb" placeholder="Url">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label for="social-tw" class="form-label">Twitter</label>
-                                                            <div class="input-group">
-                                                                <span class="input-group-text"><i class="mdi mdi-twitter"></i></span>
-                                                                <input type="text" class="form-control" id="social-tw" placeholder="Username">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- end col -->
-                                                </div>
-                                                <!-- end row -->
-
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label for="social-insta" class="form-label">Instagram</label>
-                                                            <div class="input-group">
-                                                                <span class="input-group-text"><i class="mdi mdi-instagram"></i></span>
-                                                                <input type="text" class="form-control" id="social-insta" placeholder="Url">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label for="social-lin" class="form-label">Linkedin</label>
-                                                            <div class="input-group">
-                                                                <span class="input-group-text"><i class="mdi mdi-linkedin"></i></span>
-                                                                <input type="text" class="form-control" id="social-lin" placeholder="Url">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- end col -->
-                                                </div>
-                                                <!-- end row -->
-
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label for="social-sky" class="form-label">Skype</label>
-                                                            <div class="input-group">
-                                                                <span class="input-group-text"><i class="mdi mdi-skype"></i></span>
-                                                                <input type="text" class="form-control" id="social-sky" placeholder="@username">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label for="social-gh" class="form-label">Github</label>
-                                                            <div class="input-group">
-                                                                <span class="input-group-text"><i class="mdi mdi-github"></i></span>
-                                                                <input type="text" class="form-control" id="social-gh" placeholder="Username">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- end col -->
-                                                </div>
-                                                <!-- end row -->
-
-                                                <div class="text-end">
-                                                    <button type="submit" class="btn btn-success mt-2"><i class="mdi mdi-content-save"></i> Save</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <!-- end settings content-->
-
-                                    </div>
-                                    <!-- end tab-content -->
-                                </div>
-                                <!-- end card body -->
-                            </div>
-                            <!-- end card -->
-                        </div>
-                        <!-- end col -->
-                    </div>
-                    <!-- end row-->
-
-                </div>
-                <!-- container -->
-
-            </div>
-            <!-- content -->
-
-            <!-- Footer Start -->
-            <footer class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <script>
-                                document.write(new Date().getFullYear())
-                            </script> © Hyper - Coderthemes.com
-                        </div>
-                        <div class="col-md-6">
-                            <div class="text-md-end footer-links d-none d-md-block">
-                                <a href="javascript: void(0);">About</a>
-                                <a href="javascript: void(0);">Support</a>
-                                <a href="javascript: void(0);">Contact Us</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-            <!-- end Footer -->
-
+ <form id="companyForm" enctype="multipart/form-data">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="companyname" class="form-label">Company Name</label>
+            <input type="text" class="form-control" id="companyname" placeholder="Enter company name" required>
+          </div>
         </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="companylogo" class="form-label">Logo</label>
+            <input type="file" class="form-control" id="companylogo" accept="image/*" required>
+          </div>
+        </div>
+      </div>
 
-        <!-- ============================================================== -->
-        <!-- End Page content -->
-        <!-- ============================================================== -->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" class="form-control" id="description" placeholder="Company description" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" id="location" placeholder="Company location" required>
+          </div>
+        </div>
+      </div>
 
-    </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="website" class="form-label">Website</label>
+            <input type="url" class="form-control" id="website" placeholder="https://example.com" required>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="mb-3">
+            <label for="size" class="form-label">Size</label>
+            <input type="text" class="form-control" id="size" placeholder="e.g. medium" required>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="mb-3">
+            <label for="hired_people" class="form-label">Hired People</label>
+            <input type="number" class="form-control" id="hired_people" placeholder="185000" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-end">
+        <button type="submit" class="btn btn-success" id="saveCompanyBtn">
+          <i class="bi bi-save"></i> Save
+        </button>
+      </div>
+    </form>
+  </div>
+
+
     <!-- END wrapper -->
 
     <!-- Theme Settings -->
@@ -1442,6 +1318,57 @@
                             }
                         });
                     </script>
+
+                    <script>
+    const companyApiUrl = 'https://jobizaa.com/api/company/create';
+
+    async function submitCompanyData(formData) {
+        try {
+            const response = await fetch(companyApiUrl, {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.message || 'فشل في إرسال البيانات');
+            return result;
+        } catch (error) {
+            console.error('Error:', error);
+            alert(`❌ حدث خطأ: ${error.message}`);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('companyForm');
+        const saveBtn = document.getElementById('saveCompanyBtn');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData();
+            formData.append('name', document.getElementById('companyname').value.trim());
+            formData.append('logo', document.getElementById('companylogo').files[0]);
+            formData.append('description', document.getElementById('description').value.trim());
+            formData.append('location', document.getElementById('location').value.trim());
+            formData.append('website', document.getElementById('website').value.trim());
+            formData.append('size', document.getElementById('size').value.trim());
+            formData.append('hired_people', document.getElementById('hired_people').value.trim());
+
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+
+            const result = await submitCompanyData(formData);
+            if (result) {
+                alert('✅ تم حفظ بيانات الشركة بنجاح!');
+                form.reset();
+            }
+
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Save';
+        });
+    });
+</script>
+
                         
                           </body>
 </html>

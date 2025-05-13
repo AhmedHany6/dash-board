@@ -37,26 +37,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <link type="text/css" rel="stylesheet" href="assets/css/styles.css">
-    <style>
-        .code-box {
-            display: inline-block;
-            width: 30px;         /* زيادة العرض */
-            height: 60px;        /* زيادة الارتفاع */
-            line-height: 60px;   /* لجعل النص في المنتصف عموديًا */
-            text-align: center;
-            border: 1px solid #ccc;
-            margin: 10px;        /* زيادة المسافة بين المربعات */
-            font-size: 28px;     /* تكبير حجم الخط */
-            outline: none;
-        }
-        .btn-verify-small {
-            padding: 8px 20px;
-            font-size: 16px;
-            width: 150px;
-            min-width: unset;
-        }
-    </style>
-
+   
 </head>
 
 <body>
@@ -91,7 +72,8 @@
                             <span class="code-box" contenteditable="true" maxlength="1"></span>
                         </div>
                        
-                        <button type="button" class="btn-common btn-verify-small"onclick="window.location.href='newpass.html'">verify</button>
+<button type="submit" class="btn-common btn-verify-small">verify</button>
+
                     </form>
                 </div>
                
@@ -112,6 +94,85 @@
     <!-- Customized Javascript File -->
     <script src="assets/js/svg.js"></script>
     <script src="assets/js/custom.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form");
+    const codeBoxes = document.querySelectorAll(".code-box");
+    const button = document.querySelector(".btn-verify-small");
+
+    // Improve navigation between input fields
+    codeBoxes.forEach((box, index) => {
+        box.addEventListener("input", function () {
+            this.textContent = this.textContent.replace(/[^0-9]/g, '');
+            if (this.textContent.length > 1) {
+                this.textContent = this.textContent.charAt(0);
+            }
+            if (this.textContent && index < codeBoxes.length - 1) {
+                codeBoxes[index + 1].focus();
+            }
+        });
+
+        box.addEventListener("keydown", function (e) {
+            if (e.key === "Backspace" && !this.textContent && index > 0) {
+                codeBoxes[index - 1].focus();
+            }
+        });
+    });
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        let pinCode = "";
+        codeBoxes.forEach(box => {
+            pinCode += (box.textContent || "").trim();
+        });
+
+        if (!/^\d{6}$/.test(pinCode)) {
+            alert("Please enter a 6-digit code.");
+            return;
+        }
+
+        const email = localStorage.getItem("emailToVerify");
+        if (!email) {
+            alert("Session expired, please try again.");
+            window.location.href = "forgot-password.html";
+            return;
+        }
+
+        console.log("Sending to server:", { email, pinCode }); // Debug log
+
+        button.disabled = true;
+        button.textContent = "Verifying...";
+
+        fetch("https://jobizaa.com/api/admin/password/verify-pin", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, pinCode }) // Changed from 'pin' to 'pinCode'
+        })
+        .then(async res => {
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || "Failed to verify code.");
+            return data;
+        })
+        .then(() => {
+            localStorage.setItem("resetVerified", "true");
+            window.location.href = "newpass.html";
+        })
+        .catch(err => {
+            console.error("Verification error:", err);
+            alert(err.message || "Invalid or expired code.");
+        })
+        .finally(() => {
+            button.disabled = false;
+            button.textContent = "Verify";
+        });
+    });
+});
+</script>
+
 </body>
 
 </html>

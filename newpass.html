@@ -38,25 +38,7 @@
 
     <link type="text/css" rel="stylesheet" href="assets/css/styles.css">
     
-    <style>
-        .code-box {
-            display: inline-block;
-            width: 30px;         /* زيادة العرض */
-            height: 60px;        /* زيادة الارتفاع */
-            line-height: 60px;   /* لجعل النص في المنتصف عموديًا */
-            text-align: center;
-            border: 1px solid #ccc;
-            margin: 10px;        /* زيادة المسافة بين المربعات */
-            font-size: 28px;     /* تكبير حجم الخط */
-            outline: none;
-        }
-        .btn-verify-small {
-            padding: 8px 20px;
-            font-size: 16px;
-            width: 150px;
-            min-width: unset;
-        }
-    </style>
+    
 </head>
 
 <body>
@@ -113,6 +95,107 @@
     <!-- Customized Javascript File -->
     <script src="assets/js/svg.js"></script>
     <script src="assets/js/custom.js"></script>
+
+    
+      <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById("resetPasswordForm");
+        const newPasswordInput = document.getElementById("newPassword");
+        const confirmPasswordInput = document.getElementById("confirmPassword");
+        const submitButton = form.querySelector("button[type='submit']");
+
+        form.addEventListener("submit", async function(e) {
+            e.preventDefault();
+
+            // التحقق من تطابق كلمات المرور
+            if (newPasswordInput.value !== confirmPasswordInput.value) {
+                alert("كلمة المرور وتأكيدها غير متطابقين");
+                return;
+            }
+
+            // التحقق من قوة كلمة المرور
+            if (newPasswordInput.value.length < 8) {
+                alert("كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل");
+                return;
+            }
+
+            // الحصول على البريد الإلكتروني من localStorage
+            const email = localStorage.getItem("emailToVerify");
+            if (!email) {
+                alert("انتهت صلاحية الجلسة، يرجى إعادة المحاولة");
+                window.location.href = "forgot-password.html";
+                return;
+            }
+
+            // إعداد البيانات للإرسال
+            const data = {
+                email: email,
+                newPassword: newPasswordInput.value,
+                newPassword_confirmation: confirmPasswordInput.value
+            };
+
+            // تغيير حالة الزر
+            submitButton.disabled = true;
+            submitButton.textContent = "جاري التحميل...";
+
+            try {
+                // 1. إرسال طلب إعادة تعيين كلمة المرور
+                const resetResponse = await fetch("https://jobizaa.com/api/admin/password/new-password", {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const resetResult = await resetResponse.json();
+
+                if (!resetResponse.ok) {
+                    throw new Error(resetResult.message || "فشل في إعادة تعيين كلمة المرور");
+                }
+
+                // 2. تسجيل الدخول تلقائيًا بعد إعادة التعيين
+                const loginData = {
+                    email: email,
+                    password: newPasswordInput.value
+                };
+
+                const loginResponse = await fetch("https://jobizaa.com/api/admin/login", {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(loginData)
+                });
+
+                const loginResult = await loginResponse.json();
+
+                if (!loginResponse.ok) {
+                    throw new Error(loginResult.message || "فشل في تسجيل الدخول بعد إعادة التعيين");
+                }
+
+                // 3. تخزين التوكن للجلسة
+                localStorage.setItem("authToken", loginResult.token);
+                
+                // 4. تنظيف البيانات المؤقتة
+                localStorage.removeItem("emailToVerify");
+                localStorage.removeItem("resetVerified");
+                
+                // 5. توجيه إلى صفحة الوظائف
+                window.location.href = "jobs.html";
+                
+            } catch (error) {
+                console.error("Error:", error);
+                alert(error.message || "حدث خطأ أثناء العملية");
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = "تأكيد";
+            }
+        });
+    });
+    </script>
 </body>
 
 </html>

@@ -1078,3 +1078,24 @@ textarea::placeholder {
         transform: rotate(360deg);
     }
 }
+
+
+
+        .code-box {
+            display: inline-block;
+            width: 30px;         /* زيادة العرض */
+            height: 60px;        /* زيادة الارتفاع */
+            line-height: 60px;   /* لجعل النص في المنتصف عموديًا */
+            text-align: center;
+            border: 1px solid #ccc;
+            margin: 10px;        /* زيادة المسافة بين المربعات */
+            font-size: 28px;     /* تكبير حجم الخط */
+            outline: none;
+        }
+        .btn-verify-small {
+            padding: 8px 20px;
+            font-size: 16px;
+            width: 150px;
+            min-width: unset;
+        }
+
