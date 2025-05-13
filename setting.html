@@ -286,15 +286,13 @@
     <button type="submit">Add Super Admin</button>
 </form>
 
-    <hr>
-  
-    <label for="adminList">Choose Admin:</label>
-    <select id="adminList">
-        <option>Choose Admin</option>
-   
-   
-
-</div>
+   <hr>
+<h3>Added supervisors:</h3>
+<select id="superAdminNames" style="margin-bottom: 10px;">
+    <option disabled selected>Choose admin</option>
+</select>
+<br>
+<button id="clearAdminsBtn" style="background-color: #055685; color: white; padding: 8px 15px; border: none; border-radius: 5px;">🗑️Delete all moderators</button>
 
         </div>
     </section>
@@ -302,126 +300,7 @@
 
     <script src="./js/main.js"></script>
     <script src="./js/setting.js"></script>
- <script>
-    const API_URL = 'https://jobizaa.com/api/admin/AddSuperAdmin/65165612';
-
-    async function addSuperAdmin(adminData) {
-        try {
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(adminData)
-            });
-
-            const result = await response.json();
-            if (!response.ok) throw new Error(result.message || 'فشل في إضافة المشرف');
-            return result;
-        } catch (error) {
-            console.error('Error:', error);
-            throw error;
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('superAdminForm');
-        const submitBtn = form.querySelector('button[type="submit"]');
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const password = document.getElementById('adminPassword').value;
-            const confirmPassword = document.getElementById('adminPasswordConfirm').value;
-
-            if (password !== confirmPassword) {
-                alert('تأكيد كلمة المرور غير مطابق');
-                return;
-            }
-
-            const adminData = {
-                fullName: document.getElementById('adminName').value.trim(),
-                email: document.getElementById('adminEmail').value.trim(),
-                phone: document.getElementById('adminPhone').value.trim(),
-                password: password,
-                password_confirmation: confirmPassword
-            };
-
-            try {
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'جاري الإضافة...';
-
-                await addSuperAdmin(adminData);
-                alert('تمت إضافة المشرف بنجاح');
-                form.reset();
-            } catch (error) {
-                alert`(خطأ: ${error.message})`;
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Add Super Admin';
-            }
-        });
-    });
-</script>
-<script>
-    function initSuperAdminForm() {
-        const form = document.getElementById('superAdminForm');
-        if (!form) return; // التحقق من وجود النموذج قبل التهيئة
-
-        const submitBtn = form.querySelector('button[type="submit"]');
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const password = document.getElementById('adminPassword').value;
-            const confirmPassword = document.getElementById('adminPasswordConfirm').value;
-
-            if (password !== confirmPassword) {
-                alert('تأكيد كلمة المرور غير مطابق');
-                return;
-            }
-
-            const adminData = {
-                fullName: document.getElementById('adminName').value.trim(),
-                email: document.getElementById('adminEmail').value.trim(),
-                phone: document.getElementById('adminPhone').value.trim(),
-                password: password,
-                password_confirmation: confirmPassword
-            };
-
-            try {
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'جاري الإضافة...';
-
-                await addSuperAdmin(adminData);
-                alert('تمت إضافة المشرف بنجاح');
-                form.reset();
-            } catch (error) {
-                alert(`خطأ: ${error.message}`);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Add Super Admin';
-            }
-        });
-    }
-
-    function showTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(tab => {
-            tab.classList.add('hidden');
-        });
-        document.getElementById(tabId).classList.remove('hidden');
-
-        // عند فتح تب الإدمن، نفذ تهيئة النموذج
-        if (tabId === 'admin') {
-            initSuperAdminForm();
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        showTab('general'); // التب الافتراضي عند التحميل
-    });
-</script>
-
+ <script src="./js/admin-settings.js"></script>
 
 </body>
 
