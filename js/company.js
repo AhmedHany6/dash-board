@@ -7,65 +7,77 @@ function activeLink() {
 list.forEach((item) => item.addEventListener("mouseover", activeLink));
 
 // API Constants
-const API_BASE = 'https://jobizaa.com/api/admin/companies';
-const TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0Njg4NDg4NSwibmJmIjoxNzQ2ODg0ODg1LCJqdGkiOiJKNFRQNDc0VDBYZmVkbHZSIiwic3ViIjoiMSIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJzdXBlci1hZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2UtYWxsLWNvbXBhbmllcyIsIm1hbmFnZS1hbGwtam9icyIsIm1hbmFnZS1yb2xlcyIsIm1hbmFnZS1jb21wYW55LWFkbWlucyIsIm1hbmFnZS1hcHBsaWNhdGlvbnMiLCJ2aWV3LWFwcGxpY2FudC1wcm9maWxlcyIsInNlbmQtbWVzc2FnZXMiXSwiY29tcGFueV9pZCI6bnVsbH0.1okzsacodT2LkZoDo6e7N8nkNekwXxvFAuT1mjH0OE0"; 
+const API_BASE = "https://jobizaa.com/api/admin/companies";
+const TOKEN =
+  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0Njg4NDg4NSwibmJmIjoxNzQ2ODg0ODg1LCJqdGkiOiJKNFRQNDc0VDBYZmVkbHZSIiwic3ViIjoiMSIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJzdXBlci1hZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2UtYWxsLWNvbXBhbmllcyIsIm1hbmFnZS1hbGwtam9icyIsIm1hbmFnZS1yb2xlcyIsIm1hbmFnZS1jb21wYW55LWFkbWlucyIsIm1hbmFnZS1hcHBsaWNhdGlvbnMiLCJ2aWV3LWFwcGxpY2FudC1wcm9maWxlcyIsInNlbmQtbWVzc2FnZXMiXSwiY29tcGFueV9pZCI6bnVsbH0.1okzsacodT2LkZoDo6e7N8nkNekwXxvFAuT1mjH0OE0";
 
+document.addEventListener("DOMContentLoaded", fetchCompanies);
+
+// @desc    Fetch companies
+// @route   GET /companies
+// @auhtor  A.A
 let companies = [];
-
-// Fetch companies from API
 async function fetchCompanies() {
   try {
     const response = await fetch(API_BASE, {
       headers: {
-        'Authorization': TOKEN,
-        'Accept': 'application/json'
-      }
+        Authorization: TOKEN,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
     });
 
-    if (!response.ok)
-      throw new Error(`HTTP error! Status: ${response.status}`);
-
-    const data = await response.json();
-
-    console.log("Nested Data:", data.data);
-    console.log("Full API Response:", data);
-
-    const companiesArray = data.data.items || [];
-    if (!Array.isArray(companiesArray)) {
-      console.error("Expected array but got:", data.data);
+    if (!response.ok) {
+      Swal.fire("Error", "Failed to fetch companies", "error");
       return;
     }
 
-    companies = companiesArray.map(company => ({
-      id: company.id || 0,
-      name: company.name || "N/A",
-      email: company.email || "N/A",
-      jobs: company.jobs_count || 0,
-      status: Math.random() > 0.5 ? 'Active' : 'Inactive'
-    }));
+    const apiResult = await response.json();
+    console.log(" Response:", apiResult);
 
-console.log(companies);
+    console.log("companies:", Object.values(apiResult)[2]["items"]);
+
+    if (!apiResult || !apiResult.data || !Array.isArray(apiResult.data.items)) {
+      console.error("Unexpected structure:", apiResult.data?.items);
+      Swal.fire("Error", "Invalid data format received from API", "error");
+      return;
+    }
+
+    console.log("Full API Response:", apiResult);
+    const items = apiResult.data.items;
+
+    companies = items.map((company) => ({
+      id: company.id ?? 0,
+      name: company.name ?? "N/A",
+      email: company.email ?? "N/A",
+      jobs: company.jobs_count ?? 0,
+      status: Math.random() > 0.5 ? "Active" : "Inactive", // يُفضل لاحقًا تأتي من الـ API
+    }));
 
     displayCompanies(companies);
   } catch (error) {
-    console.error('Error fetching companies:', error);
+    console.error("Error fetching companies:", error);
+    Swal.fire(
+      "Error",
+      "Something went wrong while fetching companies",
+      "error"
+    );
   }
 }
 
 // Add a company
 async function addCompany(formData) {
   try {
-    const response = await fetch(`${API_BASE}`/add-company, {
-      method: 'POST',
+    const response = await fetch(`${API_BASE}` / add - company, {
+      method: "POST",
       headers: {
-        'Authorization': TOKEN,
-        'Accept': 'application/json'
+        Authorization: TOKEN,
+        Accept: "application/json",
       },
-      body: formData
+      body: formData,
     });
 
-    if (!response.ok)
-      throw new Error('Failed to add company');
+    if (!response.ok) throw new Error("Failed to add company");
 
     await fetchCompanies();
   } catch (error) {
@@ -79,16 +91,15 @@ async function updateCompany(id, formData) {
 
   try {
     const response = await fetch(`${API_BASE}/${id}`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': TOKEN,
-        'Accept': 'application/json'
+        Authorization: TOKEN,
+        Accept: "application/json",
       },
-      body: formData
+      body: formData,
     });
 
-    if (!response.ok)
-      throw new Error('Failed to update company');
+    if (!response.ok) throw new Error("Failed to update company");
 
     await fetchCompanies();
   } catch (error) {
@@ -105,26 +116,30 @@ async function deleteCompany(id) {
     showCancelButton: true,
     confirmButtonColor: "#d33",
     cancelButtonColor: "#3085d6",
-    confirmButtonText: "Yes, delete it!"
+    confirmButtonText: "Yes, delete it!",
   });
 
   if (confirm.isConfirmed) {
     try {
       const response = await fetch(`${API_BASE}/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
-          'Authorization': TOKEN,
-          'Accept': 'application/json'
-        }
+          Authorization: TOKEN,
+          Accept: "application/json",
+        },
       });
 
       if (!response.ok)
         throw new Error(`Failed to delete company with id ${id}`);
 
-      companies = companies.filter(c => c.id !== id);
+      companies = companies.filter((c) => c.id !== id);
       displayCompanies();
 
-      Swal.fire("Deleted!", "Company has been deleted successfully.", "success");
+      Swal.fire(
+        "Deleted!",
+        "Company has been deleted successfully.",
+        "success"
+      );
     } catch (error) {
       console.error("Error deleting company:", error);
     }
@@ -133,27 +148,36 @@ async function deleteCompany(id) {
 
 // Change company status (local only)
 function changeStatus(id, newStatus) {
-  companies = companies.map(company =>
+  companies = companies.map((company) =>
     company.id === id ? { ...company, status: newStatus } : company
   );
   displayCompanies();
 }
 
 // Display companies
-function displayCompanies(companiesList = companies) {
-  let tableBody = document.getElementById("companyTableBody");
-  let companyListContainer = document.getElementById("companyList");
+function displayCompanies(companiesList = []) {
+  const tableBody = document.getElementById("companyTableBody");
+  const companyListContainer = document.getElementById("companyList");
+
+  // Check if HTML elements exist
+  if (!tableBody || !companyListContainer) {
+    console.error(
+      "Missing DOM elements with IDs: companyTableBody or companyList"
+    );
+    return;
+  }
 
   tableBody.innerHTML = "";
   companyListContainer.innerHTML = "";
 
   if (companiesList.length === 0) {
-    tableBody.innerHTML =` <tr><td colspan="5">No companies found</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="5">No companies found</td></tr>`;
     return;
   }
 
-  companiesList.forEach(company => {
-    let row = document.createElement("tr");
+  companiesList.forEach((company) => {
+    // Table row
+    const row = document.createElement("tr");
     row.innerHTML = `
       <td>${company.name}</td>
       <td>${company.email}</td>
@@ -167,8 +191,9 @@ function displayCompanies(companiesList = companies) {
     `;
     tableBody.appendChild(row);
 
-    let item = document.createElement('div');
-    item.classList.add('company-item');
+    // Card view
+    const item = document.createElement("div");
+    item.classList.add("company-item");
     item.innerHTML = `
       <label>Company Name:</label><p>${company.name}</p>
       <label>Email:</label><p>${company.email}</p>
@@ -183,7 +208,10 @@ function displayCompanies(companiesList = companies) {
     companyListContainer.appendChild(item);
   });
 
-  updateDisplayMode();
+  // Optional: switch between table and card display
+  if (typeof updateDisplayMode === "function") {
+    updateDisplayMode();
+  }
 }
 
 // Filter companies
@@ -191,9 +219,10 @@ function filterCompanies() {
   let status = document.getElementById("statusFilter").value;
   let jobCount = document.getElementById("jobsFilter").value;
 
-  let filtered = companies.filter(company =>
-    (status === "" || company.status === status) &&
-    (jobCount === "" || company.jobs >= jobCount)
+  let filtered = companies.filter(
+    (company) =>
+      (status === "" || company.status === status) &&
+      (jobCount === "" || company.jobs >= jobCount)
   );
 
   displayCompanies(filtered);

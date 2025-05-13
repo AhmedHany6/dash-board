@@ -51,24 +51,7 @@ async function fetchJobs() {
         },
       }
     );
-
-    // if (!response.ok) {
-    //     Swal.fire({
-    //       title: "Error!",
-    //       text: `${data.message || "Access denied."} (${response.status})`,
-    //       icon: "error"
-    //     });
-    //     return;
-    //   }
-    //   if (!data.jobs || data.jobs.length === 0) {
-    //     Swal.fire({
-    //       icon: "info",
-    //       title: "No Jobs Available",
-    //       text: "The job list is currently empty.",
-    //     });
-    //     return;
-    //   }
-
+    
     const respons = await response.json();
     console.log("Response:", respons);
 
@@ -152,7 +135,7 @@ function displayJobs(jobsArray) {
       <td>${job.company}</td>
       <td>${job.applicants}</td>
       <td>${job.status}</td>
-<td>
+      <td>
         <button class="view-btn" onclick="viewJob(${job.id})">
           <i class="fa-solid fa-eye"></i> View
         </button>
