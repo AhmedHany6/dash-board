@@ -33,26 +33,29 @@ async function fetchCompanies() {
     }
 
     const apiResult = await response.json();
-    console.log(" Response:", apiResult);
+    console.log(apiResult.data);
 
-    console.log("companies:", Object.values(apiResult)[2]["items"]);
+    // console.log("companies:", Object.values(apiResult)[2]["items"]);
 
-    if (!apiResult || !apiResult.data || !Array.isArray(apiResult.data.items)) {
-      console.error("Unexpected structure:", apiResult.data?.items);
-      Swal.fire("Error", "Invalid data format received from API", "error");
-      return;
-    }
+  if (!apiResult || !Array.isArray(apiResult.data)) {
+  console.error("Unexpected structure:", apiResult.data);
+  Swal.fire("Error", "Invalid data format received from API", "error");
+  return;
+}
 
-    console.log("Full API Response:", apiResult);
-    const items = apiResult.data.items;
+    // console.log("Full API Response:", apiResult);
+    const items = apiResult.data;
 
-    companies = items.map((company) => ({
-      id: company.id ?? 0,
-      name: company.name ?? "N/A",
-      email: company.email ?? "N/A",
-      jobs: company.jobs_count ?? 0,
-      status: Math.random() > 0.5 ? "Active" : "Inactive", // يُفضل لاحقًا تأتي من الـ API
-    }));
+const companies = items.map((company) => ({
+  id: company.id ?? 0,
+  name: company.name ?? "N/A",
+  logo: company.logo ?? "",
+  email: company.email ?? "N/A", // لو فيه email
+  jobs: company.jobs_count ?? 0, // لو فيه jobs_count
+  status: Math.random() > 0.5 ? "Active" : "Inactive"
+}));
+
+
 
     displayCompanies(companies);
   } catch (error) {
@@ -180,7 +183,7 @@ function displayCompanies(companiesList = []) {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${company.name}</td>
-      <td>${company.email}</td>
+      <td>${company.size}</td>
       <td>${company.jobs}</td>
       <td>${company.status}</td>
       <td>

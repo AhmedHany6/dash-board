@@ -1,9 +1,10 @@
 // General Settings
 const API_URL = "https://jobizaa.com/api/admin/jobs";
-const AUTH_TOKEN =
-  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0Njg4NDg4NSwibmJmIjoxNzQ2ODg0ODg1LCJqdGkiOiJKNFRQNDc0VDBYZmVkbHZSIiwic3ViIjoiMSIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJzdXBlci1hZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2UtYWxsLWNvbXBhbmllcyIsIm1hbmFnZS1hbGwtam9icyIsIm1hbmFnZS1yb2xlcyIsIm1hbmFnZS1jb21wYW55LWFkbWlucyIsIm1hbmFnZS1hcHBsaWNhdGlvbnMiLCJ2aWV3LWFwcGxpY2FudC1wcm9maWxlcyIsInNlbmQtbWVzc2FnZXMiXSwiY29tcGFueV9pZCI6bnVsbH0.1okzsacodT2LkZoDo6e7N8nkNekwXxvFAuT1mjH0OE0";
 
-const CEATOR_TOKEN =
+const ACTIVE_TOKEN =
+  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0NzE1MDQzMSwibmJmIjoxNzQ3MTUwNDMxLCJqdGkiOiI0OVJpWkZhWmxVU0s4cm4xIiwic3ViIjoiMSIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJzdXBlci1hZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2UtYWxsLWNvbXBhbmllcyIsIm1hbmFnZS1hbGwtam9icyIsIm1hbmFnZS1yb2xlcyIsIm1hbmFnZS1jb21wYW55LWFkbWlucyIsIm1hbmFnZS1hcHBsaWNhdGlvbnMiLCJ2aWV3LWFwcGxpY2FudC1wcm9maWxlcyIsInNlbmQtbWVzc2FnZXMiXSwiY29tcGFueV9pZCI6bnVsbH0.A7ZHAITLLRLnHYdlz0HSGDlkKgnMDz5hP8clyswzJT0";
+
+const CREATOR_TOKEN =
   "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0Njk5NTMwNiwibmJmIjoxNzQ2OTk1MzA2LCJqdGkiOiJmR0pFa2FWMHpBTTFmU0kwIiwic3ViIjoiMyIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJhZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2Utb3duLWNvbXBhbnkiLCJtYW5hZ2UtY29tcGFueS1qb2JzIiwibWFuYWdlLWNvbXBhbnktYWRtaW5zIiwibWFuYWdlLWFwcGxpY2F0aW9ucyIsInZpZXctYXBwbGljYW50LXByb2ZpbGVzIiwic2VuZC1tZXNzYWdlcyJdLCJjb21wYW55X2lkIjozfQ.X3uQzsixFHZizAf9v8Y_ESNnQ-sIMNQFOWoGHYKpOsM";
 
 let jobs = [];
@@ -45,7 +46,7 @@ async function fetchJobs() {
       {
         method: "GET",
         headers: {
-          Authorization: AUTH_TOKEN,
+          Authorization: ACTIVE_TOKEN,
           Accept: "application/json",
           "Content-Type": "application/json",
         },
@@ -94,7 +95,7 @@ function viewJob(jobId) {
   fetch(`${API_URL}/${jobId}`, {
     method: "GET",
     headers: {
-      Authorization: AUTH_TOKEN,
+      Authorization: ACTIVE_TOKEN,
       Accept: "application/json",
       "Content-Type": "application/json",
     },
@@ -215,7 +216,7 @@ async function deleteJob(id) {
       const response = await fetch("https://jobizaa.com/api/admin/jobs/${id}", {
         method: "DELETE",
         headers: {
-          Authorization: AUTH_TOKEN,
+          Authorization: ACTIVE_TOKEN,
           Accept: "application/json"
         }
       });
@@ -317,7 +318,7 @@ async function saveChanges() {
   const options = {
     method: "POST", 
     headers: {
-      Authorization: AUTH_TOKEN,
+      Authorization: ACTIVE_TOKEN,
       Accept: "application/json",
       "Content-Type": "application/x-www-form-urlencoded",
     },
@@ -369,7 +370,7 @@ async function saveJob() {
   const options = {
     method: "POST",
     headers: {
-      Authorization: CEATOR_TOKEN,
+      Authorization: ACTIVE_TOKEN,
       Accept: "application/json",
       "Content-Type": "application/x-www-form-urlencoded",
     },
