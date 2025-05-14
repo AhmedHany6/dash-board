@@ -217,7 +217,7 @@ async function deleteJob(id) {
         method: "DELETE",
         headers: {
           // token of creator
-          Authorization: CEATOR_TOKEN,
+          Authorization: CREATOR_TOKEN,
         },
       });
 
@@ -409,7 +409,7 @@ async function saveJob() {
   const options = {
     method: "POST",
     headers: {
-      Authorization: ACTIVE_TOKEN,
+      Authorization: CREATOR_TOKEN,
       Accept: "application/json",
       "Content-Type": "application/x-www-form-urlencoded",
     },
