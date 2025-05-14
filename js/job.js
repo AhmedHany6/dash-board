@@ -14,7 +14,7 @@ const itemsPerPage = 5;
 // Load jobs on page load
 document.addEventListener("DOMContentLoaded", fetchJobs);
 
-// ✅ الإشعارات
+// @desc    Toggle Notification
 document
   .getElementById("notificationBell")
   .addEventListener("click", function (e) {
