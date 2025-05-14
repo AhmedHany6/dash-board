@@ -137,13 +137,13 @@ function displayJobs(jobsArray) {
       <td>${job.applicants}</td>
       <td>${job.status}</td>
       <td>
-        <button class="view-btn" onclick="viewJob(${job.id})">
+        <button class="view-btn btn btn-primary" onclick="viewJob(${job.id})">
           <i class="fa-solid fa-eye"></i> View
         </button>
-        <button class="edit-btn" onclick="openEditJobModal(${job.id})">
+        <button class="edit-btn btn btn-success" onclick="openEditJobModal(${job.id})">
           <i class="fa-solid fa-pen-to-square"></i> Edit
         </button>
-       <button class="delete-button" data-id="${job.id}">
+       <button class="delete-button btn btn-danger" data-id="${job.id}">
         <i class="fa-solid fa-trash"></i> Delete
       </button>
       </td>
@@ -262,6 +262,7 @@ function openAddJobModal() {
   document.getElementById("jobModal").style.display = "flex";
 
   document.getElementById("updateButton").style.display = "none";
+  document.getElementById("saveButton").style.display = "block";
 }
 
 // @author  A.A

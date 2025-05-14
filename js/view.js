@@ -57,9 +57,9 @@ function populateTable(users) {
             <td>${name}</td>
             <td>${email}</td>
             <td>
-                <button class="delete" onclick="deleteUser(${user.id})">Delete</button>
-                <button class="accept" onclick="acceptUser(${user.id})">Accept</button>
-                <button class="details" onclick="viewDetails(${user.id})">Details</button>
+            <button class="accept btn btn-success" onclick="acceptUser(${user.id})">Accept</button>
+            <button class="details btn btn-info" onclick="viewDetails(${user.id})">Details</button>
+            <button class="delete btn btn-danger" onclick="deleteUser(${user.id})">Delete</button>
             </td>
         `;
     tableBody.appendChild(row);

@@ -188,9 +188,9 @@ function displayCompanies(companiesList = []) {
       <td>${company.jobs}</td>
       <td>${company.status}</td>
       <td>
-        <button class="delete-btn" onclick="deleteCompany(${company.id})">Delete</button>
-        <button class="suspend-btn" onclick="changeStatus(${company.id}, 'Inactive')">Suspend</button>
-        <button class="activate-btn" onclick="changeStatus(${company.id}, 'Active')">Activate</button>
+      <button class="activate-btn btn btn-success" onclick="changeStatus(${company.id}, 'Active')">Activate</button>
+      <button class="suspend-btn btn btn-warning" onclick="changeStatus(${company.id}, 'Inactive')">Suspend</button>
+      <button class="delete-btn btn btn-danger" onclick="deleteCompany(${company.id})">Delete</button>
       </td>
     `;
     tableBody.appendChild(row);
