@@ -321,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-<<<<<<< HEAD
+
         // document.addEventListener('DOMContentLoaded', function () {
         //     const allowedPages = JSON.parse(localStorage.getItem('allowed_pages') || '[]');
         //     const currentPage = window.location.pathname.split('/').pop();
@@ -373,7 +373,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //         document.body.appendChild(dialog);
         //     }
         // });
-=======
+
       //  document.addEventListener('DOMContentLoaded', function () {
            // const allowedPages = JSON.parse(localStorage.getItem('allowed_pages') || '[]');
            // const currentPage = window.location.pathname.split('/').pop();
@@ -425,6 +425,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 //document.body.appendChild(dialog);
             //}
        // });
->>>>>>> 143b570 (Your commit message)
+
+       
  
   
