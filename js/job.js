@@ -51,11 +51,10 @@ async function fetchJobs() {
         },
       }
     );
-    
+
     const respons = await response.json();
     console.log("Response:", respons);
 
-    // جرب احتمالات متعددة حسب شكل الريسبونس
     const jobList =
       respons?.data?.jobs?.data ||
       respons?.data?.jobs ||
@@ -77,7 +76,7 @@ async function fetchJobs() {
     } else {
       console.warn("No jobs available");
     }
-    jobs = alljobs
+    jobs = alljobs;
 
     displayJobs(alljobs);
 
@@ -154,9 +153,9 @@ function displayJobs(jobsArray) {
   // Attach the event listener to all delete buttons after the table is populated
   document.querySelectorAll(".delete-button").forEach((button) => {
     button.addEventListener("click", function () {
-     const jobId = parseInt(this.getAttribute("data-id"));
-     deleteJob(jobId); // Get the job ID from the data-id attribute
-       // Call the deleteJob function with the job ID
+      const jobId = parseInt(this.getAttribute("data-id"));
+      deleteJob(jobId); // Get the job ID from the data-id attribute
+      // Call the deleteJob function with the job ID
     });
   });
 }
@@ -191,14 +190,14 @@ function applyFilters() {
   displayJobs(filteredJobs);
 }
 
-// Delete a job
+// @author  A.A
+// @desc    Delete job
+// @route   DELETE /api/admin/jobs/:id
 async function deleteJob(id) {
   if (!id || isNaN(id)) {
     Swal.fire("Error!", "Invalid job ID.", "error");
     return;
   }
-
-  console.log("Deleting job with ID:", id);
 
   const confirm = await Swal.fire({
     title: "Are you sure?",
@@ -207,21 +206,22 @@ async function deleteJob(id) {
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!"
+    confirmButtonText: "Yes, delete it!",
   });
 
   if (confirm.isConfirmed) {
     try {
-      const response = await fetch("https://jobizaa.com/api/admin/jobs/${id}", {
+      console.log("Deleting job with ID:", id);
+      const response = await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: AUTH_TOKEN,
-          Accept: "application/json"
-        }
+          // token of creator
+          Authorization: CEATOR_TOKEN,
+        },
       });
 
       const result = await response.json();
-      console.log("Delete response:", result);
+      console.log("result:", result);
 
       if (response.status === 404) {
         Swal.fire("Error!", "Job not found or already deleted.", "error");
@@ -229,18 +229,18 @@ async function deleteJob(id) {
       }
 
       if (!response.ok) {
-        throw new Error(result.message || "Unknown error");
+        Swal.fire("Error!", "Failed to delete job.", "error");
+        return;
       }
 
       Swal.fire("Deleted!", "Job has been deleted.", "success");
-      fetchJobs(); // إعادة تحميل الوظائف
+      fetchJobs();
     } catch (err) {
       console.error("Error deleting job:", err);
       Swal.fire("Error!", "Something went wrong.", "error");
-    }
-  }
+    }
+  }
 }
-
 
 // @author  A.A
 // @desc    Open add job modal
@@ -260,62 +260,102 @@ function openAddJobModal() {
   document.getElementById("modalTitleText").innerText = "Add Job";
   document.getElementById("jobModal").style.display = "flex";
 }
-// Open edit job modal
-function openEditJobModal(id) {
-  console.log("Edit button clicked for job ID:", id); // للتأكد من وصول الضغط
-  let job = jobs.find((j) => j.id == id);
-  if (!job) {
-    console.warn("Job not found for ID:", id);
-    return;
+
+// @author  A.A
+// @desc    Open edit job modal
+// @route   GET /api/admin/jobs/:id
+async function openEditJobModal(id) {
+  console.log("Editing job with ID:", id);
+  // fetch job details from API
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      headers: {
+        Authorization: AUTH_TOKEN,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      Swal.fire("Error", "Failed to fetch job data", "error");
+      return;
+    }
+
+    const result = await response.json();
+    const job = result.data.job;
+    console.log("job:", job);
+
+    if (!job) {
+      console.warn("Job not found in API response.");
+      return;
+    }
+
+    document.getElementById("modalCategory").value = job.category_name;
+    document.getElementById("modalTitle").value = job.title || "";
+    document.getElementById("modalSalary").value = job.salary || "";
+    document.getElementById("modalLocation").value = job.location || "";
+    document.getElementById("modalDescription").value = job.description || "";
+    document.getElementById("modalRequirement").value = job.requirement || "";
+    document.getElementById("modalBenefits").value = job.benefits || "";
+    document.getElementById("modalJob_type").value = job.job_type || "";
+    document.getElementById("modalJob_status").value = job.job_status || "";
+    document.getElementById("modalPosition").value = job.position || "";
+    document.getElementById("modalStatus").value = job.status || "Pending";
+
+    document.getElementById("modalTitleText").innerText = "Edit Job";
+    document.getElementById("jobModal").style.display = "flex";
+  } catch (err) {
+    console.error("Error fetching job details:", err);
+    Swal.fire("Error", "Failed to fetch job data", "error");
   }
-
-  document.getElementById("modalJobId").value = job.id;
-  document.getElementById("modalCategory").value = job.category || "";
-  document.getElementById("modalTitle").value = job.title || "";
-  document.getElementById("modalSalary").value = job.salary || "";
-  document.getElementById("modalLocation").value = job.location || "";
-  document.getElementById("modalDescription").value = job.description || "";
-  document.getElementById("modalRequirement").value = job.requirement || "";
-  document.getElementById("modalBenefits").value = job.benefits || "";
-  document.getElementById("modalJob_type").value = job.job_type || "";
-  document.getElementById("modalJob_status").value = job.job_status || "";
-  document.getElementById("modalPosition").value = job.position || "";
-  document.getElementById("modalStatus").value = job.status || "Pending";
-
-  document.getElementById("modalTitleText").innerText = "Edit Job";
-  document.getElementById("jobModal").style.display = "flex";
 }
-
 
 // Save or update job
 async function saveChanges() {
   let id = document.getElementById("modalJobId").value;
+  if (!id) {
+    console.warn("Job ID is not provided.");
+    return;
+  }
+  let category = document.getElementById("modalCategory").value;
   let title = document.getElementById("modalTitle").value;
-  let company = document.getElementById("modalCompany").value;
-  let applicants = document.getElementById("modalApplicants").value;
+  let salary = document.getElementById("modalSalary").value;
+  let location = document.getElementById("modalLocation").value;
+  let description = document.getElementById("modalDescription").value;
+  let requirement = document.getElementById("modalRequirement").value;
+  let benefits = document.getElementById("modalBenefits").value;
+  let job_type = document.getElementById("modalJob_type").value;
+  let job_status = document.getElementById("modalJob_status").value;
+  let position = document.getElementById("modalPosition").value;
   let status = document.getElementById("modalStatus").value;
+
+  // let id = document.getElementById("modalJobId").value;
+  //  document.getElementById("modalTitle").value;
+  // let company = document.getElementById("modalCompany").value;
+  // let applicants = document.getElementById("modalApplicants").value;
+  // let status = document.getElementById("modalStatus").value;
 
   const formData = new URLSearchParams();
   formData.append("title", title);
-  formData.append("description", company);
-  formData.append("job_status", "Open");
-  formData.append("category_name", "Engineering");
-  formData.append("location", "Cairo");
-  formData.append("salary", "4000");
-  formData.append("requirement", "2 years experience");
-  formData.append("benefits", "None");
-  formData.append("job_type", "Full-time");
-  formData.append("position", "Software Engineer");
+  formData.append("description", description);
+  formData.append("job_status", job_status);
+  formData.append("category_name", category);
+  formData.append("location", location);
+  formData.append("salary", salary);
+  formData.append("requirement", requirement);
+  formData.append("benefits", benefits);
+  formData.append("job_type", job_type);
+  formData.append("status", status);
+  formData.append("position", position);
 
-  // دي الإضافة المهمة علشان Laravel
   if (id) {
     formData.append("_method", "PUT");
   }
 
-  const url = id ? `${API_URL}/${id}` :` ${API_URL}/add-job`;
+  const url = id ? `${API_URL}/${id}` : ` ${API_URL}/add-job`;
 
   const options = {
-    method: "POST", 
+    method: "POST",
     headers: {
       Authorization: AUTH_TOKEN,
       Accept: "application/json",
@@ -331,10 +371,9 @@ async function saveChanges() {
     closeModal();
     fetchJobs();
   } catch (error) {
-    console.error("Error saving job:", error);
-  }
+    console.error("Error saving job:", error);
+  }
 }
-
 
 // @author  A.A
 // @desc    Create a new job
