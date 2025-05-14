@@ -297,11 +297,14 @@
               <option value="Rejected">Rejected</option>
               <option value="Pending">Pending</option>
             </select>
-            <button onclick="saveJob()" class="btn">
+            <!-- Save Job Button -->
+            <button onclick="saveJob()" class="btn" id="saveButton">
               <i class="fa-solid fa-save"></i> Save
             </button>
-            
-            <!-- </div> -->
+            <!-- Update Job Button -->
+            <button onclick="saveChanges()" class="btn" id="updateButton">
+              <i class="fa-solid fa-pen"></i> update
+            </button>
           </div>
         </div>
       </div>

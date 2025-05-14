@@ -260,6 +260,8 @@ function openAddJobModal() {
   document.getElementById("modalStatus").value = "Pending"; // default value
   document.getElementById("modalTitleText").innerText = "Add Job";
   document.getElementById("jobModal").style.display = "flex";
+
+  document.getElementById("updateButton").style.display = "none";
 }
 
 // @author  A.A
@@ -271,7 +273,7 @@ async function openEditJobModal(id) {
   try {
     const response = await fetch(`${API_URL}/${id}`, {
       headers: {
-        Authorization: AUTH_TOKEN,
+        Authorization: ACTIVE_TOKEN,
         Accept: "application/json",
         "Content-Type": "application/json",
       },
@@ -291,6 +293,7 @@ async function openEditJobModal(id) {
       return;
     }
 
+    document.getElementById("modalJobId").value = job.id || "";
     document.getElementById("modalCategory").value = job.category_name;
     document.getElementById("modalTitle").value = job.title || "";
     document.getElementById("modalSalary").value = job.salary || "";
@@ -305,15 +308,22 @@ async function openEditJobModal(id) {
 
     document.getElementById("modalTitleText").innerText = "Edit Job";
     document.getElementById("jobModal").style.display = "flex";
+
+    document.getElementById("saveButton").style.display = "none";
+    document.getElementById("updateButton").style.display = "block";
   } catch (err) {
     console.error("Error fetching job details:", err);
     Swal.fire("Error", "Failed to fetch job data", "error");
   }
 }
 
-// Save or update job
+// @author  A.A
+// @desc    Update job
+// @route   POST /api/admin/jobs/:id
 async function saveChanges() {
   let id = document.getElementById("modalJobId").value;
+  console.log("Saving job with ID:", id);
+
   if (!id) {
     console.warn("Job ID is not provided.");
     return;
@@ -329,12 +339,6 @@ async function saveChanges() {
   let job_status = document.getElementById("modalJob_status").value;
   let position = document.getElementById("modalPosition").value;
   let status = document.getElementById("modalStatus").value;
-
-  // let id = document.getElementById("modalJobId").value;
-  //  document.getElementById("modalTitle").value;
-  // let company = document.getElementById("modalCompany").value;
-  // let applicants = document.getElementById("modalApplicants").value;
-  // let status = document.getElementById("modalStatus").value;
 
   const formData = new URLSearchParams();
   formData.append("title", title);
@@ -358,7 +362,7 @@ async function saveChanges() {
   const options = {
     method: "POST",
     headers: {
-      Authorization: ACTIVE_TOKEN,
+      Authorization: CREATOR_TOKEN,
       Accept: "application/json",
       "Content-Type": "application/x-www-form-urlencoded",
     },
@@ -368,6 +372,22 @@ async function saveChanges() {
   try {
     const response = await fetch(url, options);
     const result = await response.json();
+    if (result.status === "403") {
+      Swal.fire({
+        title: "Error!",
+        text: "You don't have permission to perform this action.",
+        icon: "error",
+      });
+      return;
+    }
+    if (result.status === "422") {
+      Swal.fire({
+        title: "Error!",
+        text: `${result.data[0] || "Validation error."}`,
+        icon: "error",
+      });
+      return;
+    }
     console.log("Saved job:", result);
     closeModal();
     fetchJobs();
