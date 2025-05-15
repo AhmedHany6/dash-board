@@ -13,12 +13,13 @@
     <link rel="shortcut icon" href="assets/images/favicon.ico">
 
     <!-- Theme Config Js -->
+ 
+
     <script src="assets/js/hyper-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Vendor css -->
-    <link href="assets/css/vendor.min.css" rel="stylesheet" type="text/css" />
-  
 
+    
     <!-- App css -->
     <link href="assets/css/app-saas.min.css" rel="stylesheet" type="text/css" id="app-style" />
 
@@ -1174,14 +1175,11 @@ function switchToSettingsTab() {
         </div>
     </div>
 
-    <!-- Vendor js -->
-    <script src="assets/js/vendor.min.js"></script>
-
+    
     <!-- App js -->
 
     <script src="assets/js/app.min.js"></script>
-    <!-- Vendor js -->
-<script src="assets/js/vendor.min.js"></script>
+  
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -1221,14 +1219,13 @@ function switchToSettingsTab() {
                         });
                     </script> 
 
-                    <script>
-                  document.getElementById('companyForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    console.log('Form submission started');
+          <script>
+document.getElementById('companyForm').addEventListener('submit', async function(e) {
+e.preventDefault();
 
     const companyName = document.getElementById('companyname').value;
     const companyLogo = document.getElementById('companylogo').files[0];
-    
+
     if (!companyName || !companyLogo) {
         Swal.fire({
             icon: 'error',
@@ -1248,47 +1245,56 @@ function switchToSettingsTab() {
     formData.append('size', document.getElementById('size').value);
     formData.append('hired_people', document.getElementById('hired_people').value);
 
+    const token = localStorage.getItem('authToken'); // ← التوكن
+    if (!token) {
+        Swal.fire({
+            icon: 'error',
+            title: 'غير مصرح',
+            text: 'يرجى تسجيل الدخول أولاً',
+            confirmButtonText: 'حسناً'
+        });
+        return;
+    }
+
     const saveBtn = document.getElementById('saveCompanyBtn');
     saveBtn.disabled = true;
-    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
 
     try {
-        console.log('Sending data to API...');
-        const response = await fetch('https://jobizaa.com/api/admin/companies/add-company', {
+       const response = await fetch('https://jobizaa.com/api/admin/companies/add-company', {
             method: 'POST',
+            headers: {
+                "Authorization": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0NzMyMDQxMywibmJmIjoxNzQ3MzIwNDEzLCJqdGkiOiJkVW1IUnhMSUtoN0puemFNIiwic3ViIjoiOSIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJhZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2Utb3duLWNvbXBhbnkiLCJtYW5hZ2UtY29tcGFueS1qb2JzIiwibWFuYWdlLWNvbXBhbnktYWRtaW5zIiwibWFuYWdlLWFwcGxpY2F0aW9ucyIsInZpZXctYXBwbGljYW50LXByb2ZpbGVzIiwic2VuZC1tZXNzYWdlcyJdLCJjb21wYW55X2lkIjo5fQ.C8EtPd1P1MgmCVkdQaJDfPrlI1TdEGvZYbZ4QR6ihHk" // ← التوكن في الهيدر
+            },
             body: formData
         });
-
-        console.log('Response status:', response.status);
-        if (!response.ok) {
+    if (!response.ok) {
             const errorText = await response.text();
             throw new Error(errorText || 'Network response was not ok');
         }
-
-        const data = await response.json();
-        console.log('API Response:', data);
-
-        await Swal.fire({
+     await Swal.fire({
             icon: 'success',
-            title: 'تمت الإضافة بنجاح',
-            text: 'تمت إضافة الشركة بنجاح إلى النظام',
-            confirmButtonText: 'حسناً'
+            title: 'تمت الإضافة',
+            text: 'تمت إضافة الشركة بنجاح!',
+            confirmButtonText: 'متابعة'
         });
 
-        window.location.href = 'company.html';
+        window.location.href = 'company.html'; // ← التوجيه لصفحة الشركات
     } catch (error) {
-        console.error('Full Error:', error);
+        console.error('خطأ:', error);
         Swal.fire({
             icon: 'error',
             title: 'خطأ',
-            text: 'حدث خطأ أثناء إضافة الشركة: ' + (error.message || 'Unknown error'),
+            text: 'حدث خطأ أثناء حفظ الشركة: ' + (error.message || 'Unknown error'),
             confirmButtonText: 'حسناً'
         });
     } finally {
         saveBtn.disabled = false;
-        saveBtn.innerHTML = '<i class="bi bi-save"></i> Save';
+        saveBtn.innerHTML = '<i class="bi bi-save"></i> حفظ';
     }
-});</script>
+});
+</script>
+
                         
                           </body>
 </html>
