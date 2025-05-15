@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>Notifications</title>
+</head>
+<body>
+
+<!-- أيقونة الإشعارات مع البادج -->
+<div class="notification-container">
+    <i class="fas fa-bell" id="notificationBell"><span class="notification-badge">4</span></i>
+    
+    <!-- Dropdown الإشعارات -->
+    <div class="notification-dropdown" id="notificationDropdown">
+        <div class="dropdown-header">
+            <h3>Notifications</h3>
+            <a href="#" class="mark-read">Mark all as read</a>
+        </div>
+        
+        <div class="notification-list">
+            <!-- الإشعارات الجديدة -->
+            <div class="notification-section">
+                <h4>NEW</h4>
+                <div class="notification-item unread">
+                    <img src="path/to/image1.jpg" alt="Notification Icon" class="notification-icon">
+                    <div class="notification-content">
+                        Emma Watson replied to your comment: "Hello world 😊"
+                        <span class="notification-time">Just now</span>
+                    </div>
+                </div>
+                <!-- باقي الإشعارات هنا -->
+            </div>
+            
+            <!-- الإشعارات القديمة -->
+            <div class="notification-section">
+                <h4>EARLIER</h4>
+                <div class="notification-item">
+                    <img src="path/to/image2.jpg" alt="Notification Icon" class="notification-icon">
+                    <div class="notification-content">
+                        The forecast today shows a low of 20°C in California.
+                        <span class="notification-time">8h ago</span>
+                    </div>
+                </div>
+                <!-- باقي الإشعارات هنا -->
+            </div>
+        </div>
+        
+        <a href="notification.html" class="view-all">View all</a>
+    </div>
+</div>
+
+</body>
+</html>

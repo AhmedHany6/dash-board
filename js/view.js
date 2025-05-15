@@ -307,3 +307,31 @@ function setupNotifications() {
     window.location.href = this.getAttribute("href");
   });
 }
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const bellIcon = document.getElementById('notificationBell');
+    const dropdown = document.getElementById('notificationDropdown');
+    const viewAllLink = document.querySelector('.view-all');
+
+    // إظهار / إخفاء قائمة الإشعارات عند الضغط على الجرس
+    bellIcon.addEventListener('click', function (e) {
+        e.stopPropagation();
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // إغلاق القائمة إذا تم النقر خارجها
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.notification-container')) {
+            dropdown.style.display = 'none';
+        }
+    });
+
+    // عند الضغط على "View all" يتم التوجيه للصفحة
+    viewAllLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        window.location.href = this.getAttribute('href');
+    });
+});
+
+
