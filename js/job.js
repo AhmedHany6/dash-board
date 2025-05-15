@@ -155,8 +155,7 @@ function displayJobs(jobsArray) {
   document.querySelectorAll(".delete-button").forEach((button) => {
     button.addEventListener("click", function () {
       const jobId = parseInt(this.getAttribute("data-id"));
-      deleteJob(jobId); // Get the job ID from the data-id attribute
-      // Call the deleteJob function with the job ID
+      deleteJob(jobId); 
     });
   });
 }
