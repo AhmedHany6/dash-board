@@ -37,6 +37,9 @@ function fetchOrders() {
     .catch((error) => console.error("Error fetching orders:", error));
 }
 
+// @author  A.A
+// @desc    Get Users & Companies & Jobs Count
+// @route   GET /api/admin/(users|companies|jobs)
 document.addEventListener("DOMContentLoaded", fetchData);
 async function fetchData() {
   // Get Users Count
