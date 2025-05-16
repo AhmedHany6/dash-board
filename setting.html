@@ -34,64 +34,90 @@
             margin-bottom: 25px;
         }
         .notification-container {
-    position: relative;
-}
+            position: relative;
+        }
 
-.notification-container {
-    position: relative;
-}
+        .notification-dropdown {
+            display: none; /* اجعلها تظهر عند الحاجة */
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            width: 300px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px; /* إضافة حدود دائرية */
+        }
 
-.notification-dropdown {
-    display: none; /* اجعلها تظهر عند الحاجة */
-    position: absolute;
-    background-color: white;
-    border: 1px solid #ccc;
-    width: 300px;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px; /* إضافة حدود دائرية */
-}
+        .notification-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee; /* إضافة حد بين الإشعارات */
+        }
 
-.notification-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #eee; /* إضافة حد بين الإشعارات */
-}
+        .notification-item:last-child {
+            border-bottom: none; /* إزالة الحد الأخير */
+        }
 
-.notification-item:last-child {
-    border-bottom: none; /* إزالة الحد الأخير */
-}
+        .notification-icon {
+            width: 30px; /* حجم أصغر */
+            height: 30px; /* حجم أصغر */
+            border-radius: 50%; /* لجعلها دائرية */
+            margin-right: 10px;
+        }
 
-.notification-icon {
-    width: 30px; /* حجم أصغر */
-    height: 30px; /* حجم أصغر */
-    border-radius: 50%; /* لجعلها دائرية */
-    margin-right: 10px;
-}
+        .notification-content {
+            flex-grow: 1;
+        }
 
-.notification-content {
-    flex-grow: 1;
-}
+        .view-all {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 10%; /* لجعل الزر دائري */
+            margin: 10px auto; /* توسيط الزر */
+            width: 90px; /* عرض الزر */
+            height: 50px; /* ارتفاع الزر */
+            line-height: 30px; /* توسيط النص داخل الزر */
+        }
 
-.view-all {
-    display: block;
-    text-align: center;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 10%; /* لجعل الزر دائري */
-    margin: 10px auto; /* توسيط الزر */
-    width: 90px; /* عرض الزر */
-    height: 50px; /* ارتفاع الزر */
-    line-height: 30px; /* توسيط النص داخل الزر */
-}
-
-.view-all:hover {
-    background-color: #0056b3;
-}
-        </style>
+        .view-all:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Added styles for form validation */
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        input.invalid {
+            border: 1px solid #dc3545;
+        }
+        
+        .admin-list-container {
+            margin-top: 20px;
+        }
+        
+        #superAdminNames {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .admin-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+    </style>
 
 </head>
 
@@ -332,43 +358,61 @@
                 </select>
             </div>
 
-<!-- Admin Management -->
-<div class="tab-content hidden" id="admin">
-    <h2>Add super admin</h2>
-    <form id="superAdminForm">
-    <label for="adminName">Full Name:</label>
-    <input type="text" id="adminName" class="my-2" placeholder="Full Name" required>
+            <!-- Admin Management -->
+            <div class="tab-content hidden" id="admin">
+                <h2>Add Super Admin</h2>
+                <form id="superAdminForm">
+                    <div class="form-group">
+                        <label for="adminName">Full Name:</label>
+                        <input type="text" id="adminName" class="my-2" placeholder="Full Name" required>
+                        <span class="error-message" id="nameError">Please enter a valid name</span>
+                    </div>
 
-    <label for="adminEmail">Email:</label>
-    <input type="email" id="adminEmail" class="my-2" placeholder="example@email.com" required>
+                    <div class="form-group">
+                        <label for="adminEmail">Email:</label>
+                        <input type="email" id="adminEmail" class="my-2" placeholder="example@email.com" required>
+                        <span class="error-message" id="emailError">Please enter a valid email</span>
+                    </div>
 
-    <label for="adminPhone">Phone Number:</label>
-    <input type="text" id="adminPhone" class="my-2" placeholder="Phone Number" required>
+                    <div class="form-group">
+                        <label for="adminPhone">Phone Number:</label>
+                        <input type="text" id="adminPhone" class="my-2" placeholder="Phone Number" required>
+                        <span class="error-message" id="phoneError">Please enter a valid phone number</span>
+                    </div>
 
-    <label for="adminPassword">Password:</label>
-    <input type="password" id="adminPassword" class="my-2" placeholder="Password" required>
+                    <div class="form-group">
+                        <label for="adminPassword">Password:</label>
+                        <input type="password" id="adminPassword" class="my-2" placeholder="Password" required>
+                        <span class="error-message" id="passwordError">Password must be at least 6 characters</span>
+                    </div>
 
-    <label for="adminPasswordConfirm">Confirm Password:</label>
-    <input type="password" id="adminPasswordConfirm" class="my-2" placeholder="Confirm Password" required>
+                    <div class="form-group">
+                        <label for="adminPasswordConfirm">Confirm Password:</label>
+                        <input type="password" id="adminPasswordConfirm" class="my-2" placeholder="Confirm Password" required>
+                        <span class="error-message" id="confirmError">Passwords do not match</span>
+                    </div>
 
-    <button type="submit">Add Super Admin</button>
-</form>
+                    <button type="submit" class="btn btn-primary">Add Super Admin</button>
+                </form>
 
-   <hr>
-<h3>Added supervisors:</h3>
-<select id="superAdminNames" style="margin-bottom: 10px;">
-    <option disabled selected>Choose admin</option>
-</select>
-<br>
-<button id="clearAdminsBtn" style="background-color: #055685; color: white; padding: 8px 15px; border: none; border-radius: 5px;">🗑️Delete all moderators</button>
-
+                <hr>
+                <div class="admin-list-container">
+                    <h3>Added Supervisors:</h3>
+                    <select id="superAdminNames" style="margin-bottom: 10px;">
+                        <option disabled selected>Choose admin</option>
+                    </select>
+                    <div class="admin-actions">
+                        <button id="deleteSelectedAdminBtn" style="background-color: #f0ad4e; color: white; padding: 8px 15px; border: none; border-radius: 5px; margin-right: 10px;">❌ Delete Selected</button>
+                        <button id="clearAdminsBtn" style="background-color: #dc3545; color: white; padding: 8px 15px; border: none; border-radius: 5px;">🗑️ Delete All Moderators</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
    
-
     <script src="./js/main.js"></script>
     <script src="./js/setting.js"></script>
- <script src="./js/admin-settings.js"></script>
+    <script src="./js/admin-settings.js"></script>
 
 </body>
 
