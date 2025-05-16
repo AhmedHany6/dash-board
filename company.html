@@ -312,84 +312,10 @@
         <!-- ✅ قائمة الشركات في الموبايل -->
         <div id="companyList" class="company-list"></div>
       </div>
-    </section>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const bellIcon = document.getElementById("notificationBell");
-        const dropdown = document.getElementById("notificationDropdown");
-        const viewAllLink = document.querySelector(".view-all");
-
-        // إظهار / إخفاء قائمة الإشعارات عند الضغط على الجرس
-        bellIcon.addEventListener("click", function (e) {
-          e.stopPropagation();
-          dropdown.style.display =
-            dropdown.style.display === "block" ? "none" : "block";
-        });
-
-        // إغلاق القائمة إذا تم النقر خارجها
-        document.addEventListener("click", function (e) {
-          if (!e.target.closest(".notification-container")) {
-            dropdown.style.display = "none";
-          }
-        });
-
-        // عند الضغط على "View all" يتم التوجيه للصفحة
-        viewAllLink.addEventListener("click", function (e) {
-          e.preventDefault();
-          window.location.href = this.getAttribute("href");
-        });
-      });
-    </script>
-
+   </section>
     <!-- js -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/company.js"></script>
     <script src="./js/main.js" defer></script>
- <script>
-//document.addEventListener('DOMContentLoaded', async function () {
-   // const token = localStorage.getItem('authToken');
-    //if (!token) {
-       // alert("يرجى تسجيل الدخول أولاً.");
-       // window.location.href = "login.html";
-       // return;
-   // }
-
-  //try {
-       // const response = await fetch('https://jobizaa.com/api/admin/companies/all-companies', {
-            //headers: {
-               // "Authorization": `Bearer ${token}`,
-                //"Accept": "application/json"
-           // }
-      //  });
-       // const result = await response.json();
-        //const companies = result.data || result;
-
-        //const tbody = document.getElementById('companyTableBody');
-        //tbody.innerHTML = '';
-
-       // companies.forEach(company => {
-            //const row = document.createElement('tr');
-            //row.innerHTML = `
-               // <td>${company.name}</td>
-               // <td>${company.size || '-'}</td>
-               // <td>${company.hired_people || 0}</td>
-               // <td>${company.status || 'Active'}</td>
-                //<td>
-                    //<button onclick="editCompany(${company.id})">Edit</button>
-                    //<button onclick="deleteCompany(${company.id})">Delete</button>
-                //</td>
-           // `;
-           // tbody.appendChild(row);
-      //  });
-
-   // } catch (error) {
-       // console.error('فشل في جلب الشركات:', error);
-       // document.getElementById('companyTableBody').innerHTML =
-           // `<tr><td colspan="5">حدث خطأ أثناء تحميل البيانات</td></tr>`;
-   // }
-//});
-</script>
-
-  </body>
+</body>
 </html>
