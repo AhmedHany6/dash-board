@@ -202,11 +202,26 @@
         const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
         const passwordStrength = document.getElementById("passwordStrength");
         
-        // Check if we have stored email for verification
+        // التوكن الثابت للمصادقة - استخدام التوكن المقدم
+        const fixedAuthToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0NzQ4ODk5MSwibmJmIjoxNzQ3NDg4OTkxLCJqdGkiOiJydWl3WmE0RkRmYmVNSkxpIiwic3ViIjoiMTEiLCJwcnYiOiJkZjg4M2RiOTdiZDA1ZWY4ZmY4NTA4MmQ2ODZjNDVlODMyZTU5M2E5Iiwicm9sZXMiOlsiYWRtaW4iXSwicGVybWlzc2lvbnMiOlsibWFuYWdlLW93bi1jb21wYW55IiwibWFuYWdlLWNvbXBhbnktam9icyIsIm1hbmFnZS1jb21wYW55LWFkbWlucyIsIm1hbmFnZS1hcHBsaWNhdGlvbnMiLCJ2aWV3LWFwcGxpY2FudC1wcm9maWxlcyIsInNlbmQtbWVzc2FnZXMiXSwiY29tcGFueV9pZCI6MX0.MuFogjQ6fetMMsfI045ypgoDOKyMgMci8cegJF7XtGc";
+        
+        // تخزين التوكن في التخزين المحلي للاستخدام المستقبلي
+        localStorage.setItem("authToken", fixedAuthToken);
+        
+        // التحقق من وجود بريد إلكتروني مخزن للتحقق منه
         const savedEmail = localStorage.getItem('emailToVerify');
         if (savedEmail) emailInput.value = savedEmail;
         
-        // Password visibility toggle functions
+        // استخراج التوكن من URL إذا كان موجودًا
+        const urlParams = new URLSearchParams(window.location.search);
+        const resetToken = urlParams.get('token');
+        
+        // إذا كان هناك توكن في URL، احفظه
+        if (resetToken) {
+            localStorage.setItem('resetToken', resetToken);
+        }
+        
+        // وظائف تبديل رؤية كلمة المرور
         toggleNewPassword.addEventListener('click', function() {
             togglePasswordVisibility(newPasswordInput, this);
         });
@@ -219,12 +234,12 @@
             const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
             input.setAttribute('type', type);
             
-            // Toggle icon
+            // تبديل الأيقونة
             toggleIcon.querySelector('i').classList.toggle('fa-eye');
             toggleIcon.querySelector('i').classList.toggle('fa-eye-slash');
         }
         
-        // Password strength meter
+        // مقياس قوة كلمة المرور
         newPasswordInput.addEventListener('input', function() {
             const password = this.value;
             let strength = 0;
@@ -250,12 +265,12 @@
         form.addEventListener("submit", async function(e) {
             e.preventDefault();
 
-            // Get form values
+            // الحصول على قيم النموذج
             const email = emailInput.value.trim();
             const newPassword = newPasswordInput.value;
             const confirmPassword = confirmPasswordInput.value;
             
-            // Form validation
+            // التحقق من صحة النموذج
             if (!email || !newPassword || !confirmPassword) {
                 showMessage("يرجى ملء جميع الحقول المطلوبة", "error");
                 return;
@@ -271,66 +286,80 @@
                 return;
             }
 
-            // Prepare data for API
+            // إعداد البيانات للـ API
             const data = {
                 email: email,
-                newPassword: newPassword,
-                newPassword_confirmation: confirmPassword
+                password: newPassword,
+                password_confirmation: confirmPassword
             };
 
-            // Show loading state
+            // إظهار حالة التحميل
             resetButton.disabled = true;
             resetButton.innerHTML = '<span class="spinner"></span> جاري الإرسال...';
             resetButton.classList.add('btn-loading');
             hideMessage();
 
             try {
-                // Replace with your actual API endpoint
-                const apiUrl = 'https://jsonplaceholder.typicode.com/posts'; 
-                // For production: 'https://jobizaa.com/api/admin/password/new-password'
+                // استخدام رابط API الفعلي الخاص بك
+                const apiUrl = 'https://jobizaa.com/api/admin/password/new-password';
+                
+                // إعداد رؤوس الطلب مع إضافة التوكن الثابت
+                const headers = {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${fixedAuthToken}`
+                };
+                
+                console.log("Sending data:", data);
+                console.log("Headers:", headers);
 
                 const response = await fetch(apiUrl, {
                     method: "POST",
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json",
-                    },
+                    headers: headers,
                     body: JSON.stringify(data)
                 });
 
+                // تحويل الاستجابة إلى JSON
                 const result = await response.json();
                 console.log("API Response:", result);
 
-                // For demonstration purposes - simulate a successful reset
-                // In production, check response.ok and validate result
-                
-                // Show success message
-                showMessage("تم إعادة تعيين كلمة المرور بنجاح! جاري تحويلك لصفحة تسجيل الدخول...", "success");
-                
-                // Store auth token (simulated)
-                localStorage.setItem("authToken", "demo-token-123456"); // In prod: result.token
-                
-                // Clean up any stored temp data
-                localStorage.removeItem("emailToVerify");
-                localStorage.removeItem("resetVerified");
-                
-                // Redirect to login page after successful reset
-                setTimeout(() => {
-                    window.location.href = "login.html";
-                }, 2000);
+                if (response.ok) {
+                    // إذا كانت الاستجابة ناجحة
+                    // عرض رسالة النجاح
+                    showMessage("تم إعادة تعيين كلمة المرور بنجاح! جاري تحويلك لصفحة تسجيل الدخول...", "success");
+                    
+                    // تخزين رمز المصادقة إذا كان موجوداً في الاستجابة
+                    if (result.token) {
+                        localStorage.setItem("authToken", result.token);
+                    }
+                    
+                    // تخزين بيانات المستخدم الجديدة للاستخدام في صفحة تسجيل الدخول
+                    localStorage.setItem("emailToVerify", email);
+                    localStorage.setItem("registeredPassword", newPassword);
+                    localStorage.setItem("passwordResetSuccess", "true");
+                    
+                    // إعادة التوجيه إلى صفحة تسجيل الدخول بعد إعادة تعيين ناجحة
+                    setTimeout(() => {
+                        window.location.href = "login.html";
+                    }, 2000);
+                } else {
+                    // إذا كانت هناك مشكلة في الاستجابة
+                    const errorMessage = result.message || "حدث خطأ أثناء إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى";
+                    showMessage(errorMessage, "error");
+                }
                 
             } catch (error) {
                 console.error("Error:", error);
                 showMessage("حدث خطأ في الاتصال بالخادم. يرجى المحاولة مرة أخرى", "error");
             } finally {
-                // Restore button state
+                // استعادة حالة الزر
                 resetButton.disabled = false;
                 resetButton.innerHTML = "تأكيد";
                 resetButton.classList.remove('btn-loading');
             }
         });
 
-        // Helper functions for messages
+        // وظائف مساعدة للرسائل
         function showMessage(message, type) {
             messageBox.textContent = message;
             messageBox.classList.add("show");

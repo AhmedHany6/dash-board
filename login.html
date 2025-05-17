@@ -171,11 +171,10 @@
         const togglePassword = document.getElementById("togglePassword");
 
         // Check if we have stored credentials
-        const savedEmail = localStorage.getItem('loginEmail');
-        const savedPassword = localStorage.getItem('loginPassword');
+        const savedEmail = localStorage.getItem('emailToVerify');
+        const savedPassword = localStorage.getItem('registeredPassword');
         
         if (savedEmail) emailInput.value = savedEmail;
-        if (savedPassword) passwordInput.value = savedPassword;
 
         // Password visibility toggle
         togglePassword.addEventListener('click', function() {
@@ -196,11 +195,9 @@
                 return;
             }
 
-            // Prepare data for API
-            const data = {
-                email: emailInput.value,
-                password: passwordInput.value
-            };
+            // Get entered credentials
+            const enteredEmail = emailInput.value;
+            const enteredPassword = passwordInput.value;
 
             // Show loading state
             loginButton.disabled = true;
@@ -209,31 +206,34 @@
             hideError();
 
             try {
-                // Replace this URL with your actual API endpoint
-                const apiUrl = 'https://jsonplaceholder.typicode.com/posts'; 
-                // For production use: 'https://yourapi.com/api/login'
+                // Check if user has registered
+                // We'll verify against localStorage data - in a real app, this would be an API call
+                const registeredEmail = localStorage.getItem('emailToVerify');
+                const registeredPassword = localStorage.getItem('registeredPassword');
+                
+                if (!registeredEmail) {
+                    // No registered user found
+                    showError("No registered user found. Please signup first.");
+                    loginButton.disabled = false;
+                    loginButton.innerHTML = "Login";
+                    loginButton.classList.remove('btn-loading');
+                    return;
+                }
+                
+                // Validate credentials match
+                if (enteredEmail !== registeredEmail || enteredPassword !== registeredPassword) {
+                    showError("Invalid email or password. Please try again.");
+                    loginButton.disabled = false;
+                    loginButton.innerHTML = "Login";
+                    loginButton.classList.remove('btn-loading');
+                    return;
+                }
 
-                const response = await fetch(apiUrl, {
-                    method: "POST",
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-                console.log("API Response:", result);
-
-                // For demo purposes, we'll simulate a successful login
-                // In production, you should check if response.ok and validate the result
+                // Simulate API call with a delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 
                 // Store auth token
-                localStorage.setItem("authToken", "demo-token-123456"); // In prod: result.token
-                
-                // Remove stored credentials
-                localStorage.removeItem('loginEmail');
-                localStorage.removeItem('loginPassword');
+                localStorage.setItem("authToken", "user-authenticated-token");
                 
                 // Show success message
                 showSuccess("Login successful! Redirecting...");
@@ -245,7 +245,7 @@
                 
             } catch (error) {
                 console.error("Error:", error);
-                showError("Unable to connect to the server. Please try again later.");
+                showError("Unable to process your request. Please try again later.");
             } finally {
                 // Restore button state
                 loginButton.disabled = false;
@@ -269,7 +269,10 @@
         function hideError() {
             errorBox.classList.remove("show");
         }
+
     });
+
+    
     </script>
 </body>
 </html>
