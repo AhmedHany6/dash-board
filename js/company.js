@@ -1,4 +1,3 @@
-
 // Sidebar highlighting
 let list = document.querySelectorAll(".sidebar li");
 function activeLink() {
@@ -38,25 +37,23 @@ async function fetchCompanies() {
 
     // console.log("companies:", Object.values(apiResult)[2]["items"]);
 
-  if (!apiResult || !Array.isArray(apiResult.data)) {
-  console.error("Unexpected structure:", apiResult.data);
-  Swal.fire("Error", "Invalid data format received from API", "error");
-  return;
-}
+    if (!apiResult || !Array.isArray(apiResult.data)) {
+      console.error("Unexpected structure:", apiResult.data);
+      Swal.fire("Error", "Invalid data format received from API", "error");
+      return;
+    }
 
     // console.log("Full API Response:", apiResult);
     const items = apiResult.data;
 
-const companies = items.map((company) => ({
-  id: company.id ?? 0,
-  name: company.name ?? "N/A",
-  logo: company.logo ?? "",
-  email: company.email ?? "N/A", // لو فيه email
-  jobs: company.jobs_count ?? 0, // لو فيه jobs_count
-  status: Math.random() > 0.5 ? "Active" : "Inactive"
-}));
-
-
+    const companies = items.map((company) => ({
+      id: company.id ?? 0,
+      name: company.name ?? "N/A",
+      logo: company.logo ?? "",
+      email: company.email ?? "N/A", // لو فيه email
+      jobs: company.jobs_count ?? 0, // لو فيه jobs_count
+      status: Math.random() > 0.5 ? "Active" : "Inactive",
+    }));
 
     displayCompanies(companies);
   } catch (error) {

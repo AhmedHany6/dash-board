@@ -17,18 +17,18 @@ function toggleForm() {
   document.getElementById("signup-form").classList.toggle("hidden");
 }
 
-// // محاكاة تسجيل الدخول
-// function login() {
-//   let username = document.getElementById("login-username").value;
-//   let password = document.getElementById("login-password").value;
+// محاكاة تسجيل الدخول
+function login() {
+  let username = document.getElementById("login-username").value;
+  let password = document.getElementById("login-password").value;
 
-//   if (username === "" || password === "") {
-//     alert("Please fill all fields!");
-//   } else {
-//     alert("Login Successful!");
-//     // يمكنك توجيه المستخدم إلى الصفحة الرئيسية هنا
-//   }
-// }
+  if (username === "" || password === "") {
+    alert("Please fill all fields!");
+  } else {
+    alert("Login Successful!");
+    // يمكنك توجيه المستخدم إلى الصفحة الرئيسية هنا
+  }
+}
 
 // محاكاة إنشاء الحساب
 function signup() {
@@ -58,11 +58,7 @@ async function login() {
   let password = document.getElementById("login-password").value;
 
   if (username === "" || password === "") {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "Please fill all fields!",
-    });
+    alert("Please fill all fields!");
     return;
   }
 
