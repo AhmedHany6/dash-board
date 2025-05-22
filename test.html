@@ -1,0 +1,73 @@
+<script>
+async function loginAndSaveCompany() {
+    const email = "abod@gmail.com";
+    const password = "R&S19102002";
+
+    try {
+        const loginResponse = await fetch("https://jobizaa.com/api/admin/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        if (!loginResponse.ok) {
+            const errorData = await loginResponse.json();
+            throw new Error(errorData.message || 'فشل تسجيل الدخول');
+        }
+
+        const loginData = await loginResponse.json();
+        const token = loginData.token;
+        localStorage.setItem('authToken', token);
+
+        const formData = new FormData();
+        formData.append('name', document.getElementById('companyname').value);
+        formData.append('logo', document.getElementById('companylogo').files[0]);
+        formData.append('description', document.getElementById('description').value);
+        formData.append('location', document.getElementById('location').value);
+        formData.append('website', document.getElementById('website').value);
+        formData.append('size', document.getElementById('size').value);
+        formData.append('hired_people', document.getElementById('hired_people').value);
+
+        const saveResponse = await fetch("https://jobizaa.com/api/admin/companies/add-company", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        if (!saveResponse.ok) {
+            const saveData = await saveResponse.json();
+            let errors = saveData.errors || saveData.message || 'فشل في حفظ الشركة';
+            if (typeof errors === 'object') {
+                errors = Object.values(errors).flat().join('\n');
+            }
+            throw new Error(errors);
+        }
+
+      Swal.fire({
+    icon: 'success',
+    title: 'تم الحفظ',
+    text: 'تمت إضافة الشركة بنجاح',
+    confirmButtonText: 'متابعة'
+}).then(() => {
+    // حفظ حالة للإشارة إلى إضافة شركة جديدة
+    localStorage.setItem('newCompanyAdded', 'true');
+    window.location.href = 'company.html';
+});
+
+ } catch (error) {
+        console.error("خطأ:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'خطأ',
+            text: error.message || 'فشل العملية',
+            confirmButtonText: 'حسناً'
+        });
+   }
+}
+
+</script>

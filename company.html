@@ -30,6 +30,56 @@
         color: #666;
         margin-bottom: 25px;
       }
+      .notification-dropdown {
+    display: none; /* اجعلها تظهر عند الحاجة */
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    width: 300px;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px; /* إضافة حدود دائرية */
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee; /* إضافة حد بين الإشعارات */
+}
+
+.notification-item:last-child {
+    border-bottom: none; /* إزالة الحد الأخير */
+}
+
+.notification-icon {
+    width: 30px; /* حجم أصغر */
+    height: 30px; /* حجم أصغر */
+    border-radius: 50%; /* لجعلها دائرية */
+    margin-right: 10px;
+}
+
+.notification-content {
+    flex-grow: 1;
+}
+
+.view-all {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 10%; /* لجعل الزر دائري */
+    margin: 10px auto; /* توسيط الزر */
+    width: 90px; /* عرض الزر */
+    height: 50px; /* ارتفاع الزر */
+    line-height: 30px; /* توسيط النص داخل الزر */
+}
+
+.view-all:hover {
+    background-color: #0056b3;
+}
     </style>
   </head>
 
@@ -45,48 +95,57 @@
         </div>
         <div class="icon-section">
           <i class="fas fa-envelope"></i>
-          <!-- أيقونة الإشعارات مع البادج -->
-          <div class="notification-container">
-            <i class="fas fa-bell" id="notificationBell"
-              ><span class="notification-badge">4</span></i
-            >
-
-            <!-- Dropdown الإشعارات -->
-            <div class="notification-dropdown" id="notificationDropdown">
-              <div class="dropdown-header">
-                <h3>Notifications</h3>
-                <a href="#" class="mark-read">Mark all as read</a>
-              </div>
-
-              <div class="notification-list">
-                <!-- الإشعارات الجديدة -->
-                <div class="notification-section">
-                  <h4>NEW</h4>
-                  <div class="notification-item unread">
+            <!-- أيقونة الإشعارات مع البادج -->
+<div class="notification-container">
+    <i class="fas fa-bell" id="notificationBell"><span class="notification-badge">4</span></i>
+    
+    <!-- Dropdown الإشعارات -->
+    <div class="notification-dropdown" id="notificationDropdown">
+        <div class="dropdown-header">
+            <h3>Notifications</h3>
+            <a href="#" class="mark-read">Mark all as read</a>
+        </div>
+        
+        <div class="notification-list">
+            <!-- الإشعارات الجديدة -->
+            <div class="notification-section">
+                <h4>NEW</h4>
+                <div class="notification-item unread">
+                    <img src="./images/menna.jpeg" alt="Notification Icon" class="notification-icon">
                     <div class="notification-content">
-                      Emma Watson replied to your comment: "Hello world 😊"
-                      <span class="notification-time">Just now</span>
+                        Emma Watson replied to your comment: "Hello world 😊"
+                        <span class="notification-time">Just now</span>
                     </div>
-                  </div>
-                  <!-- باقي الإشعارات هنا -->
                 </div>
-
-                <!-- الإشعارات القديمة -->
-                <div class="notification-section">
-                  <h4>EARLIER</h4>
-                  <div class="notification-item">
+                <div class="notification-item unread">
+                    <img src="./images/menna.jpeg" alt="Notification Icon" class="notification-icon">
                     <div class="notification-content">
-                      The forecast today shows a low of 20°C in California.
-                      <span class="notification-time">8h ago</span>
+                        Emma Watson replied to your comment: "Hello world 😊"
+                        <span class="notification-time">Just now</span>
                     </div>
-                  </div>
-                  <!-- باقي الإشعارات هنا -->
                 </div>
-              </div>
-
-              <a href="nofigation.html" class="view-all">View all</a>
+              
+                <!-- باقي الإشعارات هنا -->
             </div>
-          </div>
+            
+            <!-- الإشعارات القديمة -->
+            <div class="notification-section">
+                <h4>EARLIER</h4>
+                <div class="notification-item">
+                    <img src="./images/istockphoto-1185418020-170667a.jpg" alt="Notification Icon" class="notification-icon">
+                    <div class="notification-content">
+                        The forecast today shows a low of 20°C in California.
+                        <span class="notification-time">8h ago</span>
+                    </div>
+                </div>
+                <!-- باقي الإشعارات هنا -->
+            </div>
+        </div>
+        
+        <a href="./nofigation.html" class="view-all">View all</a>
+    </div>
+</div>
+
           <i class="fas fa-layer-group"></i>
           <div class="user-profile" onclick="toggleDropdown()">
             <img src="assets/images/avata.jpeg" alt="image profile" />
@@ -249,40 +308,15 @@
         <!-- ✅ قائمة الشركات في الموبايل -->
         <div id="companyList" class="company-list"></div>
       </div>
-    </section>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const bellIcon = document.getElementById("notificationBell");
-        const dropdown = document.getElementById("notificationDropdown");
-        const viewAllLink = document.querySelector(".view-all");
-
-        // إظهار / إخفاء قائمة الإشعارات عند الضغط على الجرس
-        bellIcon.addEventListener("click", function (e) {
-          e.stopPropagation();
-          dropdown.style.display =
-            dropdown.style.display === "block" ? "none" : "block";
-        });
-
-        // إغلاق القائمة إذا تم النقر خارجها
-        document.addEventListener("click", function (e) {
-          if (!e.target.closest(".notification-container")) {
-            dropdown.style.display = "none";
-          }
-        });
-
-        // عند الضغط على "View all" يتم التوجيه للصفحة
-        viewAllLink.addEventListener("click", function (e) {
-          e.preventDefault();
-          window.location.href = this.getAttribute("href");
-        });
-      });
-    </script>
-
+   </section>
     <!-- js -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/company.js"></script>
     <script src="./js/main.js" defer></script>
+<<<<<<< HEAD
     <script></script>
   </body>
+=======
+</body>
+>>>>>>> 34c4e25d53ee4a61b0c14d7dc79bc3aaf04b570e
 </html>
