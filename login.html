@@ -161,121 +161,9 @@
     <script src="assets/js/svg.js"></script>
     <script src="assets/js/custom.js"></script>
     
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const form = document.getElementById("loginForm");
-        const emailInput = document.getElementById("userEmail");
-        const passwordInput = document.getElementById("userPassword");
-        const errorBox = document.getElementById("error-message-box");
-        const loginButton = document.getElementById("loginButton");
-        const togglePassword = document.getElementById("togglePassword");
-
-        // Check if we have stored credentials
-        const savedEmail = localStorage.getItem('emailToVerify');
-        const savedPassword = localStorage.getItem('registeredPassword');
-        
-        if (savedEmail) emailInput.value = savedEmail;
-
-        // Password visibility toggle
-        togglePassword.addEventListener('click', function() {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            
-            // Toggle icon
-            this.querySelector('i').classList.toggle('fa-eye');
-            this.querySelector('i').classList.toggle('fa-eye-slash');
-        });
-
-        form.addEventListener("submit", async function(e) {
-            e.preventDefault();
-
-            // Validate form
-            if (!emailInput.value || !passwordInput.value) {
-                showError("Please fill in all required fields");
-                return;
-            }
-
-            // Get entered credentials
-            const enteredEmail = emailInput.value;
-            const enteredPassword = passwordInput.value;
-
-            // Show loading state
-            loginButton.disabled = true;
-            loginButton.innerHTML = '<span class="spinner"></span> Logging in...';
-            loginButton.classList.add('btn-loading');
-            hideError();
-
-            try {
-                // Check if user has registered
-                // We'll verify against localStorage data - in a real app, this would be an API call
-                const registeredEmail = localStorage.getItem('emailToVerify');
-                const registeredPassword = localStorage.getItem('registeredPassword');
-                
-                if (!registeredEmail) {
-                    // No registered user found
-                    showError("No registered user found. Please signup first.");
-                    loginButton.disabled = false;
-                    loginButton.innerHTML = "Login";
-                    loginButton.classList.remove('btn-loading');
-                    return;
-                }
-                
-                // Validate credentials match
-                if (enteredEmail !== registeredEmail || enteredPassword !== registeredPassword) {
-                    showError("Invalid email or password. Please try again.");
-                    loginButton.disabled = false;
-                    loginButton.innerHTML = "Login";
-                    loginButton.classList.remove('btn-loading');
-                    return;
-                }
-
-                // Simulate API call with a delay
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                // Store auth token
-                localStorage.setItem("authToken", "user-authenticated-token");
-                
-                // Show success message
-                showSuccess("Login successful! Redirecting...");
-                
-                // Redirect to main page after successful login
-                setTimeout(() => {
-                    window.location.href = "job.html"; // Change to your dashboard page
-                }, 1500);
-                
-            } catch (error) {
-                console.error("Error:", error);
-                showError("Unable to process your request. Please try again later.");
-            } finally {
-                // Restore button state
-                loginButton.disabled = false;
-                loginButton.innerHTML = "Login";
-                loginButton.classList.remove('btn-loading');
-            }
-        });
-
-        // Helper functions
-        function showError(message) {
-            errorBox.textContent = message;
-            errorBox.classList.add("show");
-            errorBox.classList.remove("success-box");
-        }
-
-        function showSuccess(message) {
-            errorBox.textContent = message;
-            errorBox.classList.add("show", "success-box");
-        }
-
-        function hideError() {
-            errorBox.classList.remove("show");
-        }
-
-    });
-
-    
-    </script>
-    <script>
-   document.addEventListener("DOMContentLoaded", function() {
+   
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById("loginForm");
     const emailInput = document.getElementById("userEmail");
     const passwordInput = document.getElementById("userPassword");
@@ -283,19 +171,15 @@
     const loginButton = document.getElementById("loginButton");
     const togglePassword = document.getElementById("togglePassword");
 
-    // Check if we have stored credentials
+    // تعبئة البريد المسجل سابقاً إن وجد
     const savedEmail = localStorage.getItem('emailToVerify');
-    const savedPassword = localStorage.getItem('registeredPassword');
-    
     if (savedEmail) emailInput.value = savedEmail;
 
-    // Password visibility toggle
+    // إظهار/إخفاء كلمة المرور
     if (togglePassword) {
         togglePassword.addEventListener('click', function() {
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordInput.setAttribute('type', type);
-            
-            // Toggle icon
             this.querySelector('i').classList.toggle('fa-eye');
             this.querySelector('i').classList.toggle('fa-eye-slash');
         });
@@ -304,110 +188,69 @@
     form.addEventListener("submit", async function(e) {
         e.preventDefault();
 
-        // Validate form
-        if (!emailInput.value || !passwordInput.value) {
+        const enteredEmail = emailInput.value.trim();
+        const enteredPassword = passwordInput.value;
+
+        if (!enteredEmail || !enteredPassword) {
             showError("Please fill in all required fields");
             return;
         }
 
-        // Get entered credentials
-        const enteredEmail = emailInput.value;
-        const enteredPassword = passwordInput.value;
-
-        // Show loading state
         loginButton.disabled = true;
         loginButton.innerHTML = '<span class="spinner"></span> Logging in...';
         loginButton.classList.add('btn-loading');
         hideError();
 
         try {
-            // Check if user has registered
-            // We'll verify against localStorage data - in a real app, this would be an API call
             const registeredEmail = localStorage.getItem('emailToVerify');
             const registeredPassword = localStorage.getItem('registeredPassword');
-            
-            if (!registeredEmail) {
-                // No registered user found
-                showError("No registered user found. Please signup first.");
-                loginButton.disabled = false;
-                loginButton.innerHTML = "Login";
-                loginButton.classList.remove('btn-loading');
-                return;
-            }
-            
-            // Validate credentials match
-            if (enteredEmail !== registeredEmail || enteredPassword !== registeredPassword) {
+
+            const isAdmin = checkIfAdmin(enteredEmail);
+
+            if (!isAdmin && (enteredEmail !== registeredEmail || enteredPassword !== registeredPassword)) {
                 showError("Invalid email or password. Please try again.");
-                loginButton.disabled = false;
-                loginButton.innerHTML = "Login";
-                loginButton.classList.remove('btn-loading');
+                resetButton();
                 return;
             }
 
-            // Simulate API call with a delay
             await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            // Check if user is admin based on email pattern
-            const isAdmin = checkIfAdmin(enteredEmail);
-            
-            // Store auth info including role
+
             localStorage.setItem("authToken", "user-authenticated-token");
             localStorage.setItem("userRole", isAdmin ? "admin" : "user");
             localStorage.setItem("userEmail", enteredEmail);
-            
-            // Show success message with role information
-            const roleMessage = isAdmin ? 
-                "Admin login successful! You have full access." : 
-                "Login successful! You have limited access.";
-            
-            showSuccess(`${roleMessage} Redirecting...`);
-            
-            // Redirect to the appropriate page based on role
+
+            showSuccess(isAdmin ?
+                "Admin login successful! Redirecting..." :
+                "Login successful! Redirecting...");
+
             setTimeout(() => {
-                try {
-                    if (isAdmin) {
-                        window.location.href = "admin-dashboard.html"; // Redirect admins to admin dashboard
-                    } else {
-                        window.location.href = "job.html"; // Regular users go to job page
-                    }
-                } catch (redirectError) {
-                    console.error("Redirect error:", redirectError);
-                    showError("Navigation error. Please try again.");
-                    loginButton.disabled = false;
-                    loginButton.innerHTML = "Login";
-                    loginButton.classList.remove('btn-loading');
-                }
+                window.location.href = isAdmin ? "index.html" : "job.html";
             }, 1500);
-            
+
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Login error:", error);
             showError("Unable to process your request. Please try again later.");
-        } finally {
-            // Restore button state
-            loginButton.disabled = false;
-            loginButton.innerHTML = "Login";
-            loginButton.classList.remove('btn-loading');
+            resetButton();
         }
     });
 
-    /**
-     * Check if email belongs to an admin
-     * @param {string} email - User email address
-     * @returns {boolean} - True if admin, false otherwise
-     */
     function checkIfAdmin(email) {
-        // List of admin emails
         const adminEmails = [
             "ahmed.khaled@gmail.com",
             "sara.ibrahim@outlook.com",
-            "omar.hassan@gmail.com"
+            "omar.hassan@gmail.com",
+            "fatima.ahmed@outlook.com",
+            "khaled.salem@gmail.com",
+            "nourhan.mostafa@outlook.com",
+            "youssef.hassan@gmail.com",
+            "mona.abdelrahman@outlook.com",
+            "hassan.zaki@gmail.com",
+            "amira.fathy@outlook.com",
+            "ahmed.mohamed@gmail.com"
         ];
-        
-        // Check if the email is in the admin list and email is not empty
         return email && adminEmails.includes(email.toLowerCase());
     }
 
-    // Helper functions
     function showError(message) {
         errorBox.textContent = message;
         errorBox.classList.add("show");
@@ -422,7 +265,15 @@
     function hideError() {
         errorBox.classList.remove("show");
     }
+
+    function resetButton() {
+        loginButton.disabled = false;
+        loginButton.innerHTML = "Login";
+        loginButton.classList.remove('btn-loading');
+    }
 });
-    </script>
+</script>
+
+
 </body>
 </html>
