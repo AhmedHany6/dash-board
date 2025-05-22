@@ -151,26 +151,32 @@
                 </div>
                 <div class="activity-actions activity-actions-forget">
                     <form id="resetPasswordForm" class="d-flex flex-column gap-4">
-                        <div class="form-group">
-                            <label for="email"><i class="fas fa-envelope"></i></label>
-                            <input type="email" id="email" class="input-one" placeholder="البريد الإلكتروني" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="newPassword"><i class="fas fa-lock"></i></label>
-                            <input type="password" id="newPassword" class="input-one" placeholder="كلمة المرور الجديدة" required>
-                            <span class="password-toggle" id="toggleNewPassword">
-                                <i class="fas fa-eye"></i>
-                            </span>
-                            <div class="strength-meter" id="passwordStrength"></div>
-                            <div class="password-requirements">كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="confirmPassword"><i class="fas fa-lock"></i></label>
-                            <input type="password" id="confirmPassword" class="input-one" placeholder="تأكيد كلمة المرور" required>
-                            <span class="password-toggle" id="toggleConfirmPassword">
-                                <i class="fas fa-eye"></i>
-                            </span>
-                        </div>
+                       <div class="form-group">
+    <label for="email"><i class="fas fa-envelope"></i></label>
+    <input type="email" id="email" class="input-one" placeholder="البريد الإلكتروني" required>
+</div>
+
+<div class="form-group">
+    <label for="verificationCode"><i class="fas fa-key"></i></label>
+    <input type="text" id="verificationCode" class="input-one" placeholder="رمز التحقق من البريد الإلكتروني" required>
+</div>
+
+<div class="form-group">
+    <label for="newPassword"><i class="fas fa-lock"></i></label>
+    <input type="password" id="newPassword" class="input-one" placeholder="كلمة المرور الجديدة" required>
+    <span class="password-toggle" id="toggleNewPassword">
+        <i class="fas fa-eye"></i>
+    </span>
+
+</div>
+
+<div class="form-group">
+    <label for="confirmPassword"><i class="fas fa-lock"></i></label>
+    <input type="password" id="confirmPassword" class="input-one" placeholder="تأكيد كلمة المرور" required>
+    <span class="password-toggle" id="toggleConfirmPassword">
+        <i class="fas fa-eye"></i>
+    </span>
+</div>
                         <button type="submit" id="resetButton" class="btn-common btn-activity-confirm">تأكيد</button>
                         <div id="message-box" class="message-box"></div>
                     </form>
@@ -190,9 +196,7 @@
     <!-- Default Javascript File -->
     <script src="assets/js/custom.js"></script>
 
-    <script>
-  // تعديل الجزء المسؤول عن التوكن في ملف newpass.html
-
+   <script>
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById("resetPasswordForm");
     const emailInput = document.getElementById("email");
@@ -202,253 +206,97 @@ document.addEventListener("DOMContentLoaded", function() {
     const resetButton = document.getElementById("resetButton");
     const toggleNewPassword = document.getElementById("toggleNewPassword");
     const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
-    const passwordStrength = document.getElementById("passwordStrength");
-    
-    // إدارة التوكن - التحسين الجديد باستخدام sessionStorage
-    async function getAuthToken() {
-        // التحقق أولاً من وجود توكن مخزن صالح
-        const storedToken = sessionStorage.getItem("authToken");
-        const tokenExpiry = sessionStorage.getItem("tokenExpiry");
-        
-        // التحقق من صلاحية التوكن المخزن (إذا كان موجوداً وإذا لم تنتهِ صلاحيته)
-        if (storedToken && tokenExpiry && new Date().getTime() < parseInt(tokenExpiry)) {
-            console.log("استخدام التوكن المخزن (صالح)");
-            return storedToken;
-        }
-        
-        try {
-            // طلب توكن جديد من API إذا لم يكن هناك توكن صالح
-            const response = await fetch('https://jobizaa.com/api/admin/auth/refresh-token', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                // إذا كان هناك توكن تحديث (refresh token) يمكن إرساله هنا
-                body: JSON.stringify({
-                    refresh_token: sessionStorage.getItem("refreshToken") || ""
-                })
-            });
-            
-            if (response.ok) {
-                const data = await response.json();
-                
-                // تخزين التوكن الجديد مع وقت انتهاء الصلاحية في sessionStorage
-                sessionStorage.setItem("authToken", data.token);
-                
-                // حساب وقت انتهاء الصلاحية بناءً على الاستجابة أو الافتراضي (24 ساعة)
-                const expiryTime = new Date().getTime() + (data.expires_in );
-                sessionStorage.setItem("tokenExpiry", expiryTime.toString());
-                
-                // تخزين refresh token إذا كان موجوداً في الاستجابة
-                if (data.refresh_token) {
-                    sessionStorage.setItem("refreshToken", data.refresh_token);
-                }
-                
-                console.log("تم الحصول على توكن جديد");
-                return data.token;
-            } else {
-                console.error("فشل في الحصول على توكن جديد:", await response.text());
-                return null;
-            }
-        } catch (error) {
-            console.error("خطأ في الحصول على التوكن:", error);
-            return null;
-        }
-    }
-    
-    // التحقق من التوكن في URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const resetToken = urlParams.get('token');
-    
-    // إذا كان هناك توكن في URL، احفظه في sessionStorage
-    if (resetToken) {
-        sessionStorage.setItem('resetToken', resetToken);
-        // تخزين التوكن مؤقتاً كتوكن مصادقة أيضاً إذا لم يكن هناك توكن مخزن
-        if (!sessionStorage.getItem('authToken')) {
-            sessionStorage.setItem('authToken', resetToken);
-            // تعيين وقت انتهاء صلاحية قصير (ساعة واحدة)
-            const expiryTime = new Date().getTime() + (60 * 60 * 1000);
-            sessionStorage.setItem("tokenExpiry", expiryTime.toString());
-        }
-    }
-    
-    // التحقق من وجود بريد إلكتروني مخزن للتحقق منه
-    const savedEmail = sessionStorage.getItem('emailToVerify');
-    if (savedEmail) emailInput.value = savedEmail;
-    
+    const verificationCodeInput = document.getElementById("verificationCode");
+
     // وظائف تبديل رؤية كلمة المرور
     toggleNewPassword.addEventListener('click', function() {
         togglePasswordVisibility(newPasswordInput, this);
     });
-    
+
     toggleConfirmPassword.addEventListener('click', function() {
         togglePasswordVisibility(confirmPasswordInput, this);
     });
-    
+
     function togglePasswordVisibility(input, toggleIcon) {
         const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
         input.setAttribute('type', type);
-        
-        // تبديل الأيقونة
         toggleIcon.querySelector('i').classList.toggle('fa-eye');
         toggleIcon.querySelector('i').classList.toggle('fa-eye-slash');
     }
-    
-    // مقياس قوة كلمة المرور
-    newPasswordInput.addEventListener('input', function() {
-        const password = this.value;
-        let strength = 0;
-        
-        if (password.length >= 8) strength += 1;
-        if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength += 1;
-        if (password.match(/[0-9]/)) strength += 1;
-        if (password.match(/[^a-zA-Z0-9]/)) strength += 1;
-        
-        passwordStrength.className = 'strength-meter';
-        
-        if (password.length === 0) {
-            passwordStrength.className = 'strength-meter';
-        } else if (strength < 2) {
-            passwordStrength.classList.add('weak');
-        } else if (strength < 4) {
-            passwordStrength.classList.add('medium');
-        } else {
-            passwordStrength.classList.add('strong');
-        }
-    });
 
     form.addEventListener("submit", async function(e) {
         e.preventDefault();
 
-        // الحصول على قيم النموذج
         const email = emailInput.value.trim();
         const newPassword = newPasswordInput.value;
         const confirmPassword = confirmPasswordInput.value;
-        
-        // التحقق من صحة النموذج
-        if (!email || !newPassword || !confirmPassword) {
+        const pinCode = verificationCodeInput.value.trim();
+
+        if (!email || !newPassword || !confirmPassword || !pinCode) {
             showMessage("يرجى ملء جميع الحقول المطلوبة", "error");
             return;
         }
-        
+
         if (newPassword !== confirmPassword) {
             showMessage("كلمة المرور وتأكيدها غير متطابقين", "error");
             return;
         }
-        
+
         if (newPassword.length < 8) {
             showMessage("كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل", "error");
             return;
         }
 
-        // إعداد البيانات للـ API
         const data = {
             email: email,
-            password: newPassword,
-            password_confirmation: confirmPassword
+            pinCode: pinCode,
+            newPassword: newPassword,
+            newPassword_confirmation: confirmPassword
         };
 
-        // إظهار حالة التحميل
         resetButton.disabled = true;
         resetButton.innerHTML = '<span class="spinner"></span> جاري الإرسال...';
         resetButton.classList.add('btn-loading');
         hideMessage();
 
         try {
-            // الحصول على التوكن من وظيفة إدارة التوكن
-            const authToken = await getAuthToken();
-            
-            // التحقق من وجود التوكن
-            if (!authToken) {
-                showMessage("لا يمكن الحصول على توكن المصادقة. يرجى تحديث الصفحة والمحاولة مرة أخرى", "error");
-                resetButton.disabled = false;
-                resetButton.innerHTML = "تأكيد";
-                resetButton.classList.remove('btn-loading');
-                return;
-            }
-            
-            // استخدام رابط API الفعلي الخاص بك
-            const apiUrl = 'https://jobizaa.com/api/admin/password/new-password';
-            
-            // إعداد رؤوس الطلب مع إضافة التوكن الديناميكي
-            const headers = {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${authToken}`
-            };
-            
-            console.log("Sending data:", data);
-            console.log("Headers:", headers);
-
-            const response = await fetch(apiUrl, {
+            const response = await fetch('https://jobizaa.com/api/admin/password/new-password', {
                 method: "POST",
-                headers: headers,
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify(data)
             });
 
-            // تحويل الاستجابة إلى JSON
             const result = await response.json();
-            console.log("API Response:", result);
 
             if (response.ok) {
-                // إذا كانت الاستجابة ناجحة
-                // عرض رسالة النجاح
                 showMessage("تم إعادة تعيين كلمة المرور بنجاح! جاري تحويلك لصفحة تسجيل الدخول...", "success");
-                
-                // تخزين رمز المصادقة في sessionStorage إذا كان موجوداً في الاستجابة
-                if (result.token) {
-                    sessionStorage.setItem("authToken", result.token);
-                    // تعيين وقت انتهاء الصلاحية بناءً على الاستجابة أو الافتراضي (24 ساعة)
-                    const expiryTime = new Date().getTime() + (result.expires_in || 24 * 60 * 60 * 1000);
-                    sessionStorage.setItem("tokenExpiry", expiryTime.toString());
-                }
-                
-                // تخزين بيانات المستخدم الجديدة في sessionStorage للاستخدام في صفحة تسجيل الدخول
                 sessionStorage.setItem("emailToVerify", email);
                 sessionStorage.setItem("registeredPassword", newPassword);
                 sessionStorage.setItem("passwordResetSuccess", "true");
-                
-                // إعادة التوجيه إلى صفحة تسجيل الدخول بعد إعادة تعيين ناجحة
+
                 setTimeout(() => {
                     window.location.href = "login.html";
                 }, 2000);
             } else {
-                // إذا كانت هناك مشكلة في الاستجابة
-                const errorMessage = result.message || "حدث خطأ أثناء إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى";
-                showMessage(errorMessage, "error");
-                
-                // إذا كان الخطأ بسبب انتهاء صلاحية التوكن، قم بمحو التوكن الحالي
-                if (response.status === 401) {
-                    sessionStorage.removeItem("authToken");
-                    sessionStorage.removeItem("tokenExpiry");
-                    
-                    // محاولة الحصول على توكن جديد وإعادة تقديم النموذج
-                    setTimeout(() => {
-                        resetButton.disabled = false;
-                        resetButton.innerHTML = "تأكيد";
-                        resetButton.classList.remove('btn-loading');
-                        showMessage("يرجى المحاولة مرة أخرى، سيتم تجديد التوكن تلقائياً", "error");
-                    }, 1000);
-                }
+                showMessage(result.message || "حدث خطأ أثناء إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى", "error");
             }
-            
+
         } catch (error) {
             console.error("Error:", error);
             showMessage("حدث خطأ في الاتصال بالخادم. يرجى المحاولة مرة أخرى", "error");
         } finally {
-            // استعادة حالة الزر
             resetButton.disabled = false;
             resetButton.innerHTML = "تأكيد";
             resetButton.classList.remove('btn-loading');
         }
     });
 
-    // وظائف مساعدة للرسائل
     function showMessage(message, type) {
         messageBox.textContent = message;
         messageBox.classList.add("show");
-        
         if (type === "error") {
             messageBox.classList.add("error");
             messageBox.classList.remove("success");
@@ -462,7 +310,8 @@ document.addEventListener("DOMContentLoaded", function() {
         messageBox.classList.remove("show", "error", "success");
     }
 });
-    </script>
+</script>
+
 </body>
 
 </html>
