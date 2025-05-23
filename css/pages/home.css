@@ -164,8 +164,6 @@ canvas {
 }
 
 .orders-table th {
-    background-color: #f8f9fa;
-    /* Light gray background for headers */
     font-weight: bold;
 }
 
