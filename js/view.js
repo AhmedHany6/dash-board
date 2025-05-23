@@ -52,16 +52,20 @@ function populateTable(users) {
 
     // Table Row
     const row = document.createElement("tr");
-    row.innerHTML = `
-            <td>${user.id}</td>
-            <td>${name}</td>
-            <td>${email}</td>
-            <td>
-            <button class="accept btn btn-success" onclick="acceptUser(${user.id})">Accept</button>
-            <button class="details btn btn-info" onclick="viewDetails(${user.id})">Details</button>
-            <button class="delete btn btn-danger" onclick="deleteUser(${user.id})">Delete</button>
-            </td>
-        `;
+    row.innerHTML = `  
+  <tr>
+    <td>${user.id}</td>
+    <td>${user.user.name}</td>
+    <td>${user.user.email}</td>
+    <td><span class="custom-status">${user.status.replaceAll("-", " ")}</span></td>
+    <td>
+      <button onclick="acceptUser(${user.id})" class="btn btn-success btn-sm">Accept</button>
+      <button onclick="viewDetails(${user.id})" class="btn btn-primary btn-sm">Details</button>
+      <button onclick="deleteUser(${user.id})" class="btn btn-danger btn-sm">Delete</button>
+    </td>
+  </tr>
+`;
+        
     tableBody.appendChild(row);
 
     // Card View
@@ -97,7 +101,7 @@ async function deleteUser(userId) {
     try {
       const response = await fetch(`${API_URL}/${userId}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${AUTH_TOKEN}` },
+        headers: { Authorization: Bearer `${AUTH_TOKEN}` },
       });
 
       if (response.ok) {
@@ -133,28 +137,51 @@ async function acceptUser(userId) {
 
   if (result.isConfirmed) {
     try {
-      const response = await fetch(`${API_URL}/${userId}/status`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${AUTH_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          status: "accepted",
-          feedback: "Accepted by admin",
-        }),
-      });
+      
 
-      if (response.ok) {
-        Swal.fire(
-          "Accepted!",
-          ` admin has accepted the user with ID: ${userId}`,
-          "success"
-        );
-        await updateDashboard();
-      } else {
-        Swal.fire("Error!", "Failed to accept the user.", "error");
-      }
+const statusFeedbackMap = {
+  "pending": "Waiting for submission",
+  "submitted": "Submitted by user",
+  "reviewed": "Reviewed by admin",
+  "screening-interview": "Scheduled for screening interview",
+  "technical-interview": "Scheduled for technical interview",
+  "final-hr-interview": "Scheduled for final HR interview",
+  "team-matching": "Matching with team",
+  "accepted": "Accepted by admin",
+  "offer-letter": "Offer letter sent",
+  "rejected": "Rejected by admin"
+};
+
+const feedback = statusFeedbackMap[newStatus] || "Status updated";
+const currentStatus = user.status; // الحالة الحالية من الداتا
+const newStatus = document.getElementById("statusSelect").value; // الحالة الجديدة من الـ select
+
+// تحقق من صلاحية الانتقال
+if (!statusOrder[currentStatus] || !statusOrder[currentStatus].includes(newStatus)) {
+  Swal.fire("Invalid Transition", `Cannot change status from "${currentStatus}" to "${newStatus}"`, "error");
+  return;
+}
+const response = await fetch(`${API_URL}/${userId}/status`, {
+  method: "PUT",
+  headers: {
+    "Authorization": "Bearer ${AUTH_TOKEN}",
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    status: newStatus,
+    feedback: feedback
+  })
+});
+
+
+     if (response.ok) {
+  Swal.fire("Accepted",` Admin has accepted the user with ID: ${userId}`, "success");
+  await updateDashboard();
+} else {
+  const errorMsg = await response.text();
+  console.error("Failed to update status:", errorMsg);
+  Swal.fire("Error", "Failed to update status.", "error");
+}
     } catch (error) {
       console.error("Error:", error);
       Swal.fire("Error!", "Something went wrong.", "error");
@@ -171,33 +198,19 @@ async function viewDetails(userId) {
     <p><strong>Name:</strong> ${user.user?.name || "N/A"}</p>
     <p><strong>Email:</strong> ${user.user?.email || "N/A"}</p>
     <label><strong>Status:</strong></label>
-    <select id="statusSelect" class="swal2-select">
-      <option value="reviewed" ${
-        user.status === "reviewed" ? "selected" : ""
-      }>Submitted</option>
-<option value="accepted" ${
-    user.status === "accepted" ? "selected" : ""
-  }>reviewed</option>
-<option value="rejected" ${
-    user.status === "rejected" ? "selected" : ""
-  }>accepted</option>
-<option value="submitted" ${
-    user.status === "submitted" ? "selected" : ""
-  }>rejected</option>
-<option value="team-matching" ${
-    user.status === "team-matching" ? "selected" : ""
-  }>Team Matching</option>
-<option value="final-hr-interview" ${
-    user.status === "final-hr-interview" ? "selected" : ""
-  }>Final HR Interview</option>
-<option value="technical-interview" ${
-    user.status === "technical-interview" ? "selected" : ""
-  }>Technical Interview</option>
-<option value="screening-interview" ${
-    user.status === "screening-interview" ? "selected" : ""
-  }>Screening Interview</option>
-    </select>
-`;
+   <select id="statusSelect" class="swal2-select">
+  <option value="pending" ${user.status === "pending" ? "selected" : ""}>Pending</option>
+  <option value="submitted" ${user.status === "submitted" ? "selected" : ""}>Submitted</option>
+  <option value="reviewed" ${user.status === "reviewed" ? "selected" : ""}>Reviewed</option>
+  <option value="screening-interview" ${user.status === "screening-interview" ? "selected" : ""}>Screening Interview</option>
+  <option value="technical-interview" ${user.status === "technical-interview" ? "selected" : ""}>Technical Interview</option>
+  <option value="final-hr-interview" ${user.status === "final-hr-interview" ? "selected" : ""}>Final HR Interview</option>
+  <option value="team-matching" ${user.status === "team-matching" ? "selected" : ""}>Team Matching</option>
+  <option value="accepted" ${user.status === "accepted" ? "selected" : ""}>Accepted</option>
+    <option value="rejected" ${user.status === "rejected" ? "selected" : ""}>Rejected</option>
+  <option value="offer-letter" ${user.status === "offer-letter" ? "selected" : ""}>Offer Letter</option>
+</select>`
+;
 
   const result = await Swal.fire({
     title: ` Details for ${user.user?.name || "User"}`,
@@ -331,7 +344,5 @@ document.addEventListener('DOMContentLoaded', function () {
     viewAllLink.addEventListener('click', function (e) {
         e.preventDefault();
         window.location.href = this.getAttribute('href');
-    });
+    });
 });
-
-
