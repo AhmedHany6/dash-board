@@ -80,7 +80,6 @@ async function fetchUserCount() {
       },
     });
     const res = await response.json();
-    console.log("API Response:", res);
 
     document.getElementById("user-count").textContent =
       res?.data?.users?.length;
