@@ -1,8 +1,68 @@
 
 
+  // حماية الصفحة للـ super-admin و admin
+  auth.protectPage(["super-admin","admin"]);
 
-// start logic in header
+  // التحكم في إظهار الروابط
+  const role = auth.parseRole(auth.getToken());
+  document.querySelectorAll(".admin-only").forEach(el => {
+    el.style.display = (role === "super-admin") ? "block" : "none";
+  });
+  document.querySelectorAll(".user-only").forEach(el => {
+    el.style.display = (["super-admin","admin"].indexOf(role) !== -1)
+      ? "block" : "none";
+  });
 
+  // ربط زرّ الخروج
+  document.querySelectorAll("[onclick='logout()']").forEach(btn => {
+    btn.addEventListener("click", auth.logout);
+  });
+document.addEventListener("DOMContentLoaded", function () {
+  const token = sessionStorage.getItem("token");
+  const role = window.parseRole(token);
+
+  // إخفاء عناصر الـ sidebar حسب الدور
+  document.querySelectorAll(".admin-only").forEach((el) => {
+    el.style.display = role === "super-admin" ? "block" : "none";
+  });
+
+  document.querySelectorAll(".user-only").forEach((el) => {
+    el.style.display = ["admin", "super-admin"].includes(role)
+      ? "block"
+      : "none";
+  });
+
+  // تقييد دخول admin إلى صفحات غير مسموح بها
+  const allowedPagesForAdmin = [
+    "job.html",
+    "view.html",
+    "profile.html",
+    "chat.html",
+  ];
+
+  if (role === "admin") {
+    const currentPage = window.location.pathname.split("/").pop().toLowerCase();
+
+    if (!allowedPagesForAdmin.includes(currentPage)) {
+      const accessDeniedDiv = document.getElementById("access-denied");
+      if (accessDeniedDiv) {
+        accessDeniedDiv.style.display = "block";
+        accessDeniedDiv.textContent = "🚫 Access Denied Only for super admin";
+      } else {
+        document.body.insertAdjacentHTML(
+          "afterbegin",
+          `<div id="access-denied" style="
+            background: #ffe0e0;
+            color: #d8000c;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+          ">🚫 Access Denied Only for super admin</div>`
+        );
+      }
+    }
+  }
+});
 function toggleDropdown() {
 
     document.querySelector(".user-profile").classList.toggle("active");

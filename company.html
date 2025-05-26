@@ -6,7 +6,7 @@
     <title>Company Management</title>
     <!-- fontAwesome -->
     <link rel="stylesheet" href="css/vendor/all.min.css" />
-
+    <script src="js/auth.js"></script>
     <link rel="stylesheet" href="./css/pages/company.css" />
 
     <link rel="stylesheet" href="css/style.css" />
@@ -177,95 +177,77 @@
       </div>
 
       <ul>
-        <li data-id="dashboard">
-          <a href="index.html">
-            <span class="icon">
-              <i class="fa-sharp fa-solid fa-house"></i>
-            </span>
-            <span class="text">Dashboard</span>
-          </a>
-        </li>
+  <!-- يظهر للجميع -->
+  <li data-id="dashboard" class="admin-only">
+    <a href="index.html">
+      <span class="icon"><i class="fa-sharp fa-solid fa-house"></i></span>
+      <span class="text">Dashboard</span>
+    </a>
+  </li>
 
-        <li data-id="users">
-          <a href="user.html">
-            <span class="icon">
-              <i class="fa-solid fa-users"></i>
-            </span>
-            <span class="text">Users</span>
-          </a>
-        </li>
+  <li data-id="users" class="admin-only">
+    <a href="user.html">
+      <span class="icon"><i class="fa-solid fa-users"></i></span>
+      <span class="text">Users</span>
+    </a>
+  </li>
 
-        <li data-id="jobs">
-          <a href="job.html">
-            <span class="icon">
-              <i class="fa-solid fa-briefcase"></i>
-            </span>
-            <span class="text">Jobs</span>
-          </a>
-        </li>
+  <li data-id="jobs" class="admin-only">
+    <a href="job.html">
+      <span class="icon"><i class="fa-solid fa-briefcase"></i></span>
+      <span class="text">Jobs</span>
+    </a>
+  </li>
 
-        <li data-id="view">
-          <a href="view.html">
-            <span class="icon">
-              <i class="fa-sharp fa-solid fa-eye"></i>
-            </span>
-            <span class="text">View jobs</span>
-          </a>
-        </li>
+  <li data-id="view" class="user-only">
+    <a href="view.html">
+      <span class="icon"><i class="fa-sharp fa-solid fa-eye"></i></span>
+      <span class="text">View jobs</span>
+    </a>
+  </li>
 
-        <li data-id="companies">
-          <a href="company.html">
-            <span class="icon">
-              <i class="fa-solid fa-buildings"></i>
-            </span>
-            <span class="text">Companies</span>
-          </a>
-        </li>
-        <li>
-          <a href="./app/chat.html">
-            <span class="icon">
-              <i class="fas fa-comments"></i>
-            </span>
-            <span class="text">Chat</span>
-          </a>
-        </li>
+  <li data-id="companies" class="admin-only">
+    <a href="company.html">
+      <span class="icon"><i class="fa-solid fa-buildings"></i></span>
+      <span class="text">Companies</span>
+    </a>
+  </li>
 
-        <li data-id="profile">
-          <a href="about.html">
-            <span class="icon">
-              <i class="fa-solid fa-user"></i>
-            </span>
-            <span class="text">Profile</span>
-          </a>
-        </li>
+  <li class="user-only">
+    <a href="./app/chat.html">
+      <span class="icon"><i class="fas fa-comments"></i></span>
+      <span class="text">Chat</span>
+    </a>
+  </li>
 
-        <li data-id="register">
-          <a href="./signup.html">
-            <span class="icon">
-              <i class="fa-solid fa-user-plus"></i>
-            </span>
-            <span class="text">Register</span>
-          </a>
-        </li>
+  <li data-id="profile" class="user-only">
+    <a href="profile.html">
+      <span class="icon"><i class="fa-solid fa-user"></i></span>
+      <span class="text">Profile</span>
+    </a>
+  </li>
 
-        <li data-id="setting">
-          <a href="setting.html">
-            <span class="icon">
-              <i class="fa-solid fa-gear"></i>
-            </span>
-            <span class="text">Settings</span>
-          </a>
-        </li>
+  <li data-id="register" class="admin-only">
+    <a href="./signup.html">
+      <span class="icon"><i class="fa-solid fa-user-plus"></i></span>
+      <span class="text">Register</span>
+    </a>
+  </li>
 
-        <li data-id="logout">
-          <a href="register.html">
-            <span class="icon">
-              <i class="fa-solid fa-right-from-bracket"></i>
-            </span>
-            <span class="text">Logout</span>
-          </a>
-        </li>
-      </ul>
+  <li data-id="setting" class="admin-only">
+    <a href="setting.html">
+      <span class="icon"><i class="fa-solid fa-gear"></i></span>
+      <span class="text">Settings</span>
+    </a>
+  </li>
+
+  <li data-id="logout">
+    <a href="#" onclick="logout()">
+      <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+      <span class="text">Logout</span>
+    </a>
+  </li>
+</ul>
     </div>
 
     <!-- ✅ Main Container -->
@@ -312,6 +294,11 @@
     <!-- js -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/company.js"></script>
-    <script src="./js/main.js" defer></script>
+    <script src="./js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+         protectPage(['super-admin','admin']);
+    </script>
+    <script src="js/login.js"></script>
 </body>
 </html>

@@ -87,7 +87,6 @@
 </style>
   
 </head>
-
 <body>
 
 
@@ -190,96 +189,76 @@
 
     <ul>
 
-        <li data-id="dashboard">
-            <a href="./index.html">
-                <span class="icon">
-                    <i class="fa-sharp fa-solid fa-house"></i>
-                </span>
-                <span class="text">Dashboard</span>
-            </a>
-        </li>
-
-        <li data-id="users">
-            <a href="./user.html">
-                <span class="icon">
-                    <i class="fa-solid fa-users"></i>
-                </span>
-                <span class="text">Users</span>
-            </a>
-        </li>
-
-        <li data-id="jobs">
-            <a href="./job.html">
-                <span class="icon">
-                    <i class="fa-solid fa-briefcase"></i>
-                </span>
-                <span class="text">Jobs</span>
-            </a>
-        </li>
-
-        <li data-id="view">
-            <a href="./view.html">
-                <span class="icon">
-                    <i class="fa-sharp fa-solid fa-eye"></i>
-                </span>
-                <span class="text">View jobs</span>
-            </a>
-        </li>
-
-<!-- تأكد من وجود هذا العنصر في قائمة السايد بار -->
-<li data-id="companies">
-    <a href="../company.html">
-        <span class="icon">
-            <i class="fa-solid fa-building"></i>
-        </span>
-        <span class="text">Companies</span>
+        <li data-id="dashboard" class="admin-only">
+    <a href="index.html">
+      <span class="icon"><i class="fa-sharp fa-solid fa-house"></i></span>
+      <span class="text">Dashboard</span>
     </a>
-</li>
-        <li>
-            <a href="./app/chat.html">
-                <span class="icon">
-                    <i class="fas fa-comments"></i>
-                </span>
-                <span class="text">Chat</span>
-            </a>
-        </li>
+  </li>
 
-        <li data-id="profile">
-            <a href="./about.html">
-                <span class="icon">
-                    <i class="fa-solid fa-user"></i>
-                </span>
-                <span class="text">Profile</span>
-            </a>
-        </li>
+  <li data-id="users" class="admin-only">
+    <a href="user.html">
+      <span class="icon"><i class="fa-solid fa-users"></i></span>
+      <span class="text">Users</span>
+    </a>
+  </li>
 
-        <li data-id="register">
-            <a href="signup.html">
-                <span class="icon">
-                    <i class="fa-solid fa-user-plus"></i>
-                </span>
-                <span class="text">Register</span>
-            </a>
-        </li>
+  <li data-id="jobs" class="admin-only">
+    <a href="job.html">
+      <span class="icon"><i class="fa-solid fa-briefcase"></i></span>
+      <span class="text">Jobs</span>
+    </a>
+  </li>
 
-        <li data-id="setting">
-            <a href="./setting.html">
-                <span class="icon">
-                    <i class="fa-solid fa-gear"></i>
-                </span>
-                <span class="text">Settings</span>
-            </a>
-        </li>
+  <li data-id="view" class="user-only">
+    <a href="view.html">
+      <span class="icon"><i class="fa-sharp fa-solid fa-eye"></i></span>
+      <span class="text">View jobs</span>
+    </a>
+  </li>
 
-        <li data-id="logout">
-            <a href="register.html">
-                <span class="icon">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                </span>
-                <span class="text">Logout</span>
-            </a>
-        </li>
-    </ul>
+  <li data-id="companies" class="admin-only">
+    <a href="company.html">
+      <span class="icon"><i class="fa-solid fa-buildings"></i></span>
+      <span class="text">Companies</span>
+    </a>
+  </li>
+
+  <li class="user-only">
+    <a href="./app/chat.html">
+      <span class="icon"><i class="fas fa-comments"></i></span>
+      <span class="text">Chat</span>
+    </a>
+  </li>
+
+  <li data-id="profile" class="user-only">
+    <a href="profile.html">
+      <span class="icon"><i class="fa-solid fa-user"></i></span>
+      <span class="text">Profile</span>
+    </a>
+  </li>
+
+  <li data-id="register" class="admin-only">
+    <a href="./signup.html">
+      <span class="icon"><i class="fa-solid fa-user-plus"></i></span>
+      <span class="text">Register</span>
+    </a>
+  </li>
+
+  <li data-id="setting" class="admin-only">
+    <a href="setting.html">
+      <span class="icon"><i class="fa-solid fa-gear"></i></span>
+      <span class="text">Settings</span>
+    </a>
+  </li>
+
+  <li data-id="logout">
+    <a href="#" onclick="logout()">
+      <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+      <span class="text">Logout</span>
+    </a>
+  </li>
+</ul>
 </div>
 
     <!-- Begin page -->
@@ -398,7 +377,7 @@ function switchToSettingsTab() {
                                 <div class="card-body">
                                     <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
                                         <li class="nav-item">
-                                            <a href="#about" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
+                                            <a href="#profile" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
                                                 About
                                             </a>
                                         </li>
@@ -552,6 +531,14 @@ function switchToSettingsTab() {
     <!-- App js -->
 
     <script src="assets/js/app.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/login.js"></script>
+    <script>
+         protectPage(['super-admin','admin']);
+    </script>
+    <script src="js/main.js"></script>
+    
+
   
 
 <!-- Bootstrap JS -->
