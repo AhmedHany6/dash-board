@@ -189,28 +189,42 @@ const response = await fetch(`${API_URL}/${userId}/status`, {
   }
 }
 
+const statusOrder = [
+  "pending",
+  "submitted",
+  "reviewed",
+  "screening-interview",
+  "technical-interview",
+  "final-hr-interview",
+  "team-matching",
+  "accepted",
+  "rejected",
+  "offer-letter"
+];
 async function viewDetails(userId) {
   const user = usersData.find((u) => u.id === userId);
   if (!user) return;
 
-  const html = `
-    <p><strong>ID:</strong> ${user.id}</p>
-    <p><strong>Name:</strong> ${user.user?.name || "N/A"}</p>
-    <p><strong>Email:</strong> ${user.user?.email || "N/A"}</p>
-    <label><strong>Status:</strong></label>
-   <select id="statusSelect" class="swal2-select">
-  <option value="pending" ${user.status === "pending" ? "selected" : ""}>Pending</option>
-  <option value="submitted" ${user.status === "submitted" ? "selected" : ""}>Submitted</option>
-  <option value="reviewed" ${user.status === "reviewed" ? "selected" : ""}>Reviewed</option>
-  <option value="screening-interview" ${user.status === "screening-interview" ? "selected" : ""}>Screening Interview</option>
-  <option value="technical-interview" ${user.status === "technical-interview" ? "selected" : ""}>Technical Interview</option>
-  <option value="final-hr-interview" ${user.status === "final-hr-interview" ? "selected" : ""}>Final HR Interview</option>
-  <option value="team-matching" ${user.status === "team-matching" ? "selected" : ""}>Team Matching</option>
-  <option value="accepted" ${user.status === "accepted" ? "selected" : ""}>Accepted</option>
-    <option value="rejected" ${user.status === "rejected" ? "selected" : ""}>Rejected</option>
-  <option value="offer-letter" ${user.status === "offer-letter" ? "selected" : ""}>Offer Letter</option>
-</select>`
-;
+ const currentIndex = statusOrder.indexOf(user.status);
+const filteredStatuses = statusOrder.slice(currentIndex);
+
+const html = `
+  <p><strong>ID:</strong> ${user.id}</p>
+  <p><strong>Name:</strong> ${user.user?.name || "N/A"}</p>
+  <p><strong>Email:</strong> ${user.user?.email || "N/A"}</p>
+  <p><strong>Created At:</strong> ${user.created_at || "N/A"}</p>
+  <p><strong>Resume:</strong> <a href="${user.resume_path}" target="_blank">Download CV</a></p>
+  <p><strong>Job Title:</strong> ${user.job?.title || "N/A"}</p>
+  <p><strong>Salary:</strong> ${user.job?.salary || "N/A"}</p>
+
+  <label><strong>Status:</strong></label>
+  <select id="statusSelect" class="swal2-select">
+    ${filteredStatuses.map(status => `
+      <option value="${status}" ${user.status === status ? "selected" : ""}>${status.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</option>
+    `).join('')}
+  </select>
+`;
+
 
   const result = await Swal.fire({
     title: ` Details for ${user.user?.name || "User"}`,

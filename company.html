@@ -10,77 +10,7 @@
     <link rel="stylesheet" href="./css/pages/company.css" />
 
     <link rel="stylesheet" href="css/style.css" />
-    <style>
-      .confirmation-dialog {
-        background-color: white;
-        border-radius: 10px;
-        padding: 25px;
-        width: 350px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        text-align: center;
-      }
-      .confirmation-title {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 15px;
-        color: #333;
-      }
-      .confirmation-message {
-        font-size: 16px;
-        color: #666;
-        margin-bottom: 25px;
-      }
-      .notification-dropdown {
-    display: none; /* اجعلها تظهر عند الحاجة */
-    position: absolute;
-    background-color: white;
-    border: 1px solid #ccc;
-    width: 300px;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px; /* إضافة حدود دائرية */
-}
-
-.notification-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #eee; /* إضافة حد بين الإشعارات */
-}
-
-.notification-item:last-child {
-    border-bottom: none; /* إزالة الحد الأخير */
-}
-
-.notification-icon {
-    width: 30px; /* حجم أصغر */
-    height: 30px; /* حجم أصغر */
-    border-radius: 50%; /* لجعلها دائرية */
-    margin-right: 10px;
-}
-
-.notification-content {
-    flex-grow: 1;
-}
-
-.view-all {
-    display: block;
-    text-align: center;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 10%; /* لجعل الزر دائري */
-    margin: 10px auto; /* توسيط الزر */
-    width: 90px; /* عرض الزر */
-    height: 50px; /* ارتفاع الزر */
-    line-height: 30px; /* توسيط النص داخل الزر */
-}
-
-.view-all:hover {
-    background-color: #0056b3;
-}
-    </style>
+   
   </head>
 
   <body>
@@ -254,33 +184,20 @@
     <section class="main-panel">
       <div class="container-fluid">
         <h2 class="my-5">Company List</h2>
-        <!-- ✅ تحسين تصميم الفلترة -->
-        <div class="filter-section">
-          <label for="statusFilter">Status:</label>
-          <select id="statusFilter">
-            <option value="">All</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
-
-          <label for="jobsFilter">Job Count:</label>
-          <input type="number" id="jobsFilter" min="0" placeholder="Min Jobs" />
-
-          <button onclick="filterCompanies()">Filter</button>
-        </div>
-
+      
         <!-- ✅ إضافة جدول الشركات -->
         <div class="table-container my-5">
           <table>
-            <thead>
-              <tr>
-                <th>Company Name</th>
-                <th>size</th>
-                <th>Job Count</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
+           <thead>
+  <tr>
+    <th>Logo</th>
+    <th>Company Name</th>
+    <th>Description</th>
+    <th>Website</th>   
+    <th>Status</th>
+    <th>Delete</th>
+  </tr>
+</thead>
             <tbody id="companyTableBody">
               <!-- سيتم ملء البيانات ديناميكيًا -->
             </tbody>

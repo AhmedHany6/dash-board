@@ -176,20 +176,18 @@ function displayCompanies(companiesList = []) {
     return;
   }
 
-  companiesList.forEach((company) => {
-    // Table row
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${company.name}</td>
-      <td>${company.size}</td>
-      <td>${company.jobs}</td>
-      <td>${company.status}</td>
-      <td>
-      <button class="activate-btn btn btn-success" onclick="changeStatus(${company.id}, 'Active')">Active</button>
-      <button class="suspend-btn btn btn-warning" onclick="changeStatus(${company.id}, 'Inactive')">Inactive</button>
-      
-      </td>
-    `;
+companiesList.forEach((company) => {
+  const row = document.createElement("tr");
+row.innerHTML = `
+  <td><img src="${company.logo}" alt="Logo" style="width:50px;height:auto;"></td>
+  <td>${company.name || "N/A"}</td>
+  <td>${company.description || "N/A"}</td>
+  <td><a href="${company.website}" target="_blank">Visit</a></td>
+  <td>${company.status || "N/A"}</td>
+         <button class="delete-btn" onclick="deleteCompany(${company.id})">Delete</button>
+
+`;
+
     tableBody.appendChild(row);
 
     // Card view
@@ -202,8 +200,6 @@ function displayCompanies(companiesList = []) {
       <label>Status:</label><p>${company.status}</p>
       <div class="actions">
         <button class="delete-btn" onclick="deleteCompany(${company.id})">Delete</button>
-        <button class="suspend-btn" onclick="changeStatus(${company.id}, 'Inactive')">Suspend</button>
-        <button class="activate-btn" onclick="changeStatus(${company.id}, 'Active')">Activate</button>
       </div>
     `;
     companyListContainer.appendChild(item);
