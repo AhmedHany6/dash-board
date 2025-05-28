@@ -22,14 +22,14 @@
     window.location.href = "login.html";
   }
 
-  function protectPage(allowedRoles) {
-    const token = getToken();
-    if (!token) return window.location.href = "login.html";
-    const role = parseRole(token);
-    if (allowedRoles.indexOf(role) === -1) {
-      return window.location.href = "unauthorized.html";
-    }
-  }
+  // function protectPage(allowedRoles) {
+  //   const token = getToken();
+  //   if (!token) return window.location.href = "login.html";
+  //   const role = parseRole(token);
+  //   if (allowedRoles.indexOf(role) === -1) {
+  //     return window.location.href = "unauthorized.html";
+  //   }
+  // }
 
   // expose both under auth.* and globally
   window.auth = { getToken, saveToken, parseRole, logout, protectPage };
@@ -63,13 +63,13 @@ function protectPage(allowedRoles = []) {
     const accessDeniedDiv = document.getElementById("access-denied");
     if (accessDeniedDiv) {
       accessDeniedDiv.style.display = "block";
-    } else {
-      // أو تحويل المستخدم لصفحة تسجيل الدخول
-      window.location.href = "login.html";
-    }
+    } 
   }
 }
-
+// else {
+//       // أو تحويل المستخدم لصفحة تسجيل الدخول
+//       window.location.href = "login.html";
+//     }
 // تصدير الدوال للاستخدام في ملفات أخرى (بدون module)
 window.parseRole = parseRole;
 window.protectPage = protectPage; 
