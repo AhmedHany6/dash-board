@@ -234,4 +234,42 @@ document.addEventListener("DOMContentLoaded", function () {
         markers = [];
     }
 
+const super_token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0ODQwMDcwMSwibmJmIjoxNzQ4NDAwNzAxLCJqdGkiOiJxN0VhVk5JZkt0eVZma0YwIiwic3ViIjoiMSIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJzdXBlci1hZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2UtYWxsLWNvbXBhbmllcyIsIm1hbmFnZS1hbGwtam9icyIsIm1hbmFnZS1yb2xlcyIsIm1hbmFnZS1jb21wYW55LWFkbWlucyIsIm1hbmFnZS1hcHBsaWNhdGlvbnMiLCJ2aWV3LWFwcGxpY2FudC1wcm9maWxlcyIsInNlbmQtbWVzc2FnZXMiXSwiY29tcGFueV9pZCI6bnVsbH0.19hp0h9-pLLwiqQKycD2KFcR3C3g9v0z8F6xDzT93iw"
+document.addEventListener("DOMContentLoaded", async () => {
 
+
+  try {
+    const response = await fetch("https://jobizaa.com/api/admin/companies", {
+      method: "GET",
+      headers: {
+        Authorization: super_token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    });
+
+    const result = await response.json();
+
+    if (response.ok && result?.data?.length) {
+      const company = result.data[0]; // أول شركة في القائمة
+
+      // تحديث عناصر الـ DOM
+      document.querySelectorAll("[name='name']").forEach(el => {
+        el.textContent = company.name;
+      });
+
+      document.querySelector("[name='websitee']").textContent = company.website;
+
+      // يمكنك أيضًا تحديث صورة اللوجو (اختياري):
+      const img = document.querySelector(".user-profile img");
+      if (img && company.logo) {
+        img.src = company.logo;
+      }
+    } else {
+      console.warn("No company data found");
+    }
+
+  } catch (error) {
+    console.error("Error fetching company data:", error);
+  }
+});
