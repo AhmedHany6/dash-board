@@ -1,4 +1,6 @@
 const application_token="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0NzMxNzIxMiwibmJmIjoxNzQ3MzE3MjEyLCJqdGkiOiJCY1JoRUsyZDJ3akxUbmxnIiwic3ViIjoiMyIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJhZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2Utb3duLWNvbXBhbnkiLCJtYW5hZ2UtY29tcGFueS1qb2JzIiwibWFuYWdlLWNvbXBhbnktYWRtaW5zIiwibWFuYWdlLWFwcGxpY2F0aW9ucyIsInZpZXctYXBwbGljYW50LXByb2ZpbGVzIiwic2VuZC1tZXNzYWdlcyJdLCJjb21wYW55X2lkIjozfQ.997-fwY_-3zLs2rd43YWnZEJ8HWLq4OoT8btXDMduoU"
+const users_token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0NzE3MzI1MSwibmJmIjoxNzQ3MTczMjUxLCJqdGkiOiJNNXNHU0lBNDZMa1AwM0wwIiwic3ViIjoiMSIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJzdXBlci1hZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2UtYWxsLWNvbXBhbmllcyIsIm1hbmFnZS1hbGwtam9icyIsIm1hbmFnZS1yb2xlcyIsIm1hbmFnZS1jb21wYW55LWFkbWlucyIsIm1hbmFnZS1hcHBsaWNhdGlvbnMiLCJ2aWV3LWFwcGxpY2FudC1wcm9maWxlcyIsInNlbmQtbWVzc2FnZXMiXSwiY29tcGFueV9pZCI6bnVsbH0.X2ezIVql0YUgkruYV058QG8NpyHzAZSdHv60zAA_9R0"
+const job_token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0NzE1Mzc3NywibmJmIjoxNzQ3MTUzNzc3LCJqdGkiOiI2QzBzVXo2NEl1b2VWQk9sIiwic3ViIjoiMSIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJzdXBlci1hZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2UtYWxsLWNvbXBhbmllcyIsIm1hbmFnZS1hbGwtam9icyIsIm1hbmFnZS1yb2xlcyIsIm1hbmFnZS1jb21wYW55LWFkbWlucyIsIm1hbmFnZS1hcHBsaWNhdGlvbnMiLCJ2aWV3LWFwcGxpY2FudC1wcm9maWxlcyIsInNlbmQtbWVzc2FnZXMiXSwiY29tcGFueV9pZCI6bnVsbH0.lllND3CQfb9WYSeWLrcC2MqyUCmkeZiCZ5k1Tqfrwic"
 const ctx1 = document.getElementById("chart-1").getContext("2d");
 const myChart1 = new Chart(ctx1, {
   type: "pie",
@@ -63,7 +65,7 @@ async function updateChart1() {
   try {
     const res = await fetch("https://jobizaa.com/api/admin/users", {
       headers: {
-        Authorization: ACTIVE_TOKEN,
+        Authorization: users_token,
         Accept: "application/json",
         "Content-Type": "application/json",
       },
@@ -143,7 +145,7 @@ async function updateChart4() {
   try {
     const res = await fetch("https://jobizaa.com/api/admin/jobs", {
       headers: {
-        Authorization: ACTIVE_TOKEN,
+        Authorization: job_token,
         Accept: "application/json",
         "Content-Type": "application/json",
       },

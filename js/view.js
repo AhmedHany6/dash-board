@@ -1,6 +1,5 @@
 const API_URL = "https://jobizaa.com/api/admin/applications";
-const AUTH_TOKEN =
-  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2pvYml6YWEuY29tL2FwaS9hZG1pbi9sb2dpbiIsImlhdCI6MTc0NzM1NDM3MiwibmJmIjoxNzQ3MzU0MzcyLCJqdGkiOiJ3czF0Y2l0TWpHVTFTUUJ1Iiwic3ViIjoiMyIsInBydiI6ImRmODgzZGI5N2JkMDVlZjhmZjg1MDgyZDY4NmM0NWU4MzJlNTkzYTkiLCJyb2xlcyI6WyJhZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2Utb3duLWNvbXBhbnkiLCJtYW5hZ2UtY29tcGFueS1qb2JzIiwibWFuYWdlLWNvbXBhbnktYWRtaW5zIiwibWFuYWdlLWFwcGxpY2F0aW9ucyIsInZpZXctYXBwbGljYW50LXByb2ZpbGVzIiwic2VuZC1tZXNzYWdlcyJdLCJjb21wYW55X2lkIjozfQ.JBCFpEIcnclld6WtyjCCS-ETYv9P_r5lilN933QolHI";
+const TOKEN = "Bearer " + sessionStorage.getItem('token');
 let usersData = [];
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -16,12 +15,12 @@ async function updateDashboard() {
 }
 
 async function fetchUsers() {
-  if (!AUTH_TOKEN) return console.error("No auth token found.");
+  if (!TOKEN) return console.error("No auth token found.");
 
   try {
     const response = await fetch(API_URL, {
       headers: {
-        Authorization: ` Bearer ${AUTH_TOKEN.trim()}`,
+        Authorization: TOKEN,
         "Content-Type": "application/json",
         Accept: "application/json",
       },
@@ -101,7 +100,7 @@ async function deleteUser(userId) {
     try {
       const response = await fetch(`${API_URL}/${userId}`, {
         method: "DELETE",
-        headers: { Authorization: Bearer `${AUTH_TOKEN}` },
+        headers: { Authorization:TOKEN },
       });
 
       if (response.ok) {
@@ -164,7 +163,7 @@ if (!statusOrder[currentStatus] || !statusOrder[currentStatus].includes(newStatu
 const response = await fetch(`${API_URL}/${userId}/status`, {
   method: "PUT",
   headers: {
-    "Authorization": "Bearer ${AUTH_TOKEN}",
+    "Authorization": TOKEN,
     "Content-Type": "application/json"
   },
   body: JSON.stringify({
@@ -244,7 +243,7 @@ const html = `
       const response = await fetch(`${API_URL}/${user.id}/status`, {
         method: "PUT",
         headers: {
-          Authorization: ` Bearer ${AUTH_TOKEN}`,
+          Authorization: TOKEN,
           "Content-Type": "application/json",
           Accept: "application/json",
         },
