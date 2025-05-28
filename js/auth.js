@@ -80,7 +80,7 @@ window.protectPage = protectPage;
     const payload = JSON.parse(atob(token.split('.')[1]));
     const roles = payload.roles || [];
 
-    const allowedForAdmin = ["jobs.html", "view.html", "profile.html", "chat.html"];
+    const allowedForAdmin = ["job.html", "view.html", "profile.html", "chat.html"];
     const currentPage = window.location.pathname.split("/").pop();
 
     if (roles.includes("admin") && !allowedForAdmin.includes(currentPage)) {
